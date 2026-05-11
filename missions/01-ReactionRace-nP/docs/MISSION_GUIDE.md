@@ -1,6 +1,26 @@
 # Mission 01: ReactionRace
 ReactionRace is the first recommended classroom mission because everyone can join quickly from a browser.
 
+## Start Here
+If you are new, follow these in order:
+
+1. [Run the app](#how-to-run).
+2. [Play one solo round](#play-it).
+3. [Understand the entry point](#entry-point).
+4. [Open the code files](#code-files).
+5. [Make one small change](#change-it).
+6. [Read the deeper walkthrough](CODE_WALKTHROUGH.md) when you want the full code explanation.
+
+## Mission Navigation
+| Need | Go Here |
+| --- | --- |
+| I want to run it | [How To Run](#how-to-run) |
+| I want to play it | [Play It](#play-it) |
+| I want to know where the app starts | [Entry Point](#entry-point) |
+| I want to know which file to open | [Code Files](#code-files) |
+| I want diagrams and function details | [CODE_WALKTHROUGH.md](CODE_WALKTHROUGH.md) |
+| I need to create my branch first | [SPRK Git Repository User Guide](../../../docs/SPRK_Git_Repository_UserGuide.md#create-your-branch) |
+
 ## Mission Goal
 Build a whole-class reaction game where students join from phones, tablets, Chromebooks, or laptops and compete on a live leaderboard.
 
@@ -94,6 +114,27 @@ Simple meaning:
 - `index.html` decides what is on the page.
 - `src/styles.css` decides how the page looks.
 - `src/app.js` decides how the game behaves.
+
+## Code Files
+Open these files from the mission folder:
+
+| File | Link | What To Look For |
+| --- | --- | --- |
+| Page structure | [index.html](../index.html) | The title, player name input, big button, scoreboard, and student notes. |
+| Game behavior | [src/app.js](../src/app.js) | Functions such as `startRound()`, `recordTap()`, and `handleEarlyTap()`. |
+| Visual design | [src/styles.css](../src/styles.css) | Color variables, button size, layout, and phone/tablet rules. |
+| Deep explanation | [CODE_WALKTHROUGH.md](CODE_WALKTHROUGH.md) | Diagrams, function table, and the main click flow. |
+
+Recommended first code reading path:
+
+```text
+index.html
+  -> find the big button
+  -> src/app.js
+  -> find what happens when the button is clicked
+  -> src/styles.css
+  -> find the button colors
+```
 
 ## How The Files Work Together
 ```mermaid
@@ -228,10 +269,10 @@ Change one visible setting, such as the round label, button text, reaction messa
 
 Good first files to inspect:
 
-- `index.html`: page structure.
-- `src/app.js`: game behavior.
-- `src/styles.css`: colors, spacing, and layout.
-- `docs/CODE_WALKTHROUGH.md`: diagrams and function explanations.
+- [index.html](../index.html): page structure.
+- [src/app.js](../src/app.js): game behavior.
+- [src/styles.css](../src/styles.css): colors, spacing, and layout.
+- [CODE_WALKTHROUGH.md](CODE_WALKTHROUGH.md): diagrams and function explanations.
 
 ## Show It
 Run the changed version and show that the browser display changed.

@@ -114,6 +114,15 @@ Detailed guides:
 - [SPRK CodeSpaces User Guide](docs/SPRK_CodeSpaces_UserGuide.md)
 - [SPRK VS Code User Guide](docs/SPRK_VSCode_UserGuide.md), including Markdown preview and iPad troubleshooting.
 
+If Codespaces or github.dev shows old files, open the terminal and run:
+
+```bash
+git status
+git pull
+```
+
+Then close and reopen the Markdown preview.
+
 ## Mission Menu
 | Mission | Name | Mode | What Students Experience | What It Teaches | GitHub Needed To Play? | GitHub Needed To Build? |
 | --- | --- | --- | --- | --- | --- | --- |
