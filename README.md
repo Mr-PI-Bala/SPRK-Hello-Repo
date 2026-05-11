@@ -6,10 +6,27 @@ The missions are independent. The numbering is the suggested classroom try-out o
 ## Start Here
 1. ~~Ask for access through the public [SPRK-Welcome](https://github.com/Mr-PI-Bala/SPRK-Welcome) repository.~~
    Victory: if you can see this private repository, your access request worked.
-2. Create your own branch before changing code.
+2. [Create your own branch before changing code](#create-your-branch-before-changing-code).
 3. Pick one mission from the Mission Menu.
 4. Play the mission first.
 5. Make one small change in your own branch.
+
+```mermaid
+sequenceDiagram
+    participant Student as Student<br/>Maya-SPRK
+    participant GitHub as GitHub<br/>Repository Page
+    participant Repo as SPRK-Hello-Repo
+    participant Branch as Student Branch<br/>maya-sprk
+    participant Guide as Local Guides<br/>docs/
+
+    Student->>GitHub: Open private repository
+    GitHub-->>Student: Repository is visible
+    Student->>Guide: Read branch instructions
+    Student->>Repo: Start from main
+    Student->>Branch: Create own branch before editing
+    Branch-->>Student: Branch name is visible
+    Student->>Branch: Play, change, commit, and push
+```
 
 ## Create Your Branch Before Changing Code
 Do this before editing files.
@@ -52,20 +69,20 @@ If the result still says `main`, stop and ask for help before changing files.
 
 Detailed guides:
 
-- [SPRK Git Repository User Guide](docs/SPRK_Git_Repository_UserGuide.md)
+- [SPRK Git Repository User Guide: Create Your Branch](docs/SPRK_Git_Repository_UserGuide.md#create-your-branch)
 - [SPRK CodeSpaces User Guide](docs/SPRK_CodeSpaces_UserGuide.md)
 - [SPRK VS Code User Guide](docs/SPRK_VSCode_UserGuide.md)
 
 ## Mission Menu
 | Mission | Name | Mode | What Students Experience | What It Teaches | GitHub Needed To Play? | GitHub Needed To Build? |
 | --- | --- | --- | --- | --- | --- | --- |
-| 01 | ReactionRace | nP | A whole-class reaction game where many students join from phones, tablets, Chromebooks, or laptops. | Browser events, timing, player names, backend state, live leaderboard. | No, if a facilitator hosts the game link. | Yes, to edit code, commit, push a branch, or request a merge. |
-| 02 | SnakeGame | 1P-nP | A solo snake game that can later grow into shared scores or classroom leaderboard mode. | Canvas/grid thinking, keyboard control, collision, score, game loop, optional backend scores. | No, if a hosted link is provided. | Yes, to customize and contribute changes. |
-| 03 | PingPong | 2P-nP | A two-player paddle game that can later grow into tournament or classroom mode. | Movement, ball physics, win conditions, keyboard control, optional tournament backend. | No, if a hosted link is provided. | Yes, to customize and contribute changes. |
-| 04 | FlashCards | 1P-nP | A useful school tool for math, vocabulary, or any subject practice. | Data lists, random questions, answer checking, scoring, progress, optional shared question sets. | No, if a hosted link is provided. | Yes, to add decks, logic, and shared features. |
-| 05 | QuizRoom | nP | A live classroom quiz room with questions, answers, teams, and scores. | Forms, validation, shared backend state, scoring, team play. | No, if a facilitator hosts the game link. | Yes, to change questions, scoring, and room behavior. |
-| 06 | FourSquare | nP | A digital version of a playground-style group game with players, turns, and rounds. | Modeling real-world rules, turns, roles, shared game state, backend coordination. | No, if a facilitator hosts the game link. | Yes, to change rules, visuals, and multiplayer behavior. |
-| 07 | SoccerScore | nP | A team scoreboard and event tracker for soccer, football, softball, or class games. | Teams, events, timestamps, score updates, shared display, backend API. | No, if a facilitator hosts the game link. | Yes, to change sports, events, stats, and display behavior. |
+| 01 | [ReactionRace](missions/01-ReactionRace-nP/docs/MISSION_GUIDE.md) | nP | A whole-class reaction game where many students join from phones, tablets, Chromebooks, or laptops. | Browser events, timing, player names, backend state, live leaderboard. | No, if a facilitator hosts the game link. | Yes, to edit code, commit, push a branch, or request a merge. |
+| 02 | [SnakeGame](missions/02-SnakeGame-1P-nP/docs/MISSION_GUIDE.md) | 1P-nP | A solo snake game that can later grow into shared scores or classroom leaderboard mode. | Canvas/grid thinking, keyboard control, collision, score, game loop, optional backend scores. | No, if a hosted link is provided. | Yes, to customize and contribute changes. |
+| 03 | [PingPong](missions/03-PingPong-2P-nP/docs/MISSION_GUIDE.md) | 2P-nP | A two-player paddle game that can later grow into tournament or classroom mode. | Movement, ball physics, win conditions, keyboard control, optional tournament backend. | No, if a hosted link is provided. | Yes, to customize and contribute changes. |
+| 04 | [FlashCards](missions/04-FlashCards-1P-nP/docs/MISSION_GUIDE.md) | 1P-nP | A useful school tool for math, vocabulary, or any subject practice. | Data lists, random questions, answer checking, scoring, progress, optional shared question sets. | No, if a hosted link is provided. | Yes, to add decks, logic, and shared features. |
+| 05 | [QuizRoom](missions/05-QuizRoom-nP/docs/MISSION_GUIDE.md) | nP | A live classroom quiz room with questions, answers, teams, and scores. | Forms, validation, shared backend state, scoring, team play. | No, if a facilitator hosts the game link. | Yes, to change questions, scoring, and room behavior. |
+| 06 | [FourSquare](missions/06-FourSquare-nP/docs/MISSION_GUIDE.md) | nP | A digital version of a playground-style group game with players, turns, and rounds. | Modeling real-world rules, turns, roles, shared game state, backend coordination. | No, if a facilitator hosts the game link. | Yes, to change rules, visuals, and multiplayer behavior. |
+| 07 | [SoccerScore](missions/07-SoccerScore-nP/docs/MISSION_GUIDE.md) | nP | A team scoreboard and event tracker for soccer, football, softball, or class games. | Teams, events, timestamps, score updates, shared display, backend API. | No, if a facilitator hosts the game link. | Yes, to change sports, events, stats, and display behavior. |
 
 ## Mode Labels
 | Label | Meaning |
