@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SPRK SnakeGame</title>
+    <link rel="stylesheet" href="../_shared/sprk_mission.css">
+    <link rel="stylesheet" href="src/styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="mission-band">
+        <div>
+          <p class="eyebrow">Mission 02</p>
+          <h1>SnakeGame</h1>
+          <p class="lede">Guide the snake, collect food, and post your score to the classroom board.</p>
+        </div>
+        <div>
+          <section class="player-panel" aria-label="Player setup">
+            <label for="playerName">Player name</label>
+            <div class="mode-badge">1P-nP classroom ready</div>
+          </section>
+          <div class="player-row">
+            <input id="playerName" maxlength="24" placeholder="Maya-SPRK" autocomplete="off">
+            <div class="sound-field">
+              <label for="soundChoice">Sound</label>
+              <select id="soundChoice" aria-label="Player sound">
+                <option value="spark">Spark</option>
+                <option value="chime">Chime</option>
+                <option value="laser">Laser</option>
+                <option value="pop">Pop</option>
+                <option value="drum">Drum</option>
+              </select>
+            </div>
+            <button id="saveNameButton" type="button">Use Name</button>
+          </div>
+        </div>
+      </header>
+
+      <section class="game-board">
+        <section class="play-card" aria-live="polite">
+          <div class="status-row">
+            <span id="gameStatus">Ready</span>
+            <span id="scoreNow">Score: 0</span>
+          </div>
+          <canvas id="gameCanvas" width="420" height="420" aria-label="Snake game board"></canvas>
+          <div class="control-grid">
+            <button id="startButton" type="button">Start</button>
+            <button id="submitButton" class="small-button" type="button">Submit Score</button>
+          </div>
+          <p id="roundMessage" class="round-message">Use arrow keys or WASD. On touch screens, use the direction buttons.</p>
+          <div class="direction-pad" aria-label="Touch controls">
+            <button data-direction="up" type="button">Up</button>
+            <button data-direction="left" type="button">Left</button>
+            <button data-direction="right" type="button">Right</button>
+            <button data-direction="down" type="button">Down</button>
+          </div>
+        </section>
+
+        <section class="shared-panel">
+          <div class="section-title-row">
+            <h2>Shared Scores</h2>
+            <button id="clearButton" type="button" class="quiet-button">Clear</button>
+          </div>
+          <div class="tab-row" role="tablist">
+            <button id="scoreboardTab" class="tab-button active" type="button" role="tab" aria-selected="true">Scores</button>
+            <button id="xrayTab" class="tab-button" type="button" role="tab" aria-selected="false">X-Ray Vision</button>
+          </div>
+          <p id="sharedStatus" class="shared-status">Connecting to shared backend...</p>
+          <div id="scorePanel"><ol id="scoreList" class="score-list"></ol></div>
+          <div id="xrayPanel" class="xray-panel hidden">
+            <p class="xray-note">Backend events from <code>server.py</code> appear here.</p>
+            <ol id="eventList" class="event-list"></ol>
+          </div>
+        </section>
+      </section>
+
+      <section class="student-notes">
+        <h2>Try Changing One Thing</h2>
+        <div class="challenge-grid">
+          <section>
+            <h3>Starter changes</h3>
+            <ul>
+              <li>Change the snake color. <span class="hint">(Hint: edit <code>snakeColor</code> in <code>src/app.js</code>.)</span></li>
+              <li>Change the board color. <span class="hint">(Hint: edit <code>--board</code> in <code>src/styles.css</code>.)</span></li>
+              <li>Change the default player name. <span class="hint">(Hint: find <code>playerName</code> in <code>src/app.js</code>.)</span></li>
+            </ul>
+          </section>
+          <section>
+            <h3>Logic challenges</h3>
+            <ul>
+              <li>Make the snake faster. <span class="hint">(Hint: lower <code>moveDelayMs</code>.)</span></li>
+              <li>Make food worth more points. <span class="hint">(Hint: change the score increase in <code>moveSnake()</code>.)</span></li>
+              <li>Change wall behavior. <span class="hint">(Hint: inspect <code>hitWall()</code>.)</span></li>
+            </ul>
+          </section>
+          <section>
+            <h3>Level-up challenges</h3>
+            <ul>
+              <li>Add obstacles. <span class="hint">(Hint: add an <code>obstacles</code> array and draw it like food.)</span></li>
+              <li>Add a bonus food sound. <span class="hint">(Hint: call <code>SPRK.playSound(...)</code> inside <code>moveSnake()</code>.)</span></li>
+              <li>Add a new score animation. <span class="hint">(Hint: create a CSS animation and add a class in <code>SPRK.renderScores</code> usage.)</span></li>
+            </ul>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <script src="../_shared/sprk_app.js"></script>
+    <script src="src/app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SPRK Mission 07 - SoccerScore</title>
+  <link rel="stylesheet" href="../_shared/sprk_mission.css">
+  <link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+  <main class="mission-shell">
+    <section class="mission-band">
+      <div>
+        <p class="eyebrow">Mission 07</p>
+        <h1>SoccerScore</h1>
+        <p>Run a shared scoreboard for soccer, softball, football, or any classroom team game.</p>
+      </div>
+      <div class="player-row">
+        <label>Reporter <input id="player-name" value="Maya-SPRK"></label>
+        <label>Sound <select id="sound-select">
+          <option value="level">Level</option>
+          <option value="coin">Coin</option>
+          <option value="pop">Pop</option>
+          <option value="zap">Zap</option>
+        </select></label>
+      </div>
+    </section>
+
+    <section class="game-board">
+      <div class="play-card score-card">
+        <div class="team-names">
+          <input id="home-name" value="Blue Team">
+          <span id="period-label">Period 1</span>
+          <input id="away-name" value="Gold Team">
+        </div>
+        <div class="score-display">
+          <div><strong id="home-score">0</strong><button data-goal="home">Home Goal</button></div>
+          <span>:</span>
+          <div><strong id="away-score">0</strong><button data-goal="away">Away Goal</button></div>
+        </div>
+        <div class="score-actions">
+          <button id="save-teams">Save Team Names</button>
+          <button id="next-period">Next Period</button>
+          <button id="reset-game">Reset Game</button>
+        </div>
+      </div>
+
+      <aside class="shared-panel">
+        <div class="tabs">
+          <button class="tab-button active" data-tab="scores">Game Events</button>
+          <button class="tab-button" data-tab="xray">X-Ray Vision</button>
+        </div>
+        <div id="scores" class="tab-panel active">
+          <ol id="score-list" class="score-list"></ol>
+        </div>
+        <div id="xray" class="tab-panel">
+          <pre id="event-log" class="event-log"></pre>
+        </div>
+      </aside>
+    </section>
+
+    <section class="challenge-panel">
+      <h2>Try Changing One Thing</h2>
+      <div class="challenge-grid">
+        <article><h3>Starter</h3><p>Rename the sport. Hint: change the title text in `index.html`.</p></article>
+        <article><h3>Logic</h3><p>Add a minus button for score corrections. Hint: copy the goal button pattern and subtract in `changeScore()`.</p></article>
+        <article><h3>Level Up</h3><p>Add event types like foul, timeout, or assist. Hint: add new buttons that post to `/api/events`.</p></article>
+      </div>
+    </section>
+  </main>
+
+  <script src="../_shared/sprk_app.js"></script>
+  <script src="src/app.js"></script>
+</body>
+</html>

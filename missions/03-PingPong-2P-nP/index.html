@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SPRK Mission 03 - PingPong</title>
+  <link rel="stylesheet" href="../_shared/sprk_mission.css">
+  <link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+  <main class="mission-shell">
+    <section class="mission-band">
+      <div>
+        <p class="eyebrow">Mission 03</p>
+        <h1>PingPong</h1>
+        <p>Two paddles, one ball, shared winners. Play on one keyboard, then post the result to the classroom board.</p>
+      </div>
+      <div class="player-row">
+        <label>Player A <input id="left-name" value="Left Player"></label>
+        <label>Player B <input id="right-name" value="Right Player"></label>
+        <label>Sound <select id="sound-select">
+          <option value="pop">Pop</option>
+          <option value="coin">Coin</option>
+          <option value="zap">Zap</option>
+          <option value="level">Level</option>
+        </select></label>
+      </div>
+    </section>
+
+    <section class="game-board">
+      <div class="play-card ping-card">
+        <div class="game-toolbar">
+          <span id="scoreline">0 : 0</span>
+          <button id="start-button">Start Round</button>
+          <button id="reset-button">Reset</button>
+        </div>
+        <canvas id="game-canvas" width="720" height="420" aria-label="PingPong game board"></canvas>
+        <p class="mini-help">Left paddle: W/S. Right paddle: Up/Down. First to 5 wins the round.</p>
+      </div>
+
+      <aside class="shared-panel">
+        <div class="tabs">
+          <button class="tab-button active" data-tab="scores">Scoreboard</button>
+          <button class="tab-button" data-tab="xray">X-Ray Vision</button>
+        </div>
+        <div id="scores" class="tab-panel active">
+          <ol id="score-list" class="score-list"></ol>
+        </div>
+        <div id="xray" class="tab-panel">
+          <pre id="event-log" class="event-log"></pre>
+        </div>
+      </aside>
+    </section>
+
+    <section class="challenge-panel">
+      <h2>Try Changing One Thing</h2>
+      <div class="challenge-grid">
+        <article><h3>Starter</h3><p>Change the winning score from 5 to 3. Hint: find `winningScore` in `src/app.js`.</p></article>
+        <article><h3>Logic</h3><p>Make the ball faster after every paddle hit. Hint: update `bounceBall()`.</p></article>
+        <article><h3>Level Up</h3><p>Add a tournament rule where every win adds two points. Hint: change `finishRound()` before it posts the score.</p></article>
+      </div>
+    </section>
+  </main>
+
+  <script src="../_shared/sprk_app.js"></script>
+  <script src="src/app.js"></script>
+</body>
+</html>

@@ -1,25 +1,58 @@
 # Mission 05: QuizRoom
-QuizRoom is a live classroom quiz mission where students answer questions and scores update for everyone.
+Start here when you want many students answering the same live classroom question.
 
-## Mission Goal
-Build a shared quiz room with questions, answers, teams, and a live score display.
+Deep dive: [Code Walkthrough](CODE_WALKTHROUGH.md).
 
-## Mode
-`nP`: many players.
+## Start Here
+1. Run the mission with `python server.py`.
+2. Open the browser link on each student device.
+3. Everyone answers the current question.
+4. The facilitator clicks `Next` to move the room forward.
+
+## How To Run
+```bash
+cd missions/05-QuizRoom-nP
+python server.py
+```
+
+```mermaid
+flowchart LR
+    A["Facilitator terminal"] --> B["python server.py<br/>(serves QuizRoom)"]
+    B --> C["Student browsers on port 8005<br/>(same shared question)"]
+    C --> D["Submit Answer<br/>(checks answer locally)"]
+    D --> E["Correct answers post to /api/scores"]
+    E --> F["X-Ray Vision shows room events"]
+```
+
+ASCII view:
+
+```text
+Facilitator laptop -> QuizRoom server -> Many browsers -> Answers -> Shared score + X-Ray
+```
+
+## Entry Point
+- App page: [index.html](../index.html)
+- Browser logic: [src/app.js](../src/app.js)
+- Styling: [src/styles.css](../src/styles.css)
+- Backend: [server.py](../server.py)
+
+## How The Files Work Together
+| File | What It Does |
+| --- | --- |
+| `server.py` | Starts port 8005 and stores the shared question index. |
+| `index.html` | Creates the answer form, next-question control, scoreboard, and X-Ray panel. |
+| `src/app.js` | Checks answers, advances shared question state, and posts correct responses. |
+| `src/styles.css` | Makes the current question easy to read. |
 
 ## Play It
-Join the quiz room and answer one question.
+One person can act as facilitator. Other devices open the same link. The shared question index lets everyone stay on the same question after the facilitator advances it.
 
-## Change It
-Change a question, add an answer choice, rename a team, or update score messages.
-
-## Show It
-Run the changed version and show the new quiz content.
-
-## Level It Up
-Add team mode, teacher controls, timed questions, or subject-specific question packs.
+## Try Changing One Thing
+| Challenge | Hint |
+| --- | --- |
+| Add a question. | Edit the `questions` array in `src/app.js`. |
+| Add harder-question points. | Add `points` to each question and use it in `submitAnswer()`. |
+| Add teams. | Add a team input in `index.html` and include it in the score detail. |
 
 ## Branch Reminder
-Create your branch before editing files.
-
-Guide: [SPRK Git Repository User Guide](../../../docs/SPRK_Git_Repository_UserGuide.md#create-your-branch)
+Only change code in your own branch, such as `<yourname-sprk>`. Do not edit `main`.

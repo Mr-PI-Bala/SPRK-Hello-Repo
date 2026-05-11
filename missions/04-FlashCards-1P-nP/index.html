@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SPRK Mission 04 - FlashCards</title>
+  <link rel="stylesheet" href="../_shared/sprk_mission.css">
+  <link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+  <main class="mission-shell">
+    <section class="mission-band">
+      <div>
+        <p class="eyebrow">Mission 04</p>
+        <h1>FlashCards</h1>
+        <p>Practice quick questions, check answers, and send your streak to the shared board.</p>
+      </div>
+      <div class="player-row">
+        <label>Player <input id="player-name" value="Maya-SPRK"></label>
+        <label>Deck <select id="deck-select">
+          <option value="math">Math</option>
+          <option value="vocab">Vocabulary</option>
+        </select></label>
+        <label>Sound <select id="sound-select">
+          <option value="coin">Coin</option>
+          <option value="pop">Pop</option>
+          <option value="zap">Zap</option>
+          <option value="level">Level</option>
+        </select></label>
+      </div>
+    </section>
+
+    <section class="game-board">
+      <div class="play-card flash-card">
+        <p id="progress">Card 1</p>
+        <h2 id="question">Question appears here</h2>
+        <div class="answer-row">
+          <input id="answer-input" placeholder="Type your answer">
+          <button id="check-button">Check</button>
+          <button id="next-button">Next</button>
+        </div>
+        <p id="feedback" class="feedback">Try the card.</p>
+        <button id="submit-score">Submit Streak</button>
+      </div>
+
+      <aside class="shared-panel">
+        <div class="tabs">
+          <button class="tab-button active" data-tab="scores">Scoreboard</button>
+          <button class="tab-button" data-tab="xray">X-Ray Vision</button>
+        </div>
+        <div id="scores" class="tab-panel active">
+          <ol id="score-list" class="score-list"></ol>
+        </div>
+        <div id="xray" class="tab-panel">
+          <pre id="event-log" class="event-log"></pre>
+        </div>
+      </aside>
+    </section>
+
+    <section class="challenge-panel">
+      <h2>Try Changing One Thing</h2>
+      <div class="challenge-grid">
+        <article><h3>Starter</h3><p>Add one math card. Hint: edit the `decks.math` list in `src/app.js`.</p></article>
+        <article><h3>Logic</h3><p>Accept two possible answers for one card. Hint: let `answer` become an array and update `checkAnswer()`.</p></article>
+        <article><h3>Level Up</h3><p>Add a countdown timer. Hint: start with a `secondsLeft` variable and subtract inside `setInterval()`.</p></article>
+      </div>
+    </section>
+  </main>
+
+  <script src="../_shared/sprk_app.js"></script>
+  <script src="src/app.js"></script>
+</body>
+</html>

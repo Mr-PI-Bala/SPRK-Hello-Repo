@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SPRK Mission 06 - FourSquare</title>
+  <link rel="stylesheet" href="../_shared/sprk_mission.css">
+  <link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+  <main class="mission-shell">
+    <section class="mission-band">
+      <div>
+        <p class="eyebrow">Mission 06</p>
+        <h1>FourSquare</h1>
+        <p>Pick a square, claim rallies, and model a playground game as shared state.</p>
+      </div>
+      <div class="player-row">
+        <label>Player <input id="player-name" value="Maya-SPRK"></label>
+        <label>Sound <select id="sound-select">
+          <option value="pop">Pop</option>
+          <option value="coin">Coin</option>
+          <option value="zap">Zap</option>
+          <option value="level">Level</option>
+        </select></label>
+      </div>
+    </section>
+
+    <section class="game-board">
+      <div class="play-card square-card">
+        <div class="round-row">
+          <span id="round-label">Round 1</span>
+          <button id="next-round">Next Round</button>
+          <button id="clear-board">Clear Board</button>
+        </div>
+        <div id="square-board" class="square-board"></div>
+      </div>
+
+      <aside class="shared-panel">
+        <div class="tabs">
+          <button class="tab-button active" data-tab="scores">Scoreboard</button>
+          <button class="tab-button" data-tab="xray">X-Ray Vision</button>
+        </div>
+        <div id="scores" class="tab-panel active">
+          <ol id="score-list" class="score-list"></ol>
+        </div>
+        <div id="xray" class="tab-panel">
+          <pre id="event-log" class="event-log"></pre>
+        </div>
+      </aside>
+    </section>
+
+    <section class="challenge-panel">
+      <h2>Try Changing One Thing</h2>
+      <div class="challenge-grid">
+        <article><h3>Starter</h3><p>Rename the squares. Hint: edit `squareNames` in `src/app.js`.</p></article>
+        <article><h3>Logic</h3><p>Make square A worth two points. Hint: update `winRally(square)` before it posts a score.</p></article>
+        <article><h3>Level Up</h3><p>Add an elimination rule. Hint: store an `outPlayers` list in backend state.</p></article>
+      </div>
+    </section>
+  </main>
+
+  <script src="../_shared/sprk_app.js"></script>
+  <script src="src/app.js"></script>
+</body>
+</html>

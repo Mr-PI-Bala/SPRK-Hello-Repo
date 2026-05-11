@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SPRK Mission 05 - QuizRoom</title>
+  <link rel="stylesheet" href="../_shared/sprk_mission.css">
+  <link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+  <main class="mission-shell">
+    <section class="mission-band">
+      <div>
+        <p class="eyebrow">Mission 05</p>
+        <h1>QuizRoom</h1>
+        <p>A live classroom quiz where everyone answers the same shared question.</p>
+      </div>
+      <div class="player-row">
+        <label>Player <input id="player-name" value="Maya-SPRK"></label>
+        <label>Sound <select id="sound-select">
+          <option value="coin">Coin</option>
+          <option value="pop">Pop</option>
+          <option value="zap">Zap</option>
+          <option value="level">Level</option>
+        </select></label>
+      </div>
+    </section>
+
+    <section class="game-board">
+      <div class="play-card quiz-card">
+        <p id="question-number">Question 1</p>
+        <h2 id="question-text">Question appears here</h2>
+        <div class="answer-row">
+          <input id="answer-input" placeholder="Type answer">
+          <button id="submit-answer">Submit Answer</button>
+          <button id="next-question">Facilitator: Next</button>
+        </div>
+        <p id="feedback" class="feedback">Answer when ready.</p>
+      </div>
+
+      <aside class="shared-panel">
+        <div class="tabs">
+          <button class="tab-button active" data-tab="scores">Scoreboard</button>
+          <button class="tab-button" data-tab="xray">X-Ray Vision</button>
+        </div>
+        <div id="scores" class="tab-panel active">
+          <ol id="score-list" class="score-list"></ol>
+        </div>
+        <div id="xray" class="tab-panel">
+          <pre id="event-log" class="event-log"></pre>
+        </div>
+      </aside>
+    </section>
+
+    <section class="challenge-panel">
+      <h2>Try Changing One Thing</h2>
+      <div class="challenge-grid">
+        <article><h3>Starter</h3><p>Add a question. Hint: edit the `questions` array in `src/app.js`.</p></article>
+        <article><h3>Logic</h3><p>Give harder questions more points. Hint: add `points` to each question and use it in `submitAnswer()`.</p></article>
+        <article><h3>Level Up</h3><p>Add team names. Hint: add a team input to `index.html` and include it in the score detail.</p></article>
+      </div>
+    </section>
+  </main>
+
+  <script src="../_shared/sprk_app.js"></script>
+  <script src="src/app.js"></script>
+</body>
+</html>

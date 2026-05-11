@@ -1,0 +1,35 @@
+.flash-card {
+  min-height: 430px;
+  display: grid;
+  align-content: center;
+  gap: 18px;
+}
+
+#progress {
+  color: #93c5fd;
+  font-weight: 700;
+  margin: 0;
+}
+
+#question {
+  color: #f8fafc;
+  font-size: clamp(1.6rem, 4vw, 3rem);
+  margin: 0;
+}
+
+.answer-row {
+  display: grid;
+  grid-template-columns: minmax(150px, 1fr) auto auto;
+  gap: 10px;
+}
+
+.feedback {
+  color: #dbeafe;
+  min-height: 28px;
+}
+
+@media (max-width: 720px) {
+  .answer-row {
+    grid-template-columns: 1fr;
+  }
+}

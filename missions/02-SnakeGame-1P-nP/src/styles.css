@@ -1,0 +1,28 @@
+:root {
+  --board: #0d141d;
+  --snake: #1fc76a;
+  --food: #ff5c7a;
+}
+
+#gameCanvas {
+  display: block;
+  width: min(100%, 420px);
+  aspect-ratio: 1;
+  margin: 14px auto;
+  border: 1px solid var(--border);
+  background: var(--board);
+}
+
+.direction-pad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.direction-pad button:first-child {
+  grid-column: 2;
+}
+
+.direction-pad button:last-child {
+  grid-column: 2;
+}

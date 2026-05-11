@@ -1,0 +1,35 @@
+.quiz-card {
+  min-height: 420px;
+  display: grid;
+  align-content: center;
+  gap: 18px;
+}
+
+#question-number {
+  color: #facc15;
+  font-weight: 800;
+  margin: 0;
+}
+
+#question-text {
+  color: #f8fafc;
+  font-size: clamp(1.5rem, 4vw, 2.7rem);
+  margin: 0;
+}
+
+.answer-row {
+  display: grid;
+  grid-template-columns: minmax(150px, 1fr) auto auto;
+  gap: 10px;
+}
+
+.feedback {
+  min-height: 30px;
+  color: #dbeafe;
+}
+
+@media (max-width: 760px) {
+  .answer-row {
+    grid-template-columns: 1fr;
+  }
+}

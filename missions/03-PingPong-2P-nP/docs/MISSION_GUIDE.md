@@ -1,25 +1,58 @@
 # Mission 03: PingPong
-PingPong starts as a two-player paddle game and can later grow into tournament or classroom mode.
+Start here when you want a two-player keyboard game that teaches movement and collisions.
 
-## Mission Goal
-Build a browser paddle game with two players, a moving ball, scoring, and a win condition.
+Deep dive: [Code Walkthrough](CODE_WALKTHROUGH.md).
 
-## Mode
-`2P-nP`: starts as two players and can grow into many-player mode.
+## Start Here
+1. Run the mission with `python server.py`.
+2. Open the browser link printed by the server.
+3. Player A uses `W/S`; Player B uses `Up/Down`.
+4. First player to 5 wins.
+5. The winner is posted to the shared scoreboard.
+
+## How To Run
+```bash
+cd missions/03-PingPong-2P-nP
+python server.py
+```
+
+```mermaid
+flowchart LR
+    A["Terminal"] --> B["python server.py<br/>(serves PingPong)"]
+    B --> C["Browser on port 8003<br/>(two players share keyboard)"]
+    C --> D["Winner reaches 5"]
+    D --> E["POST /api/scores<br/>(class leaderboard)"]
+```
+
+ASCII view:
+
+```text
+Terminal -> PingPong server -> Browser -> Paddle controls -> Winner -> Shared scoreboard
+```
+
+## Entry Point
+- App page: [index.html](../index.html)
+- Browser logic: [src/app.js](../src/app.js)
+- Styling: [src/styles.css](../src/styles.css)
+- Backend: [server.py](../server.py)
+
+## How The Files Work Together
+| File | What It Does |
+| --- | --- |
+| `server.py` | Starts port 8003 and provides score/event APIs. |
+| `index.html` | Creates the canvas, player names, sound menu, and X-Ray panel. |
+| `src/app.js` | Moves paddles, bounces the ball, detects scoring, and posts winners. |
+| `src/styles.css` | Sizes the canvas and keeps controls compact. |
 
 ## Play It
-Play one match and notice how paddles, ball movement, and scoring work.
+Two people can share one keyboard. A whole class can watch one game and then rotate players, or multiple groups can run their own copies.
 
-## Change It
-Change paddle size, ball speed, colors, score limit, or win message.
-
-## Show It
-Run the changed version and show how the game feels different.
-
-## Level It Up
-Add tournament brackets, team names, sound effects, or spectator scoreboard mode.
+## Try Changing One Thing
+| Challenge | Hint |
+| --- | --- |
+| Win at 3 instead of 5. | Change `winningScore` in `src/app.js`. |
+| Make the ball faster. | Update `bounceBall()`. |
+| Add tournament points. | Change `finishRound()` before it posts the score. |
 
 ## Branch Reminder
-Create your branch before editing files.
-
-Guide: [SPRK Git Repository User Guide](../../../docs/SPRK_Git_Repository_UserGuide.md#create-your-branch)
+Only change code in your own branch, such as `<yourname-sprk>`. Do not edit `main`.
