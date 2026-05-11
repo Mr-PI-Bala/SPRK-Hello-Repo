@@ -4,8 +4,8 @@ SPRK-Hello-Repo is a private mission repository for browser-first coding experie
 The missions are independent. The numbering is the suggested classroom try-out order, not a required learning ladder.
 
 ## Start Here
-1. ~~Ask for access through the public [SPRK-Welcome](https://github.com/Mr-PI-Bala/SPRK-Welcome) repository.~~
-   Victory: if you can see this private repository, your access request worked.
+1. ~~Ask for access through the public [SPRK-Welcome](https://github.com/Mr-PI-Bala/SPRK-Welcome) repository.~~<br>
+   **Victory:** if you can see this private repository, your access request worked.
 2. [Create your own branch before changing code](#create-your-branch-before-changing-code).
 3. Pick one mission from the Mission Menu.
 4. Play the mission first.
@@ -48,8 +48,49 @@ Use this when you are looking at the repository page in the browser.
 4. Choose `Create branch`.
 5. Confirm the page now shows your branch name instead of `main`.
 
-### Create A Branch In Codespaces
-Use this when you are inside Codespaces.
+### Choose Your Branch Method
+Use the method that matches where you are working.
+
+| Where You Are Working | Best Branch Method |
+| --- | --- |
+| GitHub repository page in a browser | Use the branch dropdown near the file list. |
+| Codespaces in browser, including iPad | Use the Codespaces terminal or the VS Code branch control. |
+| VS Code Desktop on your laptop | Use the VS Code branch control or the terminal. |
+| Terminal only | Use the Git commands below. |
+
+### Create A Branch In Codespaces Browser
+Use this when you are inside Codespaces from a browser, including iPad.
+
+Option A: terminal
+
+```bash
+git status
+git pull
+git switch -c <yourname-sprk>
+git branch --show-current
+git push -u origin <yourname-sprk>
+```
+
+Option B: VS Code branch control
+
+1. Look at the bottom-left status bar.
+2. Click the current branch name, usually `main`.
+3. Choose `Create new branch`.
+4. Type your branch name, such as `<yourname-sprk>`.
+5. Confirm the bottom-left branch name changed from `main` to your branch.
+
+### Create A Branch In VS Code Desktop
+Use this when you cloned the repository to your own laptop and opened it in VS Code.
+
+Option A: VS Code branch control
+
+1. Look at the bottom-left status bar.
+2. Click the current branch name, usually `main`.
+3. Choose `Create new branch`.
+4. Type your branch name, such as `<yourname-sprk>`.
+5. Confirm the bottom-left branch name changed from `main` to your branch.
+
+Option B: terminal
 
 ```bash
 git status
