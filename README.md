@@ -4,11 +4,57 @@ SPRK-Hello-Repo is a private mission repository for browser-first coding experie
 The missions are independent. The numbering is the suggested classroom try-out order, not a required learning ladder.
 
 ## Start Here
-1. Ask for access through the public [SPRK-Welcome](https://github.com/Mr-PI-Bala/SPRK-Welcome) repository.
-2. Open this repository after access is approved.
+1. ~~Ask for access through the public [SPRK-Welcome](https://github.com/Mr-PI-Bala/SPRK-Welcome) repository.~~
+   Victory: if you can see this private repository, your access request worked.
+2. Create your own branch before changing code.
 3. Pick one mission from the Mission Menu.
 4. Play the mission first.
-5. Create your own branch when you are ready to change the code.
+5. Make one small change in your own branch.
+
+## Create Your Branch Before Changing Code
+Do this before editing files.
+
+Your branch name should be your GitHub username in lowercase.
+
+Example:
+
+```text
+maya-sprk
+```
+
+### Create A Branch From The GitHub Page
+Use this when you are looking at the repository page in the browser.
+
+1. Find the branch dropdown near the top-left of the file list. It usually says `main`.
+2. Click the branch dropdown.
+3. Type your branch name, such as `<yourname-sprk>`.
+4. Choose `Create branch`.
+5. Confirm the page now shows your branch name instead of `main`.
+
+### Create A Branch In Codespaces
+Use this when you are inside Codespaces.
+
+```bash
+git status
+git pull
+git switch -c <yourname-sprk>
+git branch --show-current
+git push -u origin <yourname-sprk>
+```
+
+Expected result:
+
+```text
+<yourname-sprk>
+```
+
+If the result still says `main`, stop and ask for help before changing files.
+
+Detailed guides:
+
+- [SPRK Git Repository User Guide](docs/SPRK_Git_Repository_UserGuide.md)
+- [SPRK CodeSpaces User Guide](docs/SPRK_CodeSpaces_UserGuide.md)
+- [SPRK VS Code User Guide](docs/SPRK_VSCode_UserGuide.md)
 
 ## Mission Menu
 | Mission | Name | Mode | What Students Experience | What It Teaches | GitHub Needed To Play? | GitHub Needed To Build? |
