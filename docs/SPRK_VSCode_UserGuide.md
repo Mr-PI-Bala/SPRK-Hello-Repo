@@ -7,6 +7,8 @@ This is the master SPRK guide for VS Code, Codespaces editor behavior, Markdown 
 - [Save Your Work](#save-your-work)
 - [Preview Shortcuts](#preview-shortcuts)
 - [Mermaid Diagrams](#mermaid-diagrams)
+- [Markdown Preview Theme](#markdown-preview-theme)
+- [iPad Preview Troubleshooting](#ipad-preview-troubleshooting)
 - [Recommended Extensions](#recommended-extensions)
 
 ## Markdown Opens In Preview
@@ -57,6 +59,37 @@ Useful Markdown preview shortcuts:
 SPRK uses Mermaid diagrams inside Markdown.
 
 Students do not need a Mermaid account. GitHub renders Mermaid diagrams directly in Markdown. Codespaces can preview them with Markdown Preview and the recommended Mermaid extension.
+
+## Markdown Preview Theme
+SPRK repositories should include a Markdown preview stylesheet:
+
+```json
+{
+  "markdown.styles": [
+    "docs/styles/markdown-preview.css"
+  ]
+}
+```
+
+That stylesheet keeps Markdown preview readable in dark mode across GitHub web, github.dev, Codespaces, and VS Code Desktop.
+
+If the preview is white with low-contrast text, the Markdown preview webview is not using the expected dark styling.
+
+## iPad Preview Troubleshooting
+On iPad, github.dev and Codespaces run inside the browser, and Markdown preview is a VS Code webview. Sometimes the editor theme and the preview webview do not refresh together.
+
+Try these steps:
+
+1. Confirm the repository has `.vscode/settings.json`.
+2. Confirm `.vscode/settings.json` includes `markdown.styles`.
+3. Close the Markdown preview tab.
+4. Reopen `README.md`.
+5. Open Command Palette.
+6. Run `Developer: Reload Window`.
+7. Reopen Markdown Preview.
+8. If the preview is still white, open the same README in normal GitHub view instead of github.dev to read the rendered Mermaid diagram.
+
+If Chromebook preview works but iPad preview stays white, treat it as an iPad browser webview limitation. The repository is still valid; use normal GitHub README view for reading and Codespaces editor view for editing.
 
 ## Recommended Extensions
 SPRK repositories can include:

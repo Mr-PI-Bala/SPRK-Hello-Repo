@@ -112,7 +112,7 @@ Detailed guides:
 
 - [SPRK Git Repository User Guide: Create Your Branch](docs/SPRK_Git_Repository_UserGuide.md#create-your-branch)
 - [SPRK CodeSpaces User Guide](docs/SPRK_CodeSpaces_UserGuide.md)
-- [SPRK VS Code User Guide](docs/SPRK_VSCode_UserGuide.md)
+- [SPRK VS Code User Guide](docs/SPRK_VSCode_UserGuide.md), including Markdown preview and iPad troubleshooting.
 
 ## Mission Menu
 | Mission | Name | Mode | What Students Experience | What It Teaches | GitHub Needed To Play? | GitHub Needed To Build? |
