@@ -36,6 +36,36 @@ In Codespaces, right-click `index.html` and use a preview option if one is avail
 ## How To Run
 ReactionRace is currently a browser app. That means the first version runs with only HTML, CSS, and JavaScript.
 
+```mermaid
+flowchart TD
+    A["Student opens Codespaces or VS Code"] --> B["Open terminal"]
+    B --> C["cd missions/01-ReactionRace-nP"]
+    C --> D["python -m http.server 8000"]
+    D --> E["Open browser preview or localhost"]
+    E --> F["ReactionRace appears in browser"]
+```
+
+Plain version:
+
+```text
+Open editor
+  |
+  v
+Open terminal
+  |
+  v
+Go to mission folder
+  |
+  v
+Start web server on port 8000
+  |
+  v
+Open browser preview
+  |
+  v
+Play ReactionRace
+```
+
 ### Run From Codespaces
 Use this path on iPad, Chromebook, or any browser device that can open Codespaces.
 
@@ -72,6 +102,30 @@ http://localhost:8000
 
 ### Run From A Classroom Host Laptop
 Use this path when one laptop hosts the app and other devices join from a browser.
+
+```mermaid
+flowchart LR
+    Host["Host laptop<br/>runs web server"] --> Network["Same Wi-Fi or<br/>SPRK Laptop Network"]
+    Network --> Chromebook["Chromebook<br/>opens host link"]
+    Network --> IPad["iPad<br/>opens host link"]
+    Network --> Phone["Phone<br/>opens host link"]
+    Network --> Laptop["Student laptop<br/>opens host link"]
+```
+
+Plain version:
+
+```text
+Host laptop
+  runs: python -m http.server 8000 --bind 0.0.0.0
+  |
+  v
+Same network
+  |
+  |-- Chromebook opens http://<host-laptop-ip>:8000
+  |-- iPad opens http://<host-laptop-ip>:8000
+  |-- phone opens http://<host-laptop-ip>:8000
+  |-- student laptop opens http://<host-laptop-ip>:8000
+```
 
 1. Connect the host laptop and student devices to the same network.
 2. On the host laptop, run:
@@ -227,6 +281,16 @@ The shared classroom scoreboard comes in the backend version.
 ## Frontend And Backend
 This first version is frontend-only.
 
+```mermaid
+flowchart TD
+    Browser["Browser on one device"] --> HTML["index.html"]
+    Browser --> CSS["src/styles.css"]
+    Browser --> JS["src/app.js"]
+    JS --> Score["Local scoreboard<br/>only on that device"]
+```
+
+Plain version:
+
 ```text
 Browser
   |
@@ -246,6 +310,19 @@ What the frontend does now:
 - Stores scores in the current browser page.
 
 The backend version will add a shared server:
+
+```mermaid
+flowchart LR
+    DeviceA["Student device A"] --> Backend["Backend server<br/>Codespaces or host laptop"]
+    DeviceB["Student device B"] --> Backend
+    DeviceC["Student device C"] --> Backend
+    Backend --> SharedScore["Shared classroom scoreboard"]
+    SharedScore --> DeviceA
+    SharedScore --> DeviceB
+    SharedScore --> DeviceC
+```
+
+Plain version:
 
 ```text
 Student device browser
