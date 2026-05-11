@@ -13,6 +13,81 @@ missions/01-ReactionRace-nP/index.html
 
 In Codespaces, right-click `index.html` and use a preview option if one is available. If preview is not available, start with the normal GitHub file view to inspect the code, then use the next browser-preview setup provided by SPRKTeacher or SPRKAdmin.
 
+## Entry Point
+Start with `index.html`.
+
+That file is the front door for this mission. The browser opens `index.html`, then `index.html` loads the other files.
+
+```text
+index.html
+  |
+  |-- loads src/styles.css
+  |
+  |-- loads src/app.js
+```
+
+Simple meaning:
+
+- `index.html` decides what is on the page.
+- `src/styles.css` decides how the page looks.
+- `src/app.js` decides how the game behaves.
+
+## How The Files Work Together
+```mermaid
+flowchart LR
+    HTML["index.html<br/>page parts"] --> CSS["src/styles.css<br/>colors and layout"]
+    HTML --> JS["src/app.js<br/>game actions"]
+    JS --> Page["Browser page<br/>button, messages, scores"]
+    CSS --> Page
+```
+
+Plain version:
+
+```text
+index.html creates the game parts
+  -> styles.css makes the game readable and touch-friendly
+  -> app.js listens for taps and updates the score
+  -> the browser shows the result
+```
+
+## What Each File Does
+| File | Student Meaning | Good First Change |
+| --- | --- | --- |
+| `index.html` | The page skeleton. It has the title, name box, button, scoreboard, and notes. | Change a heading or instruction sentence. |
+| `src/styles.css` | The style file. It controls colors, spacing, button size, and phone/tablet layout. | Change a color variable like `--go`. |
+| `src/app.js` | The game brain. It starts rounds, waits, checks taps, and updates scores. | Change button text or the default player name. |
+| `docs/CODE_WALKTHROUGH.md` | The deeper explanation. It has function notes and diagrams. | Read this when you want to understand the code flow. |
+
+## Game Flow
+```mermaid
+stateDiagram-v2
+    [*] --> Ready
+    Ready --> Waiting: Start Round
+    Waiting --> Ready: Tap too early
+    Waiting --> Go: Random timer finishes
+    Go --> Result: Tap green button
+    Result --> Ready: Score is saved
+```
+
+Plain version:
+
+```text
+Ready
+  Student taps Start Round
+
+Waiting
+  Student must wait and not tap early
+
+Go
+  Button turns green
+
+Result
+  App saves the reaction time
+
+Ready
+  Student can start again
+```
+
 ## Mode
 `nP`: many players.
 
