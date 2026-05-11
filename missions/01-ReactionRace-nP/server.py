@@ -21,18 +21,35 @@ Then open the browser link shown in the terminal.
 
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 import json
+import os
+import platform
 from pathlib import Path
+import signal
+import shutil
+import socket
+import subprocess
+import sys
+import time
 from urllib.parse import urlparse
 
 
 HOST = "0.0.0.0"
 PORT = 8000
 MAX_SCORES = 25
+MAX_EVENTS = 80
 MISSION_FOLDER = Path(__file__).parent
 
 # This list is the shared classroom memory.
 # Every browser connected to this server sees scores from the same list.
 scores = []
+events = []
+next_score_id = 1
+
+
+class ReusableThreadingHTTPServer(ThreadingHTTPServer):
+    """Allow a clean restart when the previous server released the port."""
+
+    allow_reuse_address = True
 
 
 def make_json_response(handler, status_code, data):
@@ -43,6 +60,26 @@ def make_json_response(handler, status_code, data):
     handler.send_header("Content-Length", str(len(body)))
     handler.end_headers()
     handler.wfile.write(body)
+
+
+def log_event(kind, message):
+    """Print an event and save it for the frontend X-Ray Vision panel."""
+    event = {
+        "time": time.strftime("%H:%M:%S"),
+        "kind": kind,
+        "message": message,
+    }
+    events.append(event)
+    del events[:-MAX_EVENTS]
+    print(f"{event['time']} {kind}: {message}")
+
+
+def make_score_id():
+    """Create a simple increasing ID so the frontend can animate new scores."""
+    global next_score_id
+    score_id = next_score_id
+    next_score_id += 1
+    return score_id
 
 
 def clean_player_name(raw_name):
@@ -64,6 +101,13 @@ def clean_reaction_time(raw_time):
     return reaction_time
 
 
+def clean_sound(raw_sound):
+    """Only allow sound names that the frontend knows how to play."""
+    sound = str(raw_sound or "").strip()
+    allowed_sounds = {"spark", "chime", "laser", "pop", "drum"}
+    return sound if sound in allowed_sounds else "spark"
+
+
 class ReactionRaceHandler(SimpleHTTPRequestHandler):
     """HTTP handler that serves files and the scoreboard API."""
 
@@ -76,8 +120,14 @@ class ReactionRaceHandler(SimpleHTTPRequestHandler):
 
     def do_GET(self):
         """Serve the app files or return the shared scoreboard."""
-        if urlparse(self.path).path == "/api/scores":
+        path = urlparse(self.path).path
+
+        if path == "/api/scores":
             make_json_response(self, 200, {"scores": sorted_scores()})
+            return
+
+        if path == "/api/events":
+            make_json_response(self, 200, {"events": events})
             return
 
         super().do_GET()
@@ -103,13 +153,15 @@ class ReactionRaceHandler(SimpleHTTPRequestHandler):
             return
 
         score = {
+            "id": make_score_id(),
             "name": clean_player_name(data.get("name")),
             "time": reaction_time,
+            "sound": clean_sound(data.get("sound")),
         }
         scores.append(score)
         keep_best_scores_only()
 
-        print(f"score: {score['name']} reacted in {score['time']} ms")
+        log_event("score", f"{score['name']} reacted in {score['time']} ms")
         make_json_response(self, 201, {"scores": sorted_scores()})
 
     def do_DELETE(self):
@@ -119,7 +171,7 @@ class ReactionRaceHandler(SimpleHTTPRequestHandler):
             return
 
         scores.clear()
-        print("scoreboard: cleared")
+        log_event("scoreboard", "cleared")
         make_json_response(self, 200, {"scores": []})
 
 
@@ -133,9 +185,114 @@ def keep_best_scores_only():
     scores[:] = sorted_scores()[:MAX_SCORES]
 
 
+def port_is_open(port):
+    """Check whether another process is already using this port."""
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as probe:
+        probe.settimeout(0.25)
+        return probe.connect_ex(("127.0.0.1", port)) == 0
+
+
+def find_windows_port_pids(port):
+    """Find Windows process IDs using the port, if possible."""
+    result = subprocess.run(
+        ["netstat", "-ano"],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+    for line in result.stdout.splitlines():
+        if f":{port}" in line and "LISTENING" in line:
+            parts = line.split()
+            if parts:
+                return [parts[-1]]
+
+    return []
+
+
+def find_unix_port_pids(port):
+    """Find Linux or macOS process IDs using the port, if possible."""
+    if shutil.which("lsof"):
+        lsof_result = subprocess.run(
+            ["lsof", "-ti", f"tcp:{port}"],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        pids = [line.strip() for line in lsof_result.stdout.splitlines() if line.strip()]
+        if pids:
+            return pids
+
+    if shutil.which("fuser"):
+        fuser_result = subprocess.run(
+            ["fuser", f"{port}/tcp"],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        return [part.strip() for part in fuser_result.stdout.split() if part.strip().isdigit()]
+
+    return []
+
+
+def find_port_pids(port):
+    """Find process IDs using the port on the current operating system."""
+    if platform.system() == "Windows":
+        return find_windows_port_pids(port)
+
+    return find_unix_port_pids(port)
+
+
+def stop_port_processes(pids):
+    """Stop existing server processes after the user approves."""
+    if platform.system() == "Windows":
+        for pid in pids:
+            subprocess.run(["taskkill", "/PID", pid, "/F"], check=False)
+        return
+
+    for pid in pids:
+        try:
+            os.kill(int(pid), signal.SIGTERM)
+        except OSError as error:
+            print(f"Could not stop process {pid}: {error}")
+
+
+def ask_to_free_port(port):
+    """Warn about a busy port and offer to stop it on Windows."""
+    if not port_is_open(port):
+        return
+
+    print()
+    print(f"Port {port} is already in use.")
+    print("That usually means another ReactionRace server is still running.")
+
+    pids = find_port_pids(port)
+    if not pids:
+        print("Could not identify the process using the port.")
+        print("Close the old terminal or restart Codespaces, then try again.")
+        sys.exit(1)
+
+    print(f"Process ID(s) using port {port}: {', '.join(pids)}")
+    answer = input("Stop these process(es) so this server can start? [y/N] ").strip().lower()
+
+    if answer not in {"y", "yes"}:
+        print("Keeping the existing process. Server was not started.")
+        sys.exit(1)
+
+    stop_port_processes(pids)
+    time.sleep(0.5)
+
+    if port_is_open(port):
+        print("The port is still busy. Stop it manually, then try again.")
+        sys.exit(1)
+
+    print(f"Port {port} is clear now.")
+
+
 def main():
     """Start the backend server."""
-    server = ThreadingHTTPServer((HOST, PORT), ReactionRaceHandler)
+    ask_to_free_port(PORT)
+    server = ReusableThreadingHTTPServer((HOST, PORT), ReactionRaceHandler)
 
     print()
     print("SPRK ReactionRace backend")
@@ -145,11 +302,12 @@ def main():
     print(f"- Classroom link pattern: http://<host-laptop-ip>:{PORT}")
     print("- Press Ctrl+C to stop.")
     print()
+    log_event("server", f"started on port {PORT}")
 
     try:
         server.serve_forever()
     except KeyboardInterrupt:
-        print("\nserver: stopped")
+        log_event("server", "stopped")
     finally:
         server.server_close()
 

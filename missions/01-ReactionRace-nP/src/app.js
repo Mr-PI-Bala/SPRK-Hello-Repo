@@ -23,20 +23,28 @@
 // These constants connect JavaScript to the HTML elements.
 // The names are intentionally long so students can read what each one means.
 const playerNameInput = document.querySelector("#playerName");
+const soundChoice = document.querySelector("#soundChoice");
 const saveNameButton = document.querySelector("#saveNameButton");
 const raceButton = document.querySelector("#raceButton");
 const roundStatus = document.querySelector("#roundStatus");
 const roundMessage = document.querySelector("#roundMessage");
 const bestTime = document.querySelector("#bestTime");
 const scoreboardStatus = document.querySelector("#scoreboardStatus");
+const scoreboardTab = document.querySelector("#scoreboardTab");
+const xrayTab = document.querySelector("#xrayTab");
+const scorePanel = document.querySelector("#scorePanel");
+const xrayPanel = document.querySelector("#xrayPanel");
 const scoreList = document.querySelector("#scoreList");
+const eventList = document.querySelector("#eventList");
 const clearButton = document.querySelector("#clearButton");
 
 // This API path points to the backend in server.py.
 // Because it starts with "/", it uses the same Codespaces or laptop host link
 // that opened index.html.
 const scoreboardApiUrl = "/api/scores";
+const eventsApiUrl = "/api/events";
 const scoreboardRefreshMs = 2000;
+const eventRefreshMs = 2000;
 
 // These variables are the app memory.
 // They change while the player uses the page.
@@ -45,8 +53,27 @@ let roundState = "idle";
 let startTime = 0;
 let timerId = null;
 let scores = [];
+let previousScoreRanks = new Map();
+let audioContext = null;
 
 playerNameInput.value = playerName;
+
+/*
+  Turns on browser sound after a student interacts with the page.
+
+  Browsers block surprise sound. That is why we create AudioContext only after
+  the player clicks a button or saves a name.
+*/
+function unlockSound() {
+  if (!audioContext) {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    audioContext = new AudioContextClass();
+  }
+
+  if (audioContext.state === "suspended") {
+    audioContext.resume();
+  }
+}
 
 /*
   Shows short status text to the player.
@@ -78,6 +105,81 @@ function setScoreboardStatus(message) {
 }
 
 /*
+  Plays one short sound using the Web Audio API.
+
+  Students can make new sounds by changing frequency, duration, or oscillator
+  type. Common oscillator types are "sine", "square", "triangle", and
+  "sawtooth".
+*/
+function playTone(frequency, duration, type = "sine") {
+  if (!audioContext) {
+    return;
+  }
+
+  const oscillator = audioContext.createOscillator();
+  const volume = audioContext.createGain();
+
+  oscillator.type = type;
+  oscillator.frequency.value = frequency;
+  volume.gain.setValueAtTime(0.001, audioContext.currentTime);
+  volume.gain.exponentialRampToValueAtTime(0.18, audioContext.currentTime + 0.02);
+  volume.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration);
+
+  oscillator.connect(volume);
+  volume.connect(audioContext.destination);
+  oscillator.start();
+  oscillator.stop(audioContext.currentTime + duration);
+}
+
+/*
+  Plays the sound chosen by the player who earned the score.
+
+  This teaches a useful pattern:
+  data from the backend can control what the frontend plays or animates.
+*/
+function playPlayerSound(score) {
+  const sound = score.sound || "spark";
+
+  if (sound === "chime") {
+    playTone(660, 0.12, "sine");
+    window.setTimeout(() => playTone(880, 0.14, "sine"), 110);
+    return;
+  }
+
+  if (sound === "laser") {
+    playTone(920, 0.08, "sawtooth");
+    window.setTimeout(() => playTone(420, 0.12, "sawtooth"), 80);
+    return;
+  }
+
+  if (sound === "pop") {
+    playTone(260, 0.08, "square");
+    return;
+  }
+
+  if (sound === "drum") {
+    playTone(120, 0.1, "triangle");
+    return;
+  }
+
+  playTone(520, 0.09, "triangle");
+  window.setTimeout(() => playTone(780, 0.12, "triangle"), 90);
+}
+
+/*
+  Switches the right-side panel between the scoreboard and backend X-Ray events.
+*/
+function showPanel(panelName) {
+  const showXray = panelName === "xray";
+  scorePanel.classList.toggle("hidden", showXray);
+  xrayPanel.classList.toggle("hidden", !showXray);
+  scoreboardTab.classList.toggle("active", !showXray);
+  xrayTab.classList.toggle("active", showXray);
+  scoreboardTab.setAttribute("aria-selected", String(!showXray));
+  xrayTab.setAttribute("aria-selected", String(showXray));
+}
+
+/*
   Finds the fastest score so far and displays it.
 
   Lower reaction time is better because it means the player tapped faster.
@@ -105,14 +207,52 @@ function renderScores() {
   scoreList.innerHTML = "";
 
   const sortedScores = [...scores].sort((a, b) => a.time - b.time);
+  const nextScoreRanks = new Map();
+  let soundToPlay = null;
 
-  sortedScores.forEach((score) => {
+  sortedScores.forEach((score, index) => {
+    nextScoreRanks.set(score.id, index);
     const item = document.createElement("li");
     item.innerHTML = `<span>${score.name}</span><strong>${score.time} ms</strong>`;
+
+    const oldRank = previousScoreRanks.get(score.id);
+    if (oldRank === undefined) {
+      item.classList.add("score-new");
+      soundToPlay = soundToPlay || score;
+    } else if (oldRank > index) {
+      item.classList.add("score-up");
+      soundToPlay = soundToPlay || score;
+    }
+
+    if (index === 0) {
+      item.classList.add("score-leader");
+    }
+
     scoreList.appendChild(item);
   });
 
+  if (soundToPlay) {
+    playPlayerSound(soundToPlay);
+  }
+
+  previousScoreRanks = nextScoreRanks;
   updateBestTime();
+}
+
+/*
+  Redraws the X-Ray Vision event list.
+
+  These events come from server.py, so students can see backend activity that
+  would otherwise be hidden in the terminal.
+*/
+function renderEvents(events) {
+  eventList.innerHTML = "";
+
+  events.slice().reverse().forEach((event) => {
+    const item = document.createElement("li");
+    item.textContent = `${event.time} ${event.kind}: ${event.message}`;
+    eventList.appendChild(item);
+  });
 }
 
 /*
@@ -128,6 +268,26 @@ async function loadSharedScores() {
   } catch (error) {
     setScoreboardStatus("Shared scoreboard offline. Run python server.py, then reload.");
     console.log("ReactionRace: scoreboard API is not available yet.", error);
+  }
+}
+
+/*
+  Asks server.py for backend events for the X-Ray Vision panel.
+*/
+async function loadBackendEvents() {
+  try {
+    const response = await fetch(eventsApiUrl);
+    const data = await response.json();
+    renderEvents(data.events || []);
+  } catch (error) {
+    renderEvents([
+      {
+        time: "--:--:--",
+        kind: "offline",
+        message: "Backend events are not available yet."
+      }
+    ]);
+    console.log("ReactionRace: backend events are not available yet.", error);
   }
 }
 
@@ -193,6 +353,7 @@ function startRound() {
   Reaction time = current time - time when the button turned green.
 */
 async function recordTap() {
+  unlockSound();
   const reactionTime = Math.round(performance.now() - startTime);
 
   roundState = "idle";
@@ -202,7 +363,8 @@ async function recordTap() {
   try {
     await saveSharedScore({
       name: playerName,
-      time: reactionTime
+      time: reactionTime,
+      sound: soundChoice.value
     });
     setMessage("Result", `${playerName} reacted in ${reactionTime} ms.`);
     setScoreboardStatus("Shared scoreboard updated for everyone on this backend.");
@@ -228,6 +390,8 @@ function handleEarlyTap() {
 // This is the main game click handler.
 // It checks the current round state and chooses what should happen next.
 raceButton.addEventListener("click", () => {
+  unlockSound();
+
   if (roundState === "idle") {
     startRound();
     return;
@@ -245,10 +409,19 @@ raceButton.addEventListener("click", () => {
 
 // This lets each student choose a name for the scoreboard.
 saveNameButton.addEventListener("click", () => {
+  unlockSound();
   const nextName = playerNameInput.value.trim();
   playerName = nextName || "Maya-SPRK";
   playerNameInput.value = playerName;
   setMessage("Ready", `Player name set to ${playerName}.`);
+});
+
+scoreboardTab.addEventListener("click", () => {
+  showPanel("scores");
+});
+
+xrayTab.addEventListener("click", () => {
+  showPanel("xray");
 });
 
 // This gives the class a clean scoreboard for the next test round.
@@ -266,7 +439,9 @@ clearButton.addEventListener("click", async () => {
 
 // Load the shared scoreboard when the page first opens.
 loadSharedScores();
+loadBackendEvents();
 
 // Refresh the shared scoreboard so each device can see scores from other
 // devices without needing to reload the page.
 window.setInterval(loadSharedScores, scoreboardRefreshMs);
+window.setInterval(loadBackendEvents, eventRefreshMs);

@@ -19,6 +19,7 @@ If you are new, follow these in order:
 | I want to know where the app starts | [Entry Point](#entry-point) |
 | I want to know which file to open | [Code Files](#code-files) |
 | I want diagrams and function details | [CODE_WALKTHROUGH.md](CODE_WALKTHROUGH.md) |
+| I want to understand sounds and animations | [Sounds Animations And X-Ray Vision](#sounds-animations-and-x-ray-vision) |
 | I need to create my branch first | [SPRK Git Repository User Guide](../../../docs/SPRK_Git_Repository_UserGuide.md#create-your-branch) |
 
 ## Standard SPRK Guidance
@@ -86,6 +87,8 @@ python server.py
 4. Open the `Ports` tab.
 5. Open the forwarded port for `8000`.
 6. The browser should show ReactionRace.
+
+If port `8000` is already being used, `server.py` will warn you. When it can identify the old process, it asks before stopping it. This keeps old servers from running in the background by accident.
 
 The Codespaces link will look something like:
 
@@ -306,11 +309,11 @@ What you should see:
 ```text
 Top band
   Mission name on the left
-  Player name on the right
+  Player name and sound choice on the right
 
 Main game area
   Big reaction button on the left
-  Shared scoreboard on the right
+  Shared scoreboard or X-Ray Vision on the right
 
 Bottom area
   Three challenge groups with hints
@@ -322,11 +325,13 @@ The top band should stay small. The button and scoreboard should be visible toge
 Use this when one person is testing on one device.
 
 1. Type your player name.
-2. Select `Use Name`.
-3. Select `Start Round`.
-4. Wait for the button to turn green.
-5. Tap as fast as you can.
-6. Try again and beat your own best score.
+2. Pick your sound.
+3. Select `Use Name`.
+4. Select `Start Round`.
+5. Wait for the button to turn green.
+6. Tap as fast as you can.
+7. Watch the scoreboard animate when scores are added or rankings change.
+8. Open `X-Ray Vision` to see backend events coming from `server.py`.
 
 ### Group Test With Different Devices
 Use this when a facilitator shares the app link with multiple students.
@@ -335,8 +340,10 @@ Use this when a facilitator shares the app link with multiple students.
 2. Facilitator shares the app link.
 3. Each student opens the link on a phone, tablet, Chromebook, or laptop.
 4. Each student types their own player name.
-5. Each student runs one or more reaction rounds.
-6. Students compare scores out loud or from the visible scoreboard on their own device.
+5. Each student picks a sound.
+6. Each student runs one or more reaction rounds.
+7. Students compare scores from the shared scoreboard.
+8. Students open `X-Ray Vision` to see backend events such as score saves and scoreboard clears.
 
 Important current limit:
 
@@ -379,7 +386,9 @@ What the backend does:
 
 - Serves `index.html`, `src/styles.css`, and `src/app.js`.
 - Receives scores at `/api/scores`.
+- Receives backend event requests at `/api/events`.
 - Stores one shared scoreboard while `server.py` is running.
+- Stores recent backend events for the X-Ray Vision panel.
 - Sends updated scores back to every browser that asks for them.
 - The browser asks for updated scores every few seconds so other players appear without a manual reload.
 
@@ -408,6 +417,43 @@ Backend server on Codespaces or host laptop
 Shared classroom scoreboard
 ```
 
+## Sounds Animations And X-Ray Vision
+ReactionRace now teaches three extra app ideas:
+
+| Feature | Where To Look | What It Teaches |
+| --- | --- | --- |
+| Player sounds | [index.html](../index.html), [src/app.js](../src/app.js) | A dropdown can control sound behavior in JavaScript. |
+| Score animations | [src/styles.css](../src/styles.css), [src/app.js](../src/app.js) | CSS classes can animate new scores and rank changes. |
+| X-Ray Vision | [server.py](../server.py), [src/app.js](../src/app.js) | Backend events can be shown inside the frontend so students can see what the server is doing. |
+
+Sound flow:
+
+```text
+Student picks a sound
+  -> app.js sends the sound with the score
+  -> server.py stores it
+  -> app.js plays that sound when the score appears or moves up
+```
+
+Animation flow:
+
+```text
+app.js compares old scoreboard order to new scoreboard order
+  -> new score gets score-new
+  -> score that moves up gets score-up
+  -> first-place score gets score-leader
+  -> styles.css animates those classes
+```
+
+X-Ray Vision flow:
+
+```text
+server.py prints backend events
+  -> server.py also stores those events
+  -> app.js asks /api/events every few seconds
+  -> X-Ray Vision tab shows the backend events
+```
+
 ## Change It
 Start with one small change. Then try a logic challenge after the first change works.
 
@@ -419,6 +465,7 @@ These are safe first edits because they mostly change words or colors.
 | Change the button text. | In [src/app.js](../src/app.js), look for `setButton(label, state)`, then find the `"Tap Now!"` call inside `startRound()`. |
 | Change the colors. | In [src/styles.css](../src/styles.css), look near the top for color variables like `--go`, `--wait`, and `--accent`. |
 | Change the default player name. | In [src/app.js](../src/app.js), look for `let playerName = "Maya-SPRK";`. |
+| Change a player sound. | In [index.html](../index.html), look for `soundChoice`; in [src/app.js](../src/app.js), look for `playPlayerSound(score)`. |
 
 ### Logic Challenges
 These change what the app does, not only how it looks.
@@ -428,6 +475,7 @@ These change what the app does, not only how it looks.
 | Make the wait shorter or longer. | In `startRound()`, change the random `delay` formula. |
 | Change what counts as a safe player name. | In the `saveNameButton` click handler, change the fallback name or add a minimum length check. |
 | Show only the top 10 scores. | In [server.py](../server.py), change `MAX_SCORES`; in `renderScores()`, look at how the score list is drawn. |
+| Change when a sound plays. | In `renderScores()`, compare the old rank to the new rank before calling `playPlayerSound(score)`. |
 
 ### Level-Up Challenges
 These require changing more than one file.
@@ -437,6 +485,7 @@ These require changing more than one file.
 | Add a team name beside each player. | Add a new input in [index.html](../index.html), read it in [src/app.js](../src/app.js), then include it in the score sent to [server.py](../server.py). |
 | Penalize early taps instead of just resetting. | Change `handleEarlyTap()` so it sends a slow score or shows a strike count. |
 | Add a classroom round reset message. | After `clearSharedScores()`, update both `setMessage(...)` and `setScoreboardStatus(...)`. |
+| Add a new scoreboard animation. | Create a new CSS class in [src/styles.css](../src/styles.css), then add it in `renderScores()` when a score moves up. |
 
 Good files to inspect:
 

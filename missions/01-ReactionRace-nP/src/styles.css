@@ -31,7 +31,8 @@ body {
 }
 
 button,
-input {
+input,
+select {
   font: inherit;
 }
 
@@ -119,20 +120,27 @@ label {
   font-weight: 700;
 }
 
-.name-row {
-  /* Input takes the open space; button stays just wide enough for text. */
+.player-row {
+  /* Player name, sound choice, and save button live together. */
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: minmax(120px, 1fr) minmax(104px, 128px) auto;
   gap: 10px;
+  align-items: end;
 }
 
-input {
+input,
+select {
   width: 100%;
   min-height: 44px;
   padding: 10px 12px;
   border: 1px solid var(--border);
   background: #0d141d;
   color: var(--text);
+}
+
+.sound-field label {
+  margin-bottom: 4px;
+  font-size: 0.78rem;
 }
 
 .game-board {
@@ -211,6 +219,25 @@ input:focus-visible {
   color: var(--text);
 }
 
+.tab-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.tab-button {
+  min-height: 36px;
+  padding: 6px 10px;
+  background: #0d141d;
+  color: var(--muted);
+}
+
+.tab-button.active {
+  background: var(--accent);
+  color: #00111f;
+}
+
 .score-list {
   display: grid;
   gap: 8px;
@@ -221,9 +248,50 @@ input:focus-visible {
   overflow: auto;
 }
 
+.score-list li.score-new {
+  animation: score-pop 700ms ease-out;
+}
+
+.score-list li.score-up {
+  animation: score-rise 900ms ease-out;
+}
+
+.score-list li.score-leader {
+  border-left: 4px solid var(--go);
+}
+
 .scoreboard-status {
   margin-bottom: 0;
   color: var(--muted);
+}
+
+.xray-panel {
+  max-height: 300px;
+  overflow: auto;
+}
+
+.xray-note {
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.event-list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style-position: inside;
+}
+
+.event-list li {
+  padding: 8px 10px;
+  background: var(--panel-strong);
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.9rem;
+}
+
+.hidden {
+  display: none;
 }
 
 .score-list li {
@@ -232,6 +300,34 @@ input:focus-visible {
   gap: 12px;
   padding: 10px 12px;
   background: var(--panel-strong);
+}
+
+@keyframes score-pop {
+  0% {
+    transform: scale(0.98);
+    background: var(--accent);
+    color: #00111f;
+  }
+
+  100% {
+    transform: scale(1);
+    background: var(--panel-strong);
+    color: var(--text);
+  }
+}
+
+@keyframes score-rise {
+  0% {
+    transform: translateY(10px);
+    background: var(--go);
+    color: #00111f;
+  }
+
+  100% {
+    transform: translateY(0);
+    background: var(--panel-strong);
+    color: var(--text);
+  }
 }
 
 .student-notes {
@@ -283,7 +379,7 @@ input:focus-visible {
   .mission-band,
   .game-board,
   .challenge-grid,
-  .name-row,
+  .player-row,
   .status-row,
   .section-title-row,
   .score-list li {
@@ -296,7 +392,7 @@ input:focus-visible {
   }
 
   .mode-badge,
-  .name-row button,
+  .player-row button,
   .quiet-button {
     width: 100%;
     margin-top: 10px;

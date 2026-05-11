@@ -28,8 +28,20 @@
           <label for="playerName">Player name</label>
           <div class="mode-badge">nP classroom ready</div>
         </section>
-        <div class="name-row">
-          <input id="playerName" maxlength="24" placeholder="Maya-SPRK" autocomplete="off">
+        <div class="player-row">
+          <div class="name-field">
+            <input id="playerName" maxlength="24" placeholder="Maya-SPRK" autocomplete="off">
+          </div>
+          <div class="sound-field">
+            <label for="soundChoice">Sound</label>
+            <select id="soundChoice" aria-label="Player sound">
+              <option value="spark">Spark</option>
+              <option value="chime">Chime</option>
+              <option value="laser">Laser</option>
+              <option value="pop">Pop</option>
+              <option value="drum">Drum</option>
+            </select>
+          </div>
           <button id="saveNameButton" type="button">Use Name</button>
         </div>
       </header>
@@ -51,8 +63,18 @@
             <h2>Scoreboard</h2>
             <button id="clearButton" type="button" class="quiet-button">Clear</button>
           </div>
+          <div class="tab-row" role="tablist" aria-label="Scoreboard tabs">
+            <button id="scoreboardTab" class="tab-button active" type="button" role="tab" aria-selected="true">Scores</button>
+            <button id="xrayTab" class="tab-button" type="button" role="tab" aria-selected="false">X-Ray Vision</button>
+          </div>
           <p id="scoreboardStatus" class="scoreboard-status">Connecting to the shared scoreboard...</p>
-          <ol id="scoreList" class="score-list"></ol>
+          <div id="scorePanel">
+            <ol id="scoreList" class="score-list"></ol>
+          </div>
+          <div id="xrayPanel" class="xray-panel hidden">
+            <p class="xray-note">Backend events from <code>server.py</code> appear here.</p>
+            <ol id="eventList" class="event-list"></ol>
+          </div>
         </section>
       </section>
 
@@ -66,6 +88,7 @@
               <li>Change the button text in <code>src/app.js</code>. <span class="hint">(Hint: button text is set in <code>setButton(label, state)</code>; start with the <code>"Tap Now!"</code> call inside <code>startRound()</code>.)</span></li>
               <li>Change the colors in <code>src/styles.css</code>. <span class="hint">(Hint: the named color variables are at the top; try <code>--go</code>, <code>--wait</code>, or <code>--accent</code>.)</span></li>
               <li>Change the default player name in <code>src/app.js</code>. <span class="hint">(Hint: look for <code>let playerName = "Maya-SPRK";</code> near the top.)</span></li>
+              <li>Change a player sound. <span class="hint">(Hint: sound choices are in <code>index.html</code>; sound shapes are in <code>playPlayerSound(score)</code>.)</span></li>
             </ul>
           </section>
 
@@ -75,6 +98,7 @@
               <li>Make the wait shorter or longer. <span class="hint">(Hint: in <code>startRound()</code>, change the random <code>delay</code> formula.)</span></li>
               <li>Change what counts as a safe player name. <span class="hint">(Hint: in <code>saveNameButton</code>'s click handler, change the fallback name or add a minimum length check.)</span></li>
               <li>Show only the top 10 scores. <span class="hint">(Hint: in <code>server.py</code>, change <code>MAX_SCORES</code>; in <code>renderScores()</code>, look at how the list is drawn.)</span></li>
+              <li>Change when a sound plays. <span class="hint">(Hint: in <code>renderScores()</code>, compare the old rank to the new rank before calling <code>playPlayerSound(score)</code>.)</span></li>
             </ul>
           </section>
 
@@ -84,6 +108,7 @@
               <li>Add a team name beside each player. <span class="hint">(Hint: add a new input in <code>index.html</code>, read it in <code>app.js</code>, then include it in the score sent to <code>server.py</code>.)</span></li>
               <li>Penalize early taps instead of just resetting. <span class="hint">(Hint: change <code>handleEarlyTap()</code> so it sends a slow score or shows a strike count.)</span></li>
               <li>Add a classroom round reset message. <span class="hint">(Hint: after <code>clearSharedScores()</code>, update both <code>setMessage(...)</code> and <code>setScoreboardStatus(...)</code>.)</span></li>
+              <li>Add a new scoreboard animation. <span class="hint">(Hint: create a new CSS class in <code>src/styles.css</code>, then add it in <code>renderScores()</code> when a score moves up.)</span></li>
             </ul>
           </section>
         </div>
