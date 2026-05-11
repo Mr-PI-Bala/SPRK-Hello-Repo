@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SPRK ReactionRace</title>
+    <link rel="stylesheet" href="src/styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">Mission 01</p>
+          <h1>ReactionRace</h1>
+          <p class="lede">Wait for the signal, tap as fast as you can, then compare scores around the room.</p>
+        </div>
+        <div class="mode-badge">nP classroom ready</div>
+      </section>
+
+      <section class="control-panel" aria-label="Player setup">
+        <label for="playerName">Player name</label>
+        <div class="name-row">
+          <input id="playerName" maxlength="24" placeholder="Maya-SPRK" autocomplete="off">
+          <button id="saveNameButton" type="button">Use Name</button>
+        </div>
+      </section>
+
+      <section class="race-card" aria-live="polite">
+        <div class="status-row">
+          <span id="roundStatus">Ready</span>
+          <span id="bestTime">Best: none yet</span>
+        </div>
+        <button id="raceButton" class="race-button" type="button">Start Round</button>
+        <p id="roundMessage" class="round-message">Tap Start Round. When the button turns green, tap it fast.</p>
+      </section>
+
+      <section class="scoreboard" aria-label="Scoreboard">
+        <div class="section-title-row">
+          <h2>Scoreboard</h2>
+          <button id="clearButton" type="button" class="quiet-button">Clear</button>
+        </div>
+        <ol id="scoreList" class="score-list"></ol>
+      </section>
+
+      <section class="student-notes">
+        <h2>Try Changing One Thing</h2>
+        <ul>
+          <li>Change the button text in <code>src/app.js</code>.</li>
+          <li>Change the colors in <code>src/styles.css</code>.</li>
+          <li>Change the default player name in <code>src/app.js</code>.</li>
+        </ul>
+      </section>
+    </main>
+
+    <script src="src/app.js"></script>
+  </body>
+</html>
