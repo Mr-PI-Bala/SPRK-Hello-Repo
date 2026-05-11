@@ -1,0 +1,9 @@
+{
+  "workbench.editorAssociations": {
+    "*.md": "vscode.markdown.preview.editor"
+  },
+  "markdown.preview.openMarkdownLinks": "inPreview",
+  "markdown.styles": [
+    "docs/styles/markdown-preview.css"
+  ]
+}
