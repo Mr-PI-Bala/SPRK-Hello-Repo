@@ -13,6 +13,69 @@ missions/01-ReactionRace-nP/index.html
 
 In Codespaces, right-click `index.html` and use a preview option if one is available. If preview is not available, start with the normal GitHub file view to inspect the code, then use the next browser-preview setup provided by SPRKTeacher or SPRKAdmin.
 
+## How To Run
+ReactionRace is currently a browser app. That means the first version runs with only HTML, CSS, and JavaScript.
+
+### Run From Codespaces
+Use this path on iPad, Chromebook, or any browser device that can open Codespaces.
+
+1. Open `SPRK-Hello-Repo` in Codespaces.
+2. Open the terminal.
+3. Run:
+
+```bash
+cd missions/01-ReactionRace-nP
+python -m http.server 8000
+```
+
+4. Open the `Ports` tab.
+5. Open the forwarded port for `8000`.
+6. The browser should show ReactionRace.
+
+### Run From VS Code Desktop
+Use this path on a laptop with the repository cloned locally.
+
+1. Open the repository in VS Code.
+2. Open the terminal.
+3. Run:
+
+```bash
+cd missions/01-ReactionRace-nP
+python -m http.server 8000
+```
+
+4. Open:
+
+```text
+http://localhost:8000
+```
+
+### Run From A Classroom Host Laptop
+Use this path when one laptop hosts the app and other devices join from a browser.
+
+1. Connect the host laptop and student devices to the same network.
+2. On the host laptop, run:
+
+```bash
+cd missions/01-ReactionRace-nP
+python -m http.server 8000 --bind 0.0.0.0
+```
+
+3. Find the host laptop IP address.
+4. Student devices open:
+
+```text
+http://<host-laptop-ip>:8000
+```
+
+Example:
+
+```text
+http://192.168.1.25:8000
+```
+
+If the page does not open from another device, the network or firewall may be blocking device-to-device traffic.
+
 ## Entry Point
 Start with `index.html`.
 
@@ -94,14 +157,71 @@ Ready
 ## Play It
 Join the facilitator's game link and try one reaction round.
 
-Solo test:
+### Solo Test
+Use this when one person is testing on one device.
 
 1. Type your player name.
 2. Select `Use Name`.
 3. Select `Start Round`.
 4. Wait for the button to turn green.
 5. Tap as fast as you can.
-6. Compare the score with another player.
+6. Try again and beat your own best score.
+
+### Group Test With Different Devices
+Use this when a facilitator shares the app link with multiple students.
+
+1. Facilitator runs the app from Codespaces or a host laptop.
+2. Facilitator shares the app link.
+3. Each student opens the link on a phone, tablet, Chromebook, or laptop.
+4. Each student types their own player name.
+5. Each student runs one or more reaction rounds.
+6. Students compare scores out loud or from the visible scoreboard on their own device.
+
+Important current limit:
+
+Each browser keeps its own local scoreboard in this first version. If three students open the app on three devices, each device has its own scoreboard.
+
+The shared classroom scoreboard comes in the backend version.
+
+## Frontend And Backend
+This first version is frontend-only.
+
+```text
+Browser
+  |
+  |-- index.html
+  |-- src/styles.css
+  |-- src/app.js
+  |
+  v
+Local scoreboard on that device
+```
+
+What the frontend does now:
+
+- Shows the page.
+- Handles taps.
+- Measures reaction time.
+- Stores scores in the current browser page.
+
+The backend version will add a shared server:
+
+```text
+Student device browser
+  |
+  v
+Backend server on Codespaces or host laptop
+  |
+  v
+Shared classroom scoreboard
+```
+
+What the backend will do later:
+
+- Receive scores from many devices.
+- Store one shared scoreboard.
+- Send the updated scoreboard back to every player.
+- Let phones, tablets, Chromebooks, and laptops play together in the same classroom round.
 
 ## Change It
 Change one visible setting, such as the round label, button text, reaction message, or leaderboard title.
