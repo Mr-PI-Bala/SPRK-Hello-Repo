@@ -188,6 +188,11 @@ input:focus-visible {
   list-style-position: inside;
 }
 
+.scoreboard-status {
+  margin-bottom: 0;
+  color: var(--muted);
+}
+
 .score-list li {
   display: flex;
   justify-content: space-between;

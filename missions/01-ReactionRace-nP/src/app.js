@@ -6,16 +6,18 @@
   2. The app waits for a random amount of time.
   3. The button turns green.
   4. The player taps as fast as possible.
-  5. The app records the reaction time and updates the scoreboard.
+  5. The app sends the score to server.py.
+  6. server.py sends back the shared classroom scoreboard.
 
   Simple flow:
 
-  idle -> waiting -> ready -> result -> idle
+  browser -> app.js -> server.py -> shared scoreboard -> browser
 
   Vocabulary:
+  - "frontend" means this browser page.
+  - "backend" means server.py.
+  - "API" means a URL that JavaScript uses to talk to the backend.
   - "state" means what mode the round is currently in.
-  - "timer" means code that runs later after waiting.
-  - "score" means one saved result for one player tap.
 */
 
 // These constants connect JavaScript to the HTML elements.
@@ -26,8 +28,15 @@ const raceButton = document.querySelector("#raceButton");
 const roundStatus = document.querySelector("#roundStatus");
 const roundMessage = document.querySelector("#roundMessage");
 const bestTime = document.querySelector("#bestTime");
+const scoreboardStatus = document.querySelector("#scoreboardStatus");
 const scoreList = document.querySelector("#scoreList");
 const clearButton = document.querySelector("#clearButton");
+
+// This API path points to the backend in server.py.
+// Because it starts with "/", it uses the same Codespaces or laptop host link
+// that opened index.html.
+const scoreboardApiUrl = "/api/scores";
+const scoreboardRefreshMs = 2000;
 
 // These variables are the app memory.
 // They change while the player uses the page.
@@ -62,6 +71,13 @@ function setButton(label, state) {
 }
 
 /*
+  Shows whether the shared scoreboard backend is working.
+*/
+function setScoreboardStatus(message) {
+  scoreboardStatus.textContent = message;
+}
+
+/*
   Finds the fastest score so far and displays it.
 
   Lower reaction time is better because it means the player tapped faster.
@@ -82,7 +98,8 @@ function updateBestTime() {
 /*
   Redraws the scoreboard from the scores array.
 
-  We sort a copy of the scores so the fastest result appears first.
+  server.py already sends sorted scores, but sorting again here keeps the
+  frontend easy to understand and safe if that backend changes later.
 */
 function renderScores() {
   scoreList.innerHTML = "";
@@ -96,6 +113,56 @@ function renderScores() {
   });
 
   updateBestTime();
+}
+
+/*
+  Asks server.py for the latest shared classroom scoreboard.
+*/
+async function loadSharedScores() {
+  try {
+    const response = await fetch(scoreboardApiUrl);
+    const data = await response.json();
+    scores = data.scores || [];
+    setScoreboardStatus("Shared scoreboard connected.");
+    renderScores();
+  } catch (error) {
+    setScoreboardStatus("Shared scoreboard offline. Run python server.py, then reload.");
+    console.log("ReactionRace: scoreboard API is not available yet.", error);
+  }
+}
+
+/*
+  Sends one reaction score to server.py.
+
+  The backend stores the score and returns the updated shared scoreboard.
+*/
+async function saveSharedScore(score) {
+  const response = await fetch(scoreboardApiUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(score)
+  });
+
+  const data = await response.json();
+  scores = data.scores || [];
+  renderScores();
+}
+
+/*
+  Clears the shared classroom scoreboard.
+
+  This affects everyone connected to the same server.py backend.
+*/
+async function clearSharedScores() {
+  const response = await fetch(scoreboardApiUrl, {
+    method: "DELETE"
+  });
+
+  const data = await response.json();
+  scores = data.scores || [];
+  renderScores();
 }
 
 /*
@@ -125,17 +192,25 @@ function startRound() {
   performance.now() gives a very precise timestamp.
   Reaction time = current time - time when the button turned green.
 */
-function recordTap() {
+async function recordTap() {
   const reactionTime = Math.round(performance.now() - startTime);
-  scores.push({
-    name: playerName,
-    time: reactionTime
-  });
 
   roundState = "idle";
   setButton("Start Round", "idle");
-  setMessage("Result", `${playerName} reacted in ${reactionTime} ms.`);
-  renderScores();
+  setMessage("Saving", `${playerName} reacted in ${reactionTime} ms. Updating the shared scoreboard.`);
+
+  try {
+    await saveSharedScore({
+      name: playerName,
+      time: reactionTime
+    });
+    setMessage("Result", `${playerName} reacted in ${reactionTime} ms.`);
+    setScoreboardStatus("Shared scoreboard updated for everyone on this backend.");
+  } catch (error) {
+    setMessage("Backend Needed", "Score was not saved. Run python server.py and reload.");
+    setScoreboardStatus("Shared scoreboard offline. This device cannot see other players yet.");
+    console.log("ReactionRace: could not save score.", error);
+  }
 }
 
 /*
@@ -177,11 +252,21 @@ saveNameButton.addEventListener("click", () => {
 });
 
 // This gives the class a clean scoreboard for the next test round.
-clearButton.addEventListener("click", () => {
-  scores = [];
-  renderScores();
-  setMessage("Ready", "Scoreboard cleared. Start a new round.");
+clearButton.addEventListener("click", async () => {
+  try {
+    await clearSharedScores();
+    setMessage("Ready", "Shared scoreboard cleared. Start a new round.");
+    setScoreboardStatus("Shared scoreboard cleared for everyone on this backend.");
+  } catch (error) {
+    setMessage("Backend Needed", "Could not clear scores. Run python server.py and reload.");
+    setScoreboardStatus("Shared scoreboard offline.");
+    console.log("ReactionRace: could not clear scores.", error);
+  }
 });
 
-// Draw the empty scoreboard when the page first opens.
-renderScores();
+// Load the shared scoreboard when the page first opens.
+loadSharedScores();
+
+// Refresh the shared scoreboard so each device can see scores from other
+// devices without needing to reload the page.
+window.setInterval(loadSharedScores, scoreboardRefreshMs);

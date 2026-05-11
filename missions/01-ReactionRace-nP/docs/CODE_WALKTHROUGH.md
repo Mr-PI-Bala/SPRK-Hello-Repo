@@ -11,7 +11,10 @@ This guide explains how the files and functions work together.
     The visual design. It controls color, spacing, layout, and phone/tablet sizing.
 
   src/app.js
-    The game behavior. It starts rounds, waits, records taps, and updates scores.
+    The frontend game behavior. It starts rounds, waits, records taps, and sends scores to server.py.
+
+  server.py
+    The backend. It serves the browser files and stores one shared classroom scoreboard.
 
   docs/MISSION_GUIDE.md
     The student mission instructions.
@@ -22,6 +25,8 @@ This guide explains how the files and functions work together.
 flowchart LR
     HTML["index.html<br/>page parts"] --> CSS["src/styles.css<br/>visual style"]
     HTML --> JS["src/app.js<br/>game behavior"]
+    JS --> Server["server.py<br/>shared scores"]
+    Server --> JS
     JS --> HTML
     Guide["docs/MISSION_GUIDE.md<br/>what to try"] --> HTML
 ```
@@ -32,6 +37,7 @@ Plain version:
 index.html gives the app its parts
   -> styles.css makes those parts look good
   -> app.js makes those parts react to taps
+  -> server.py saves the shared scores
   -> the browser shows the result
 ```
 
@@ -70,6 +76,10 @@ idle
 | `setButton(label, state)` | Changes button text and color state. | Make the big button match the game moment. |
 | `updateBestTime()` | Finds the fastest score. | Show who is winning. |
 | `renderScores()` | Rebuilds the scoreboard. | Redraw the class results. |
+| `loadSharedScores()` | Gets scores from `server.py`. | Ask the classroom backend who is winning. |
+| `saveSharedScore(score)` | Sends one score to `server.py`. | Add this player's tap to the classroom scoreboard. |
+| `clearSharedScores()` | Clears scores through `server.py`. | Reset the shared scoreboard for the class. |
+| `window.setInterval(...)` | Refreshes scores every few seconds. | Let each device see scores from other devices. |
 | `startRound()` | Starts a new round with a random wait. | Begin the challenge. |
 | `recordTap()` | Saves a successful reaction time. | Add one score. |
 | `handleEarlyTap()` | Cancels a too-early tap. | Reset after jumping early. |
@@ -93,6 +103,12 @@ Is roundState "waiting"?
   v
 Is roundState "ready"?
   yes -> recordTap()
+           |
+           v
+         saveSharedScore()
+           |
+           v
+         server.py updates shared scoreboard
 ```
 
 ## First Safe Changes
@@ -109,6 +125,8 @@ This mission teaches a common app pattern:
 ```text
 User action
   -> JavaScript changes data
+  -> JavaScript talks to the backend
+  -> Backend stores shared data
   -> JavaScript updates the page
   -> CSS makes the result visible
 ```

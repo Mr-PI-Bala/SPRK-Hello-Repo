@@ -36,23 +36,29 @@ Students can always read `SPRK-Welcome` because it is public. Working repositori
 Build a whole-class reaction game where students join from phones, tablets, Chromebooks, or laptops and compete on a live leaderboard.
 
 ## Open The App
-Open:
+The recommended classroom version uses `server.py`.
+
+Open the app through the browser link created in [How To Run](#how-to-run).
+
+Code starting point:
 
 ```text
 missions/01-ReactionRace-nP/index.html
 ```
 
-In Codespaces, right-click `index.html` and use a preview option if one is available. If preview is not available, start with the normal GitHub file view to inspect the code, then use the next browser-preview setup provided by SPRKTeacher or SPRKAdmin.
+`index.html` is still the page, but `server.py` is what makes the shared scoreboard work across devices.
 
 ## How To Run
-ReactionRace is currently a browser app. That means the first version runs with only HTML, CSS, and JavaScript.
+ReactionRace is a browser app with a tiny Python backend.
+
+The frontend is what students see in the browser. The backend is `server.py`, and it keeps one shared classroom scoreboard.
 
 ```mermaid
 flowchart LR
     A["Editor<br/>(Codespaces or VS Code)"] --> B["Terminal<br/>(type commands)"]
     B --> C["Mission folder<br/>(go to this app)"]
-    C --> D["Web server<br/>(runs index.html)"]
-    D --> E["Browser link<br/>(play the app)"]
+    C --> D["python server.py<br/>(runs index.html and scores API)"]
+    D --> E["Browser link<br/>(play the shared game)"]
 ```
 
 Plain version:
@@ -61,8 +67,8 @@ Plain version:
 Editor (Codespaces or VS Code)
   -> Terminal (type commands)
   -> Mission folder (go to this app)
-  -> Web server (runs index.html)
-  -> Browser link (play the app)
+  -> python server.py (runs index.html and the shared scores API)
+  -> Browser link (play the shared game)
 ```
 
 ### Run From Codespaces
@@ -74,7 +80,7 @@ Use this path on iPad, Chromebook, or any browser device that can open Codespace
 
 ```bash
 cd missions/01-ReactionRace-nP
-python -m http.server 8000
+python server.py
 ```
 
 4. Open the `Ports` tab.
@@ -89,9 +95,10 @@ https://<your-codespace-name>-8000.app.github.dev
 
 That link means:
 
-- `8000` is the port where the small Python web server is running.
+- `8000` is the port where `server.py` is running.
 - `app.github.dev` is GitHub's browser access to your Codespace.
 - Opening the link shows `index.html`.
+- Scores go through `/api/scores`, which is handled by `server.py`.
 
 ### Run From VS Code Desktop
 Use this path on a laptop with the repository cloned locally.
@@ -102,7 +109,7 @@ Use this path on a laptop with the repository cloned locally.
 
 ```bash
 cd missions/01-ReactionRace-nP
-python -m http.server 8000
+python server.py
 ```
 
 4. Open:
@@ -114,8 +121,9 @@ http://localhost:8000
 That link means:
 
 - `localhost` is your own laptop.
-- `8000` is the port where the small Python web server is running.
+- `8000` is the port where `server.py` is running.
 - Opening the link shows `index.html`.
+- Scores go through `/api/scores`, which is handled by `server.py`.
 
 ### Run From A Classroom Host Laptop
 Use this path when one laptop hosts the app and other devices join from a browser.
@@ -157,7 +165,7 @@ Host laptop (runs index.html)
 
 ```bash
 cd missions/01-ReactionRace-nP
-python -m http.server 8000 --bind 0.0.0.0
+python server.py
 ```
 
 3. Find the host laptop IP address.
@@ -176,8 +184,9 @@ http://192.168.1.25:8000
 That link means:
 
 - `192.168.1.25` is an example host laptop IP address.
-- `8000` is the port where the small Python web server is running.
+- `8000` is the port where `server.py` is running.
 - Every student device must be on the same network to open this link.
+- Everyone who opens the same host link uses the same shared scoreboard.
 
 If the page does not open from another device, the network or firewall may be blocking device-to-device traffic.
 
@@ -192,6 +201,8 @@ index.html
   |-- loads src/styles.css
   |
   |-- loads src/app.js
+  |
+  |-- talks to server.py through /api/scores
 ```
 
 Simple meaning:
@@ -199,6 +210,7 @@ Simple meaning:
 - `index.html` decides what is on the page.
 - `src/styles.css` decides how the page looks.
 - `src/app.js` decides how the game behaves.
+- `server.py` stores the shared classroom scoreboard.
 
 ## Code Files
 Open these files from the mission folder:
@@ -208,6 +220,7 @@ Open these files from the mission folder:
 | Page structure | [index.html](../index.html) | The title, player name input, big button, scoreboard, and student notes. |
 | Game behavior | [src/app.js](../src/app.js) | Functions such as `startRound()`, `recordTap()`, and `handleEarlyTap()`. |
 | Visual design | [src/styles.css](../src/styles.css) | Color variables, button size, layout, and phone/tablet rules. |
+| Shared backend | [server.py](../server.py) | The API that stores and returns the classroom scoreboard. |
 | Deep explanation | [CODE_WALKTHROUGH.md](CODE_WALKTHROUGH.md) | Diagrams, function table, and the main click flow. |
 
 Recommended first code reading path:
@@ -226,6 +239,8 @@ index.html
 flowchart LR
     HTML["index.html<br/>page parts"] --> CSS["src/styles.css<br/>colors and layout"]
     HTML --> JS["src/app.js<br/>game actions"]
+    JS --> API["server.py<br/>shared scores API"]
+    API --> JS
     JS --> Page["Browser page<br/>button, messages, scores"]
     CSS --> Page
 ```
@@ -235,7 +250,9 @@ Plain version:
 ```text
 index.html creates the game parts
   -> styles.css makes the game readable and touch-friendly
-  -> app.js listens for taps and updates the score
+  -> app.js listens for taps
+  -> server.py stores the shared classroom score
+  -> app.js redraws the score
   -> the browser shows the result
 ```
 
@@ -244,7 +261,8 @@ index.html creates the game parts
 | --- | --- | --- |
 | `index.html` | The page skeleton. It has the title, name box, button, scoreboard, and notes. | Change a heading or instruction sentence. |
 | `src/styles.css` | The style file. It controls colors, spacing, button size, and phone/tablet layout. | Change a color variable like `--go`. |
-| `src/app.js` | The game brain. It starts rounds, waits, checks taps, and updates scores. | Change button text or the default player name. |
+| `src/app.js` | The frontend game brain. It starts rounds, waits, checks taps, and asks the backend to save scores. | Change button text or the default player name. |
+| `server.py` | The backend. It serves the page files and stores one shared classroom scoreboard. | Change `MAX_SCORES` after you understand the flow. |
 | `docs/CODE_WALKTHROUGH.md` | The deeper explanation. It has function notes and diagrams. | Read this when you want to understand the code flow. |
 
 ## Game Flow
@@ -305,46 +323,54 @@ Use this when a facilitator shares the app link with multiple students.
 
 Important current limit:
 
-Each browser keeps its own local scoreboard in this first version. If three students open the app on three devices, each device has its own scoreboard.
+Everyone must use the same backend link to share scores.
 
-The shared classroom scoreboard comes in the backend version.
+If one student opens one Codespaces link and another student opens a different Codespaces link, those are different backends and the scores will not combine.
 
 ## Frontend And Backend
-This first version is frontend-only.
+This mission now has both a frontend and a backend.
 
 ```mermaid
 flowchart TD
-    Browser["Browser on one device"] --> HTML["index.html"]
-    Browser --> CSS["src/styles.css"]
-    Browser --> JS["src/app.js"]
-    JS --> Score["Local scoreboard<br/>only on that device"]
+    DeviceA["Chromebook browser"] --> Backend["server.py<br/>shared backend"]
+    DeviceB["iPad browser"] --> Backend
+    DeviceC["Phone browser"] --> Backend
+    Backend --> Score["One shared scoreboard"]
+    Score --> DeviceA
+    Score --> DeviceB
+    Score --> DeviceC
 ```
 
 Plain version:
 
 ```text
-Browser
-  |
-  |-- index.html
-  |-- src/styles.css
-  |-- src/app.js
-  |
-  v
-Local scoreboard on that device
+Chromebook, iPad, phone, or laptop browser
+  -> same server.py backend link
+  -> one shared scoreboard
+  -> updated scores show on each browser
 ```
 
-What the frontend does now:
+What the frontend does:
 
 - Shows the page.
 - Handles taps.
 - Measures reaction time.
-- Stores scores in the current browser page.
+- Sends scores to the backend.
+- Redraws the scoreboard it gets back from the backend.
 
-The backend version will add a shared server:
+What the backend does:
+
+- Serves `index.html`, `src/styles.css`, and `src/app.js`.
+- Receives scores at `/api/scores`.
+- Stores one shared scoreboard while `server.py` is running.
+- Sends updated scores back to every browser that asks for them.
+- The browser asks for updated scores every few seconds so other players appear without a manual reload.
+
+Shared-score flow:
 
 ```mermaid
-flowchart LR
-    DeviceA["Student device A"] --> Backend["Backend server<br/>Codespaces or host laptop"]
+flowchart TD
+    DeviceA["Student device A<br/>(tap score)"] --> Backend["server.py<br/>(save score)"]
     DeviceB["Student device B"] --> Backend
     DeviceC["Student device C"] --> Backend
     Backend --> SharedScore["Shared classroom scoreboard"]
@@ -364,13 +390,6 @@ Backend server on Codespaces or host laptop
   v
 Shared classroom scoreboard
 ```
-
-What the backend will do later:
-
-- Receive scores from many devices.
-- Store one shared scoreboard.
-- Send the updated scoreboard back to every player.
-- Let phones, tablets, Chromebooks, and laptops play together in the same classroom round.
 
 ## Change It
 Change one visible setting, such as the round label, button text, reaction message, or leaderboard title.
