@@ -15,53 +15,78 @@
   </head>
   <body>
     <main class="app-shell">
-      <!-- Hero: the title and short mission explanation. -->
-      <section class="hero">
+      <!-- Mission band: compact title plus player setup. -->
+      <header class="mission-band">
         <div>
           <p class="eyebrow">Mission 01</p>
           <h1>ReactionRace</h1>
-          <p class="lede">Wait for the signal, tap as fast as you can, then compare scores around the room.</p>
+          <p class="lede">Wait for green, tap fast, compare the shared scoreboard.</p>
         </div>
-        <div class="mode-badge">nP classroom ready</div>
-      </section>
 
-      <!-- Player setup: the student chooses the name shown on the scoreboard. -->
-      <section class="control-panel" aria-label="Player setup">
-        <label for="playerName">Player name</label>
+        <!-- Player setup: the student chooses the name shown on the scoreboard. -->
+        <section class="player-panel" aria-label="Player setup">
+          <label for="playerName">Player name</label>
+          <div class="mode-badge">nP classroom ready</div>
+        </section>
         <div class="name-row">
           <input id="playerName" maxlength="24" placeholder="Maya-SPRK" autocomplete="off">
           <button id="saveNameButton" type="button">Use Name</button>
         </div>
-      </section>
+      </header>
 
-      <!-- Race card: the main game area. -->
-      <section class="race-card" aria-live="polite">
-        <div class="status-row">
-          <span id="roundStatus">Ready</span>
-          <span id="bestTime">Best: none yet</span>
-        </div>
-        <button id="raceButton" class="race-button" type="button">Start Round</button>
-        <p id="roundMessage" class="round-message">Tap Start Round. When the button turns green, tap it fast.</p>
-      </section>
+      <section class="game-board" aria-label="ReactionRace game board">
+        <!-- Race card: the main game area. -->
+        <section class="race-card" aria-live="polite">
+          <div class="status-row">
+            <span id="roundStatus">Ready</span>
+            <span id="bestTime">Best: none yet</span>
+          </div>
+          <button id="raceButton" class="race-button" type="button">Start Round</button>
+          <p id="roundMessage" class="round-message">Tap Start Round. When the button turns green, tap it fast.</p>
+        </section>
 
-      <!-- Scoreboard: JavaScript fills this list after each successful tap. -->
-      <section class="scoreboard" aria-label="Scoreboard">
-        <div class="section-title-row">
-          <h2>Scoreboard</h2>
-          <button id="clearButton" type="button" class="quiet-button">Clear</button>
-        </div>
-        <p id="scoreboardStatus" class="scoreboard-status">Connecting to the shared scoreboard...</p>
-        <ol id="scoreList" class="score-list"></ol>
+        <!-- Scoreboard: JavaScript fills this list after each successful tap. -->
+        <section class="scoreboard" aria-label="Scoreboard">
+          <div class="section-title-row">
+            <h2>Scoreboard</h2>
+            <button id="clearButton" type="button" class="quiet-button">Clear</button>
+          </div>
+          <p id="scoreboardStatus" class="scoreboard-status">Connecting to the shared scoreboard...</p>
+          <ol id="scoreList" class="score-list"></ol>
+        </section>
       </section>
 
       <!-- Student notes: safe first changes for new coders. -->
       <section class="student-notes">
         <h2>Try Changing One Thing</h2>
-        <ul>
-          <li>Change the button text in <code>src/app.js</code>.</li>
-          <li>Change the colors in <code>src/styles.css</code>.</li>
-          <li>Change the default player name in <code>src/app.js</code>.</li>
-        </ul>
+        <div class="challenge-grid">
+          <section>
+            <h3>Starter changes</h3>
+            <ul>
+              <li>Change the button text in <code>src/app.js</code>. <span class="hint">(Hint: button text is set in <code>setButton(label, state)</code>; start with the <code>"Tap Now!"</code> call inside <code>startRound()</code>.)</span></li>
+              <li>Change the colors in <code>src/styles.css</code>. <span class="hint">(Hint: the named color variables are at the top; try <code>--go</code>, <code>--wait</code>, or <code>--accent</code>.)</span></li>
+              <li>Change the default player name in <code>src/app.js</code>. <span class="hint">(Hint: look for <code>let playerName = "Maya-SPRK";</code> near the top.)</span></li>
+            </ul>
+          </section>
+
+          <section>
+            <h3>Logic challenges</h3>
+            <ul>
+              <li>Make the wait shorter or longer. <span class="hint">(Hint: in <code>startRound()</code>, change the random <code>delay</code> formula.)</span></li>
+              <li>Change what counts as a safe player name. <span class="hint">(Hint: in <code>saveNameButton</code>'s click handler, change the fallback name or add a minimum length check.)</span></li>
+              <li>Show only the top 10 scores. <span class="hint">(Hint: in <code>server.py</code>, change <code>MAX_SCORES</code>; in <code>renderScores()</code>, look at how the list is drawn.)</span></li>
+            </ul>
+          </section>
+
+          <section>
+            <h3>Level-up challenges</h3>
+            <ul>
+              <li>Add a team name beside each player. <span class="hint">(Hint: add a new input in <code>index.html</code>, read it in <code>app.js</code>, then include it in the score sent to <code>server.py</code>.)</span></li>
+              <li>Penalize early taps instead of just resetting. <span class="hint">(Hint: change <code>handleEarlyTap()</code> so it sends a slow score or shows a strike count.)</span></li>
+              <li>Add a classroom round reset message. <span class="hint">(Hint: after <code>clearSharedScores()</code>, update both <code>setMessage(...)</code> and <code>setScoreboardStatus(...)</code>.)</span></li>
+            </ul>
+          </section>
+        </div>
       </section>
     </main>
 

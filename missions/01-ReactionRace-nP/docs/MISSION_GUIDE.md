@@ -301,6 +301,23 @@ Ready
 ## Play It
 Join the facilitator's game link and try one reaction round.
 
+What you should see:
+
+```text
+Top band
+  Mission name on the left
+  Player name on the right
+
+Main game area
+  Big reaction button on the left
+  Shared scoreboard on the right
+
+Bottom area
+  Three challenge groups with hints
+```
+
+The top band should stay small. The button and scoreboard should be visible together on normal laptop, Chromebook, and tablet screens.
+
 ### Solo Test
 Use this when one person is testing on one device.
 
@@ -392,13 +409,41 @@ Shared classroom scoreboard
 ```
 
 ## Change It
-Change one visible setting, such as the round label, button text, reaction message, or leaderboard title.
+Start with one small change. Then try a logic challenge after the first change works.
 
-Good first files to inspect:
+### Starter Changes
+These are safe first edits because they mostly change words or colors.
+
+| Challenge | Hint |
+| --- | --- |
+| Change the button text. | In [src/app.js](../src/app.js), look for `setButton(label, state)`, then find the `"Tap Now!"` call inside `startRound()`. |
+| Change the colors. | In [src/styles.css](../src/styles.css), look near the top for color variables like `--go`, `--wait`, and `--accent`. |
+| Change the default player name. | In [src/app.js](../src/app.js), look for `let playerName = "Maya-SPRK";`. |
+
+### Logic Challenges
+These change what the app does, not only how it looks.
+
+| Challenge | Hint |
+| --- | --- |
+| Make the wait shorter or longer. | In `startRound()`, change the random `delay` formula. |
+| Change what counts as a safe player name. | In the `saveNameButton` click handler, change the fallback name or add a minimum length check. |
+| Show only the top 10 scores. | In [server.py](../server.py), change `MAX_SCORES`; in `renderScores()`, look at how the score list is drawn. |
+
+### Level-Up Challenges
+These require changing more than one file.
+
+| Challenge | Hint |
+| --- | --- |
+| Add a team name beside each player. | Add a new input in [index.html](../index.html), read it in [src/app.js](../src/app.js), then include it in the score sent to [server.py](../server.py). |
+| Penalize early taps instead of just resetting. | Change `handleEarlyTap()` so it sends a slow score or shows a strike count. |
+| Add a classroom round reset message. | After `clearSharedScores()`, update both `setMessage(...)` and `setScoreboardStatus(...)`. |
+
+Good files to inspect:
 
 - [index.html](../index.html): page structure.
 - [src/app.js](../src/app.js): game behavior.
 - [src/styles.css](../src/styles.css): colors, spacing, and layout.
+- [server.py](../server.py): shared classroom scoreboard backend.
 - [CODE_WALKTHROUGH.md](CODE_WALKTHROUGH.md): diagrams and function explanations.
 
 ## Show It

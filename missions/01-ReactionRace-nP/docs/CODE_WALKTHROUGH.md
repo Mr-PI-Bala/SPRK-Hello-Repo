@@ -5,7 +5,7 @@ This guide explains how the files and functions work together.
 ```text
 01-ReactionRace-nP/
   index.html
-    The page structure. It names the parts students can see.
+    The page structure. It names the compact top band, player controls, game button, scoreboard, and challenge cards.
 
   src/styles.css
     The visual design. It controls color, spacing, layout, and phone/tablet sizing.
@@ -39,6 +39,24 @@ index.html gives the app its parts
   -> app.js makes those parts react to taps
   -> server.py saves the shared scores
   -> the browser shows the result
+```
+
+## Screen Layout
+The app uses one compact game screen so students can play without hunting around the page.
+
+```text
+mission-band
+  -> left: mission name and short instruction
+  -> right: player name controls
+
+game-board
+  -> left: race-card with the big button
+  -> right: shared scoreboard
+
+student-notes
+  -> starter changes
+  -> logic challenges
+  -> level-up challenges
 ```
 
 ## Game State Flow
@@ -117,7 +135,16 @@ Try these before adding new features:
 1. Change `let playerName = "Maya-SPRK";` in `src/app.js`.
 2. Change `setButton("Tap Now!", "ready");` in `src/app.js`.
 3. Change `--go: #1fc76a;` in `src/styles.css`.
-4. Change the headline text in `index.html`.
+4. Change the compact heading text in `index.html`.
+
+## Challenge Tiers
+The page shows three challenge groups:
+
+| Tier | Meaning | Where To Start |
+| --- | --- | --- |
+| Starter changes | Change text, colors, or default names. | `index.html`, `src/styles.css`, `src/app.js` constants. |
+| Logic challenges | Change timing, names, or score limits. | `startRound()`, `saveNameButton` handler, `MAX_SCORES`. |
+| Level-up challenges | Change multiple files and data flow. | `index.html`, `src/app.js`, and `server.py` together. |
 
 ## Learning Insight
 This mission teaches a common app pattern:
