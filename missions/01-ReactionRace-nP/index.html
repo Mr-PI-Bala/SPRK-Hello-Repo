@@ -1,6 +1,13 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <!--
+      index.html is the page structure.
+
+      Students can think of this file as the "what is on the page" file.
+      - src/styles.css controls how the page looks.
+      - src/app.js controls how the game behaves.
+    -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>SPRK ReactionRace</title>
@@ -8,6 +15,7 @@
   </head>
   <body>
     <main class="app-shell">
+      <!-- Hero: the title and short mission explanation. -->
       <section class="hero">
         <div>
           <p class="eyebrow">Mission 01</p>
@@ -17,6 +25,7 @@
         <div class="mode-badge">nP classroom ready</div>
       </section>
 
+      <!-- Player setup: the student chooses the name shown on the scoreboard. -->
       <section class="control-panel" aria-label="Player setup">
         <label for="playerName">Player name</label>
         <div class="name-row">
@@ -25,6 +34,7 @@
         </div>
       </section>
 
+      <!-- Race card: the main game area. -->
       <section class="race-card" aria-live="polite">
         <div class="status-row">
           <span id="roundStatus">Ready</span>
@@ -34,6 +44,7 @@
         <p id="roundMessage" class="round-message">Tap Start Round. When the button turns green, tap it fast.</p>
       </section>
 
+      <!-- Scoreboard: JavaScript fills this list after each successful tap. -->
       <section class="scoreboard" aria-label="Scoreboard">
         <div class="section-title-row">
           <h2>Scoreboard</h2>
@@ -42,6 +53,7 @@
         <ol id="scoreList" class="score-list"></ol>
       </section>
 
+      <!-- Student notes: safe first changes for new coders. -->
       <section class="student-notes">
         <h2>Try Changing One Thing</h2>
         <ul>

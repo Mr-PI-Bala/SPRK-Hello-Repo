@@ -1,4 +1,10 @@
 :root {
+  /*
+    These are CSS custom properties.
+
+    Students can change colors here first because the rest of the file uses
+    these names instead of repeating color values everywhere.
+  */
   color-scheme: dark;
   --bg: #101820;
   --panel: #162331;
@@ -30,12 +36,14 @@ input {
 }
 
 .app-shell {
+  /* Keeps the app readable on large screens and phones. */
   width: min(960px, calc(100% - 32px));
   margin: 0 auto;
   padding: 28px 0 40px;
 }
 
 .hero {
+  /* Places the title on the left and the mode badge on the right. */
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -85,6 +93,7 @@ h2 {
 .race-card,
 .scoreboard,
 .student-notes {
+  /* Shared panel style for the main page sections. */
   margin-bottom: 18px;
   padding: 18px;
   border: 1px solid var(--border);
@@ -99,6 +108,7 @@ label {
 }
 
 .name-row {
+  /* Input takes the open space; button stays just wide enough for text. */
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 10px;
@@ -138,6 +148,7 @@ input:focus-visible {
 }
 
 .race-button {
+  /* Big tap target so phones, tablets, and Chromebooks are easy to use. */
   display: block;
   width: 100%;
   min-height: 180px;
@@ -147,10 +158,12 @@ input:focus-visible {
 }
 
 .race-button[data-state="waiting"] {
+  /* Yellow means wait. */
   background: var(--wait);
 }
 
 .race-button[data-state="ready"] {
+  /* Green means tap now. */
   background: var(--go);
 }
 
@@ -192,6 +205,7 @@ input:focus-visible {
 }
 
 @media (max-width: 640px) {
+  /* On small screens, stack controls vertically so text does not squeeze. */
   .hero,
   .name-row,
   .status-row,

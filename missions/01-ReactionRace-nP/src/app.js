@@ -1,3 +1,25 @@
+/*
+  ReactionRace game logic
+
+  Big idea:
+  1. The player starts a round.
+  2. The app waits for a random amount of time.
+  3. The button turns green.
+  4. The player taps as fast as possible.
+  5. The app records the reaction time and updates the scoreboard.
+
+  Simple flow:
+
+  idle -> waiting -> ready -> result -> idle
+
+  Vocabulary:
+  - "state" means what mode the round is currently in.
+  - "timer" means code that runs later after waiting.
+  - "score" means one saved result for one player tap.
+*/
+
+// These constants connect JavaScript to the HTML elements.
+// The names are intentionally long so students can read what each one means.
 const playerNameInput = document.querySelector("#playerName");
 const saveNameButton = document.querySelector("#saveNameButton");
 const raceButton = document.querySelector("#raceButton");
@@ -7,6 +29,8 @@ const bestTime = document.querySelector("#bestTime");
 const scoreList = document.querySelector("#scoreList");
 const clearButton = document.querySelector("#clearButton");
 
+// These variables are the app memory.
+// They change while the player uses the page.
 let playerName = "Maya-SPRK";
 let roundState = "idle";
 let startTime = 0;
@@ -15,16 +39,33 @@ let scores = [];
 
 playerNameInput.value = playerName;
 
+/*
+  Shows short status text to the player.
+
+  Example:
+  setMessage("Wait", "Do not tap yet. Wait for green.")
+*/
 function setMessage(status, message) {
   roundStatus.textContent = status;
   roundMessage.textContent = message;
 }
 
+/*
+  Changes the big game button.
+
+  The label is what students see.
+  The state is used by CSS to change button color.
+*/
 function setButton(label, state) {
   raceButton.textContent = label;
   raceButton.dataset.state = state;
 }
 
+/*
+  Finds the fastest score so far and displays it.
+
+  Lower reaction time is better because it means the player tapped faster.
+*/
 function updateBestTime() {
   if (scores.length === 0) {
     bestTime.textContent = "Best: none yet";
@@ -38,6 +79,11 @@ function updateBestTime() {
   bestTime.textContent = `Best: ${best.name} ${best.time} ms`;
 }
 
+/*
+  Redraws the scoreboard from the scores array.
+
+  We sort a copy of the scores so the fastest result appears first.
+*/
 function renderScores() {
   scoreList.innerHTML = "";
 
@@ -52,6 +98,12 @@ function renderScores() {
   updateBestTime();
 }
 
+/*
+  Starts one reaction round.
+
+  The app does not turn green immediately. It waits a random delay so the
+  player cannot predict exactly when to tap.
+*/
 function startRound() {
   roundState = "waiting";
   setButton("Wait...", "waiting");
@@ -67,6 +119,12 @@ function startRound() {
   }, delay);
 }
 
+/*
+  Saves a successful tap after the button turns green.
+
+  performance.now() gives a very precise timestamp.
+  Reaction time = current time - time when the button turned green.
+*/
 function recordTap() {
   const reactionTime = Math.round(performance.now() - startTime);
   scores.push({
@@ -80,6 +138,11 @@ function recordTap() {
   renderScores();
 }
 
+/*
+  Handles a tap that happens before the button turns green.
+
+  This cancels the waiting timer and resets the round.
+*/
 function handleEarlyTap() {
   window.clearTimeout(timerId);
   roundState = "idle";
@@ -87,6 +150,8 @@ function handleEarlyTap() {
   setMessage("Too Early", "You tapped before green. Try again.");
 }
 
+// This is the main game click handler.
+// It checks the current round state and chooses what should happen next.
 raceButton.addEventListener("click", () => {
   if (roundState === "idle") {
     startRound();
@@ -103,6 +168,7 @@ raceButton.addEventListener("click", () => {
   }
 });
 
+// This lets each student choose a name for the scoreboard.
 saveNameButton.addEventListener("click", () => {
   const nextName = playerNameInput.value.trim();
   playerName = nextName || "Maya-SPRK";
@@ -110,10 +176,12 @@ saveNameButton.addEventListener("click", () => {
   setMessage("Ready", `Player name set to ${playerName}.`);
 });
 
+// This gives the class a clean scoreboard for the next test round.
 clearButton.addEventListener("click", () => {
   scores = [];
   renderScores();
   setMessage("Ready", "Scoreboard cleared. Start a new round.");
 });
 
+// Draw the empty scoreboard when the page first opens.
 renderScores();

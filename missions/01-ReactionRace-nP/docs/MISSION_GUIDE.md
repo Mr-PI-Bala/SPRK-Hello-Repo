@@ -36,6 +36,7 @@ Good first files to inspect:
 - `index.html`: page structure.
 - `src/app.js`: game behavior.
 - `src/styles.css`: colors, spacing, and layout.
+- `docs/CODE_WALKTHROUGH.md`: diagrams and function explanations.
 
 ## Show It
 Run the changed version and show that the browser display changed.
