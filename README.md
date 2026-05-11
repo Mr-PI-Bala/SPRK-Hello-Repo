@@ -3,6 +3,11 @@ SPRK-Hello-Repo is a private mission repository for browser-first coding experie
 
 The missions are independent. The numbering is the suggested classroom try-out order, not a required learning ladder.
 
+## Standard SPRK Guidance
+Shared SPRK onboarding and governance starts in the public [SPRK-Welcome](https://github.com/Mr-PI-Bala/SPRK-Welcome) repository.
+
+This repository keeps local copies of the shared guides in [docs](docs/) so students can keep working inside `SPRK-Hello-Repo` after access is approved.
+
 ## Start Here
 1. ~~Ask for access through the public [SPRK-Welcome](https://github.com/Mr-PI-Bala/SPRK-Welcome) repository.~~<br>
    **Victory:** if you can see this private repository, your access request worked.

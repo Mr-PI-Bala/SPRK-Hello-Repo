@@ -21,6 +21,17 @@ If you are new, follow these in order:
 | I want diagrams and function details | [CODE_WALKTHROUGH.md](CODE_WALKTHROUGH.md) |
 | I need to create my branch first | [SPRK Git Repository User Guide](../../../docs/SPRK_Git_Repository_UserGuide.md#create-your-branch) |
 
+## Standard SPRK Guidance
+This working repository carries local copies of the shared SPRK guides in `../../../docs/`.
+
+The public source for shared SPRK onboarding and governance is:
+
+```text
+https://github.com/Mr-PI-Bala/SPRK-Welcome
+```
+
+Students can always read `SPRK-Welcome` because it is public. Working repositories like this one may be private, so they keep local guide copies after access is approved.
+
 ## Mission Goal
 Build a whole-class reaction game where students join from phones, tablets, Chromebooks, or laptops and compete on a live leaderboard.
 
@@ -37,33 +48,21 @@ In Codespaces, right-click `index.html` and use a preview option if one is avail
 ReactionRace is currently a browser app. That means the first version runs with only HTML, CSS, and JavaScript.
 
 ```mermaid
-flowchart TD
-    A["Student opens Codespaces or VS Code"] --> B["Open terminal"]
-    B --> C["cd missions/01-ReactionRace-nP"]
-    C --> D["python -m http.server 8000"]
-    D --> E["Open browser preview or localhost"]
-    E --> F["ReactionRace appears in browser"]
+flowchart LR
+    A["Editor<br/>(Codespaces or VS Code)"] --> B["Terminal<br/>(type commands)"]
+    B --> C["Mission folder<br/>(go to this app)"]
+    C --> D["Web server<br/>(runs index.html)"]
+    D --> E["Browser link<br/>(play the app)"]
 ```
 
 Plain version:
 
 ```text
-Open editor
-  |
-  v
-Open terminal
-  |
-  v
-Go to mission folder
-  |
-  v
-Start web server on port 8000
-  |
-  v
-Open browser preview
-  |
-  v
-Play ReactionRace
+Editor (Codespaces or VS Code)
+  -> Terminal (type commands)
+  -> Mission folder (go to this app)
+  -> Web server (runs index.html)
+  -> Browser link (play the app)
 ```
 
 ### Run From Codespaces
@@ -81,6 +80,18 @@ python -m http.server 8000
 4. Open the `Ports` tab.
 5. Open the forwarded port for `8000`.
 6. The browser should show ReactionRace.
+
+The Codespaces link will look something like:
+
+```text
+https://<your-codespace-name>-8000.app.github.dev
+```
+
+That link means:
+
+- `8000` is the port where the small Python web server is running.
+- `app.github.dev` is GitHub's browser access to your Codespace.
+- Opening the link shows `index.html`.
 
 ### Run From VS Code Desktop
 Use this path on a laptop with the repository cloned locally.
@@ -100,31 +111,45 @@ python -m http.server 8000
 http://localhost:8000
 ```
 
+That link means:
+
+- `localhost` is your own laptop.
+- `8000` is the port where the small Python web server is running.
+- Opening the link shows `index.html`.
+
 ### Run From A Classroom Host Laptop
 Use this path when one laptop hosts the app and other devices join from a browser.
 
 ```mermaid
-flowchart LR
-    Host["Host laptop<br/>runs web server"] --> Network["Same Wi-Fi or<br/>SPRK Laptop Network"]
-    Network --> Chromebook["Chromebook<br/>opens host link"]
-    Network --> IPad["iPad<br/>opens host link"]
-    Network --> Phone["Phone<br/>opens host link"]
-    Network --> Laptop["Student laptop<br/>opens host link"]
+flowchart TB
+    subgraph HostRow["Host row"]
+        Host["Host laptop<br/>(runs index.html)"]
+    end
+    subgraph NetworkRow["Network row"]
+        Network["Same network<br/>(school Wi-Fi or SPRK Laptop Network)"]
+    end
+    subgraph StudentRow["Student devices"]
+        Chromebook["Chromebook"]
+        IPad["iPad"]
+        Phone["Phone"]
+        Laptop["Student laptop"]
+    end
+    Host --> Network
+    Network --> Chromebook
+    Network --> IPad
+    Network --> Phone
+    Network --> Laptop
 ```
 
 Plain version:
 
 ```text
-Host laptop
-  runs: python -m http.server 8000 --bind 0.0.0.0
-  |
-  v
-Same network
-  |
-  |-- Chromebook opens http://<host-laptop-ip>:8000
-  |-- iPad opens http://<host-laptop-ip>:8000
-  |-- phone opens http://<host-laptop-ip>:8000
-  |-- student laptop opens http://<host-laptop-ip>:8000
+Host laptop (runs index.html)
+  -> same network (school Wi-Fi or SPRK Laptop Network)
+     -> Chromebook opens http://<host-laptop-ip>:8000
+     -> iPad opens http://<host-laptop-ip>:8000
+     -> phone opens http://<host-laptop-ip>:8000
+     -> student laptop opens http://<host-laptop-ip>:8000
 ```
 
 1. Connect the host laptop and student devices to the same network.
@@ -147,6 +172,12 @@ Example:
 ```text
 http://192.168.1.25:8000
 ```
+
+That link means:
+
+- `192.168.1.25` is an example host laptop IP address.
+- `8000` is the port where the small Python web server is running.
+- Every student device must be on the same network to open this link.
 
 If the page does not open from another device, the network or firewall may be blocking device-to-device traffic.
 
