@@ -139,31 +139,56 @@ const SPRK = (() => {
     });
   }
 
-  function setupTabs(scoreboardTab, xrayTab, scorePanel, xrayPanel) {
-    if (!scoreboardTab) {
-      const buttons = document.querySelectorAll(".tab-button");
-      const panels = document.querySelectorAll(".tab-panel");
-      buttons.forEach((button) => {
-        button.addEventListener("click", () => {
-          buttons.forEach((item) => item.classList.toggle("active", item === button));
-          panels.forEach((panel) => panel.classList.toggle("active", panel.id === button.dataset.tab));
+  function setupTabs(tabConfig) {
+    const tabs = tabConfig.tabs || [];
+    tabs.forEach((tab) => {
+      tab.button.addEventListener("click", () => {
+        tabs.forEach((item) => {
+          const isActive = item === tab;
+          item.button.classList.toggle("active", isActive);
+          item.button.setAttribute("aria-selected", String(isActive));
+          item.panel.classList.toggle("hidden", !isActive);
         });
       });
-      return;
-    }
+    });
+  }
 
-    function showPanel(panelName) {
-      const showXray = panelName === "xray";
-      scorePanel.classList.toggle("hidden", showXray);
-      xrayPanel.classList.toggle("hidden", !showXray);
-      scoreboardTab.classList.toggle("active", !showXray);
-      xrayTab.classList.toggle("active", showXray);
-      scoreboardTab.setAttribute("aria-selected", String(!showXray));
-      xrayTab.setAttribute("aria-selected", String(showXray));
-    }
+  async function loadBaselineStatus(url, panel, statusLine) {
+    try {
+      const response = await fetch(url, { cache: "no-store" });
+      const summary = await response.json();
+      const checksMarkup = (summary.checks || []).map((group) => {
+        const items = (group.checks || []).map((item) => `<li>${item}</li>`).join("");
+        return `<section class="baseline-group"><h3>${group.mission}</h3><ul>${items}</ul></section>`;
+      }).join("");
+      const testsMarkup = (summary.tests || []).map((testCase) => (
+        `<li><span>${testCase.title}</span><strong class="${testCase.status === "passed" ? "passed" : "failed"}">${testCase.status}</strong></li>`
+      )).join("");
 
-    scoreboardTab.addEventListener("click", () => showPanel("scores"));
-    xrayTab.addEventListener("click", () => showPanel("xray"));
+      panel.innerHTML = `
+        <div class="baseline-summary-grid">
+          <div class="baseline-card"><span>Status</span><strong class="${summary.status === "passed" ? "passed" : "failed"}">${summary.status.toUpperCase()}</strong></div>
+          <div class="baseline-card"><span>Runner</span><strong>${summary.runner}</strong></div>
+          <div class="baseline-card"><span>Tests</span><strong>${summary.passed}/${summary.total}</strong></div>
+          <div class="baseline-card"><span>Updated</span><strong>${summary.generatedAtLabel}</strong></div>
+        </div>
+        <p class="baseline-policy">${summary.baselinePolicy}</p>
+        <p class="baseline-links">Detailed summary: <code>/_shared/generated/baseline-status.html</code><br>Playwright report: <code>${summary.htmlReportPath}</code></p>
+        <section class="baseline-section"><h3>What Was Validated</h3>${checksMarkup}</section>
+        <section class="baseline-section"><h3>Latest Test Results</h3><ol class="feed-list">${testsMarkup}</ol></section>
+      `;
+      if (statusLine) {
+        statusLine.textContent = `${summary.baselineName}: ${summary.passed}/${summary.total} tests passed.`;
+      }
+    } catch (error) {
+      panel.innerHTML = `
+        <p class="baseline-policy">Baseline status is not available yet.</p>
+        <p class="baseline-links">Run the local baseline suite from the repo root to generate it.</p>
+      `;
+      if (statusLine) {
+        statusLine.textContent = "Baseline status has not been generated yet.";
+      }
+    }
   }
 
   return {
@@ -174,6 +199,7 @@ const SPRK = (() => {
     deleteJson,
     renderScores,
     renderEvents,
-    setupTabs
+    setupTabs,
+    loadBaselineStatus,
   };
 })();

@@ -22,12 +22,19 @@ const clearButton = document.querySelector("#clearButton");
 const scoreList = document.querySelector("#scoreList");
 const eventList = document.querySelector("#eventList");
 const sharedStatus = document.querySelector("#sharedStatus");
+const baselinePanel = document.querySelector("#baselinePanel");
+const baselineStatusNote = document.querySelector("#baselineStatusNote");
+const searchParams = new URLSearchParams(window.location.search);
+const testModeEnabled = searchParams.get("test") === "1";
 
 SPRK.setupTabs(
-  document.querySelector("#scoreboardTab"),
-  document.querySelector("#xrayTab"),
-  document.querySelector("#scorePanel"),
-  document.querySelector("#xrayPanel")
+  {
+    tabs: [
+      { button: document.querySelector("#scoreboardTab"), panel: document.querySelector("#scorePanel") },
+      { button: document.querySelector("#xrayTab"), panel: document.querySelector("#xrayPanel") },
+      { button: document.querySelector("#baselineTab"), panel: document.querySelector("#baselinePanel") },
+    ],
+  }
 );
 
 const gridSize = 21;
@@ -192,5 +199,17 @@ window.addEventListener("keydown", (event) => {
 });
 
 resetGame();
+SPRK.loadBaselineStatus("/_shared/generated/baseline-status.json", baselinePanel, baselineStatusNote);
 refreshSharedPanels();
 window.setInterval(refreshSharedPanels, 2000);
+
+if (testModeEnabled) {
+  window.__sprkTest = {
+    setScore(nextScore) {
+      score = nextScore;
+      scoreNow.textContent = `Score: ${score}`;
+      gameStatus.textContent = "Game Over";
+      roundMessage.textContent = "Submit your score or start again.";
+    },
+  };
+}

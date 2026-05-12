@@ -1,0 +1,12 @@
+{
+  "name": "sprk-hello-repo",
+  "private": true,
+  "scripts": {
+    "test": "node tests/helpers/run-playwright.js all",
+    "test:reactionrace": "node tests/helpers/run-playwright.js reactionrace",
+    "test:snakegame": "node tests/helpers/run-playwright.js snakegame"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.54.2"
+  }
+}

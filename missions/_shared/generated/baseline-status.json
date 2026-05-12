@@ -1,0 +1,57 @@
+{
+  "baselineName": "SPRK Hello Repo Baseline",
+  "mode": "all",
+  "runner": "Playwright",
+  "baselinePolicy": "Playwright is the current baseline validation mechanism for browser-first SPRK missions. Additional or replacement baseline validators are allowed later.",
+  "generatedAt": "2026-05-12T05:44:40.613Z",
+  "generatedAtLabel": "May 11, 2026, 10:44:40 PM",
+  "status": "passed",
+  "passed": 3,
+  "failed": 0,
+  "total": 3,
+  "htmlReportPath": "tests/artifacts/playwright-report/index.html",
+  "resultsJsonPath": "tests/artifacts/results/results.json",
+  "checks": [
+    {
+      "mission": "ReactionRace",
+      "checks": [
+        "Page renders and shared backend connects",
+        "Deterministic score submission updates the shared scoreboard",
+        "Two browser clients stay in sync on leaderboard order",
+        "Clear scoreboard propagates across clients",
+        "X-Ray Vision shows backend score events",
+        "Offline scoreboard message appears when backend calls fail"
+      ]
+    },
+    {
+      "mission": "SnakeGame",
+      "checks": [
+        "Page renders and shared backend connects",
+        "Player naming works",
+        "Game state can be forced for deterministic score submission",
+        "Two browser clients stay in sync on shared scores",
+        "Baseline Status tab loads generated validation summary"
+      ]
+    }
+  ],
+  "tests": [
+    {
+      "title": "reactionrace.spec.js > ReactionRace supports shared multiplayer scoreboard and x-ray events",
+      "status": "passed",
+      "durationMs": 7813,
+      "file": "reactionrace.spec.js"
+    },
+    {
+      "title": "reactionrace.spec.js > ReactionRace shows an offline message when the backend calls fail",
+      "status": "passed",
+      "durationMs": 3063,
+      "file": "reactionrace.spec.js"
+    },
+    {
+      "title": "snakegame.spec.js > SnakeGame supports shared scores and baseline status",
+      "status": "passed",
+      "durationMs": 4598,
+      "file": "snakegame.spec.js"
+    }
+  ]
+}

@@ -128,6 +128,13 @@ git pull
 
 Then close and reopen the Markdown preview.
 
+## Learning Phases
+We are structuring the missions into distinct phases:
+
+1. **Phase 1 (Active):** Work on **01-ReactionRace** and **02-SnakeGame**. This phase establishes the shared classroom backend, basic browser device inputs, and frontend-to-backend communication.
+2. **Phase 2 (Next):** Explore the remaining 2D logic and team missions (PingPong, FlashCards, QuizRoom, etc.).
+3. **Phase 3 (Final):** A full 3D game. Note that advanced 3D, engine-specific, or platform-specific work will belong in a separate repository (such as `SPRK-Hello-3D`) to keep this introductory repository lightweight and accessible.
+
 ## Mission Menu
 | Mission | Name | Mode | What Students Experience | What It Teaches | GitHub Needed To Play? | GitHub Needed To Build? |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -180,3 +187,58 @@ maya-sprk
 
 ## Repository Boundary
 This repository is for browser-first hello missions. Advanced 3D, engine-specific, or platform-specific work belongs in a separate repository such as `SPRK-Hello-3D`.
+
+## Direct Playwright Testing
+SPRK-Hello-Repo now has a direct baseline validation harness for local browser testing against the real Python backends used by the missions.
+
+Install the test tools:
+
+```bash
+npm install
+npx playwright install
+```
+
+Run the full browser test suite:
+
+```bash
+npm test
+```
+
+Run only the ReactionRace suite:
+
+```bash
+npm run test:reactionrace
+```
+
+Run only the SnakeGame suite:
+
+```bash
+npm run test:snakegame
+```
+
+Generated validation artifacts:
+
+```text
+tests/artifacts/playwright-report/
+tests/artifacts/results/latest-status.json
+missions/_shared/generated/baseline-status.json
+missions/_shared/generated/baseline-status.html
+```
+
+Root-folder hygiene:
+
+- Keep the Node workspace files at repo root: `package.json`, `package-lock.json`, and `node_modules/`.
+- Keep Playwright code and generated Playwright artifacts under `tests/`.
+- Keep only the shared mission-readable baseline files under `missions/_shared/generated/`.
+
+Current baseline mechanism:
+
+- Playwright is the current baseline validator for browser-first SPRK missions.
+- Additional validators may be added later.
+- Playwright may also be replaced later if another baseline mechanism fits the repository better.
+
+UI convention for browser-first missions:
+
+- Tab 1 is mission-specific `RealTime`, such as `Scoreboard` or `Shared Scores`.
+- Tab 2 is always `X-Ray Vision`.
+- Tab 3 is always `Baseline Status`.

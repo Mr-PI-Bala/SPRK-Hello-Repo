@@ -63,14 +63,19 @@
             <button id="clearButton" type="button" class="quiet-button">Clear</button>
           </div>
           <div class="tab-row" role="tablist">
-            <button id="scoreboardTab" class="tab-button active" type="button" role="tab" aria-selected="true">Scores</button>
+            <button id="scoreboardTab" class="tab-button active" type="button" role="tab" aria-selected="true">Shared Scores</button>
             <button id="xrayTab" class="tab-button" type="button" role="tab" aria-selected="false">X-Ray Vision</button>
+            <button id="baselineTab" class="tab-button" type="button" role="tab" aria-selected="false">Baseline Status</button>
           </div>
           <p id="sharedStatus" class="shared-status">Connecting to shared backend...</p>
           <div id="scorePanel"><ol id="scoreList" class="score-list"></ol></div>
           <div id="xrayPanel" class="xray-panel hidden">
             <p class="xray-note">Backend events from <code>server.py</code> appear here.</p>
             <ol id="eventList" class="event-list"></ol>
+          </div>
+          <div id="baselinePanel" class="xray-panel hidden">
+            <p class="xray-note">Baseline validation results appear here after the repo-level checks run.</p>
+            <p id="baselineStatusNote" class="xray-note">Baseline status has not been generated yet.</p>
           </div>
         </section>
       </section>

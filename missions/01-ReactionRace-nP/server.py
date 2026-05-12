@@ -21,6 +21,7 @@ Then open the browser link shown in the terminal.
 
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 import json
+import mimetypes
 import os
 import platform
 from pathlib import Path
@@ -38,6 +39,7 @@ PORT = 8000
 MAX_SCORES = 25
 MAX_EVENTS = 80
 MISSION_FOLDER = Path(__file__).parent
+SHARED_FOLDER = MISSION_FOLDER.parent / "_shared"
 
 # This list is the shared classroom memory.
 # Every browser connected to this server sees scores from the same list.
@@ -122,6 +124,10 @@ class ReactionRaceHandler(SimpleHTTPRequestHandler):
         """Serve the app files or return the shared scoreboard."""
         path = urlparse(self.path).path
 
+        if path.startswith("/_shared/"):
+            self.serve_shared_file(path.removeprefix("/_shared/"))
+            return
+
         if path == "/api/scores":
             make_json_response(self, 200, {"scores": sorted_scores()})
             return
@@ -131,6 +137,23 @@ class ReactionRaceHandler(SimpleHTTPRequestHandler):
             return
 
         super().do_GET()
+
+    def serve_shared_file(self, relative_path):
+        """Serve shared mission assets without allowing path traversal."""
+        safe_parts = [part for part in relative_path.split("/") if part and part not in {".", ".."}]
+        target = SHARED_FOLDER.joinpath(*safe_parts)
+
+        if not target.is_file() or SHARED_FOLDER not in target.resolve().parents:
+          make_json_response(self, 404, {"error": "Shared asset not found."})
+          return
+
+        body = target.read_bytes()
+        content_type = mimetypes.guess_type(str(target))[0] or "application/octet-stream"
+        self.send_response(200)
+        self.send_header("Content-Type", content_type)
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
 
     def do_POST(self):
         """Receive one new reaction score from a browser."""

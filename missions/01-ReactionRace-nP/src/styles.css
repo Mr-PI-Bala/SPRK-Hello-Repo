@@ -221,7 +221,7 @@ input:focus-visible {
 
 .tab-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
   margin: 12px 0;
 }
@@ -273,6 +273,36 @@ input:focus-visible {
 .xray-note {
   color: var(--muted);
   margin-bottom: 8px;
+}
+
+.baseline-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.baseline-card,
+.baseline-group {
+  padding: 10px 12px;
+  background: var(--panel-strong);
+}
+
+.baseline-card span,
+.baseline-policy,
+.baseline-links {
+  color: var(--muted);
+}
+
+.baseline-card strong {
+  display: block;
+  margin-top: 6px;
+}
+
+.baseline-group ul,
+.baseline-section ol {
+  margin: 0;
+  padding-left: 18px;
 }
 
 .event-list {
@@ -382,7 +412,8 @@ input:focus-visible {
   .player-row,
   .status-row,
   .section-title-row,
-  .score-list li {
+  .score-list li,
+  .baseline-summary-grid {
     display: block;
   }
 

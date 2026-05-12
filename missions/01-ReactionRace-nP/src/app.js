@@ -32,8 +32,11 @@ const bestTime = document.querySelector("#bestTime");
 const scoreboardStatus = document.querySelector("#scoreboardStatus");
 const scoreboardTab = document.querySelector("#scoreboardTab");
 const xrayTab = document.querySelector("#xrayTab");
+const baselineTab = document.querySelector("#baselineTab");
 const scorePanel = document.querySelector("#scorePanel");
 const xrayPanel = document.querySelector("#xrayPanel");
+const baselinePanel = document.querySelector("#baselinePanel");
+const baselineStatusNote = document.querySelector("#baselineStatusNote");
 const scoreList = document.querySelector("#scoreList");
 const eventList = document.querySelector("#eventList");
 const clearButton = document.querySelector("#clearButton");
@@ -45,6 +48,8 @@ const scoreboardApiUrl = "/api/scores";
 const eventsApiUrl = "/api/events";
 const scoreboardRefreshMs = 2000;
 const eventRefreshMs = 2000;
+const searchParams = new URLSearchParams(window.location.search);
+const testModeEnabled = searchParams.get("test") === "1";
 
 // These variables are the app memory.
 // They change while the player uses the page.
@@ -164,19 +169,6 @@ function playPlayerSound(score) {
 
   playTone(520, 0.09, "triangle");
   window.setTimeout(() => playTone(780, 0.12, "triangle"), 90);
-}
-
-/*
-  Switches the right-side panel between the scoreboard and backend X-Ray events.
-*/
-function showPanel(panelName) {
-  const showXray = panelName === "xray";
-  scorePanel.classList.toggle("hidden", showXray);
-  xrayPanel.classList.toggle("hidden", !showXray);
-  scoreboardTab.classList.toggle("active", !showXray);
-  xrayTab.classList.toggle("active", showXray);
-  scoreboardTab.setAttribute("aria-selected", String(!showXray));
-  xrayTab.setAttribute("aria-selected", String(showXray));
 }
 
 /*
@@ -355,6 +347,11 @@ function startRound() {
 async function recordTap() {
   unlockSound();
   const reactionTime = Math.round(performance.now() - startTime);
+  await recordKnownTap(reactionTime);
+}
+
+async function recordKnownTap(reactionTime) {
+  unlockSound();
 
   roundState = "idle";
   setButton("Start Round", "idle");
@@ -387,6 +384,14 @@ function handleEarlyTap() {
   setMessage("Too Early", "You tapped before green. Try again.");
 }
 
+function forceReadyRound(reactionTime = 150) {
+  window.clearTimeout(timerId);
+  roundState = "ready";
+  startTime = performance.now() - reactionTime;
+  setButton("Tap Now!", "ready");
+  setMessage("Go", "Tap now.");
+}
+
 // This is the main game click handler.
 // It checks the current round state and chooses what should happen next.
 raceButton.addEventListener("click", () => {
@@ -416,14 +421,6 @@ saveNameButton.addEventListener("click", () => {
   setMessage("Ready", `Player name set to ${playerName}.`);
 });
 
-scoreboardTab.addEventListener("click", () => {
-  showPanel("scores");
-});
-
-xrayTab.addEventListener("click", () => {
-  showPanel("xray");
-});
-
 // This gives the class a clean scoreboard for the next test round.
 clearButton.addEventListener("click", async () => {
   try {
@@ -438,6 +435,14 @@ clearButton.addEventListener("click", async () => {
 });
 
 // Load the shared scoreboard when the page first opens.
+SPRK.setupTabs({
+  tabs: [
+    { button: scoreboardTab, panel: scorePanel },
+    { button: xrayTab, panel: xrayPanel },
+    { button: baselineTab, panel: baselinePanel },
+  ],
+});
+SPRK.loadBaselineStatus("/_shared/generated/baseline-status.json", baselinePanel, baselineStatusNote);
 loadSharedScores();
 loadBackendEvents();
 
@@ -445,3 +450,10 @@ loadBackendEvents();
 // devices without needing to reload the page.
 window.setInterval(loadSharedScores, scoreboardRefreshMs);
 window.setInterval(loadBackendEvents, eventRefreshMs);
+
+if (testModeEnabled) {
+  window.__sprkTest = {
+    forceReadyRound,
+    recordKnownTap,
+  };
+}

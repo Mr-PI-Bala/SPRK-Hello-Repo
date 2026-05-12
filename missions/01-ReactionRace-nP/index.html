@@ -64,8 +64,9 @@
             <button id="clearButton" type="button" class="quiet-button">Clear</button>
           </div>
           <div class="tab-row" role="tablist" aria-label="Scoreboard tabs">
-            <button id="scoreboardTab" class="tab-button active" type="button" role="tab" aria-selected="true">Scores</button>
+            <button id="scoreboardTab" class="tab-button active" type="button" role="tab" aria-selected="true">Scoreboard</button>
             <button id="xrayTab" class="tab-button" type="button" role="tab" aria-selected="false">X-Ray Vision</button>
+            <button id="baselineTab" class="tab-button" type="button" role="tab" aria-selected="false">Baseline Status</button>
           </div>
           <p id="scoreboardStatus" class="scoreboard-status">Connecting to the shared scoreboard...</p>
           <div id="scorePanel">
@@ -74,6 +75,10 @@
           <div id="xrayPanel" class="xray-panel hidden">
             <p class="xray-note">Backend events from <code>server.py</code> appear here.</p>
             <ol id="eventList" class="event-list"></ol>
+          </div>
+          <div id="baselinePanel" class="xray-panel hidden">
+            <p class="xray-note">Baseline validation results appear here after the repo-level checks run.</p>
+            <p id="baselineStatusNote" class="xray-note">Baseline status has not been generated yet.</p>
           </div>
         </section>
       </section>
@@ -115,6 +120,7 @@
       </section>
     </main>
 
+    <script src="../_shared/sprk_app.js"></script>
     <script src="src/app.js"></script>
   </body>
 </html>
