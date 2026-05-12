@@ -60,6 +60,7 @@ let timerId = null;
 let scores = [];
 let previousScoreRanks = new Map();
 let audioContext = null;
+let highestEventId = 0;
 
 playerNameInput.value = playerName;
 
@@ -237,13 +238,33 @@ function renderScores() {
   These events come from server.py, so students can see backend activity that
   would otherwise be hidden in the terminal.
 */
-function renderEvents(events) {
-  eventList.innerHTML = "";
+function renderEvents(fetchedEvents) {
+  if (fetchedEvents.length === 0) return;
+  
+  // Fallback for older backend versions without IDs
+  if (!fetchedEvents[0].id) {
+    eventList.innerHTML = "";
+    fetchedEvents.slice().reverse().forEach((event) => {
+      const item = document.createElement("li");
+      item.textContent = `${event.time} ${event.kind}: ${event.message}`;
+      eventList.appendChild(item);
+    });
+    return;
+  }
 
-  events.slice().reverse().forEach((event) => {
-    const item = document.createElement("li");
-    item.textContent = `${event.time} ${event.kind}: ${event.message}`;
-    eventList.appendChild(item);
+  // If the backend restarted, the IDs will have reset
+  if (fetchedEvents[fetchedEvents.length - 1].id < highestEventId) {
+    eventList.innerHTML = "";
+    highestEventId = 0;
+  }
+
+  fetchedEvents.forEach((event) => {
+    if (event.id > highestEventId) {
+      const item = document.createElement("li");
+      item.textContent = `${event.time} ${event.kind}: ${event.message}`;
+      eventList.prepend(item);
+      highestEventId = event.id;
+    }
   });
 }
 

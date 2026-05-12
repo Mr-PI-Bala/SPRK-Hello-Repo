@@ -46,6 +46,7 @@ SHARED_FOLDER = MISSION_FOLDER.parent / "_shared"
 scores = []
 events = []
 next_score_id = 1
+next_event_id = 1
 
 
 class ReusableThreadingHTTPServer(ThreadingHTTPServer):
@@ -66,11 +67,14 @@ def make_json_response(handler, status_code, data):
 
 def log_event(kind, message):
     """Print an event and save it for the frontend X-Ray Vision panel."""
+    global next_event_id
     event = {
+        "id": next_event_id,
         "time": time.strftime("%H:%M:%S"),
         "kind": kind,
         "message": message,
     }
+    next_event_id += 1
     events.append(event)
     del events[:-MAX_EVENTS]
     print(f"{event['time']} {kind}: {message}")
