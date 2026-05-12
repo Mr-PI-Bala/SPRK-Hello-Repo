@@ -3,12 +3,12 @@
   "mode": "all",
   "runner": "Playwright",
   "baselinePolicy": "Playwright is the current baseline validation mechanism for browser-first SPRK missions. Additional or replacement baseline validators are allowed later.",
-  "generatedAt": "2026-05-12T05:44:40.613Z",
-  "generatedAtLabel": "May 11, 2026, 10:44:40 PM",
+  "generatedAt": "2026-05-12T07:03:32.059Z",
+  "generatedAtLabel": "May 12, 2026, 12:03:32 AM",
   "status": "passed",
-  "passed": 3,
+  "passed": 8,
   "failed": 0,
-  "total": 3,
+  "total": 8,
   "htmlReportPath": "tests/artifacts/playwright-report/index.html",
   "resultsJsonPath": "tests/artifacts/results/results.json",
   "checks": [
@@ -32,26 +32,96 @@
         "Two browser clients stay in sync on shared scores",
         "Baseline Status tab loads generated validation summary"
       ]
+    },
+    {
+      "mission": "PingPong",
+      "checks": [
+        "Page renders and backend connects",
+        "Deterministic winner submission updates the shared scoreboard",
+        "Baseline Status tab loads generated validation summary"
+      ]
+    },
+    {
+      "mission": "FlashCards",
+      "checks": [
+        "Page renders and backend connects",
+        "Deterministic streak submission updates the shared scoreboard",
+        "Baseline Status tab loads generated validation summary"
+      ]
+    },
+    {
+      "mission": "QuizRoom",
+      "checks": [
+        "Page renders and shared question state loads",
+        "Correct answer submission updates the shared scoreboard",
+        "Baseline Status tab loads generated validation summary"
+      ]
+    },
+    {
+      "mission": "FourSquare",
+      "checks": [
+        "Page renders and shared board state loads",
+        "Claim and rally actions update scores and state",
+        "Baseline Status tab loads generated validation summary"
+      ]
+    },
+    {
+      "mission": "SoccerScore",
+      "checks": [
+        "Page renders and match state loads",
+        "Goal reporting updates the shared event board",
+        "Baseline Status tab loads generated validation summary"
+      ]
     }
   ],
   "tests": [
     {
       "title": "reactionrace.spec.js > ReactionRace supports shared multiplayer scoreboard and x-ray events",
       "status": "passed",
-      "durationMs": 7813,
+      "durationMs": 4774,
       "file": "reactionrace.spec.js"
     },
     {
       "title": "reactionrace.spec.js > ReactionRace shows an offline message when the backend calls fail",
       "status": "passed",
-      "durationMs": 3063,
+      "durationMs": 713,
       "file": "reactionrace.spec.js"
     },
     {
       "title": "snakegame.spec.js > SnakeGame supports shared scores and baseline status",
       "status": "passed",
-      "durationMs": 4598,
+      "durationMs": 4524,
       "file": "snakegame.spec.js"
+    },
+    {
+      "title": "pingpong.spec.js > PingPong baseline works",
+      "status": "passed",
+      "durationMs": 2721,
+      "file": "pingpong.spec.js"
+    },
+    {
+      "title": "flashcards.spec.js > FlashCards baseline works",
+      "status": "passed",
+      "durationMs": 2078,
+      "file": "flashcards.spec.js"
+    },
+    {
+      "title": "quizroom.spec.js > QuizRoom baseline works",
+      "status": "passed",
+      "durationMs": 2725,
+      "file": "quizroom.spec.js"
+    },
+    {
+      "title": "foursquare.spec.js > FourSquare baseline works",
+      "status": "passed",
+      "durationMs": 2901,
+      "file": "foursquare.spec.js"
+    },
+    {
+      "title": "soccerscore.spec.js > SoccerScore baseline works",
+      "status": "passed",
+      "durationMs": 2549,
+      "file": "soccerscore.spec.js"
     }
   ]
 }

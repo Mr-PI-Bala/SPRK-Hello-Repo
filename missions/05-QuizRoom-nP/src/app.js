@@ -8,6 +8,10 @@ const submitButton = document.querySelector("#submit-answer");
 const nextButton = document.querySelector("#next-question");
 const scoreList = document.querySelector("#score-list");
 const eventLog = document.querySelector("#event-log");
+const baselinePanel = document.querySelector("#baselinePanel");
+const baselineStatusNote = document.querySelector("#baselineStatusNote");
+const searchParams = new URLSearchParams(window.location.search);
+const testModeEnabled = searchParams.get("test") === "1";
 
 const questions = [
   { prompt: "What tag creates the main page title in HTML?", answer: "h1" },
@@ -91,7 +95,23 @@ answerInput.addEventListener("keydown", (event) => {
   if (event.key === "Enter") submitAnswer();
 });
 
-SPRK.setupTabs();
+SPRK.setupTabs({
+  tabs: [
+    { button: document.querySelector("#scoreboardTab"), panel: document.querySelector("#scorePanel") },
+    { button: document.querySelector("#xrayTab"), panel: document.querySelector("#xrayPanel") },
+    { button: document.querySelector("#baselineTab"), panel: baselinePanel },
+  ],
+});
+SPRK.loadBaselineStatus("/_shared/generated/baseline-status.json", baselinePanel, baselineStatusNote);
 loadState();
 refreshShared();
 setInterval(loadState, 4000);
+
+if (testModeEnabled) {
+  window.__sprkTest = {
+    setQuestionIndex(index) {
+      currentIndex = index % questions.length;
+      showQuestion();
+    },
+  };
+}

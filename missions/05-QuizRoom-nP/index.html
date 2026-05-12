@@ -39,15 +39,20 @@
       </div>
 
       <aside class="shared-panel">
-        <div class="tabs">
-          <button class="tab-button active" data-tab="scores">Scoreboard</button>
-          <button class="tab-button" data-tab="xray">X-Ray Vision</button>
+        <div class="tab-row" role="tablist">
+          <button id="scoreboardTab" class="tab-button active" type="button" role="tab" aria-selected="true">Scoreboard</button>
+          <button id="xrayTab" class="tab-button" type="button" role="tab" aria-selected="false">X-Ray Vision</button>
+          <button id="baselineTab" class="tab-button" type="button" role="tab" aria-selected="false">Baseline Status</button>
         </div>
-        <div id="scores" class="tab-panel active">
+        <div id="scorePanel" class="tab-panel active">
           <ol id="score-list" class="score-list"></ol>
         </div>
-        <div id="xray" class="tab-panel">
+        <div id="xrayPanel" class="tab-panel">
           <pre id="event-log" class="event-log"></pre>
+        </div>
+        <div id="baselinePanel" class="tab-panel">
+          <p class="xray-note">Baseline validation results appear here after the repo-level checks run.</p>
+          <p id="baselineStatusNote" class="xray-note">Baseline status has not been generated yet.</p>
         </div>
       </aside>
     </section>

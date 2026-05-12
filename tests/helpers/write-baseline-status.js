@@ -24,6 +24,46 @@ const missionCoverage = {
         "Baseline Status tab loads generated validation summary",
       ],
     },
+    {
+      mission: "PingPong",
+      checks: [
+        "Page renders and backend connects",
+        "Deterministic winner submission updates the shared scoreboard",
+        "Baseline Status tab loads generated validation summary",
+      ],
+    },
+    {
+      mission: "FlashCards",
+      checks: [
+        "Page renders and backend connects",
+        "Deterministic streak submission updates the shared scoreboard",
+        "Baseline Status tab loads generated validation summary",
+      ],
+    },
+    {
+      mission: "QuizRoom",
+      checks: [
+        "Page renders and shared question state loads",
+        "Correct answer submission updates the shared scoreboard",
+        "Baseline Status tab loads generated validation summary",
+      ],
+    },
+    {
+      mission: "FourSquare",
+      checks: [
+        "Page renders and shared board state loads",
+        "Claim and rally actions update scores and state",
+        "Baseline Status tab loads generated validation summary",
+      ],
+    },
+    {
+      mission: "SoccerScore",
+      checks: [
+        "Page renders and match state loads",
+        "Goal reporting updates the shared event board",
+        "Baseline Status tab loads generated validation summary",
+      ],
+    },
   ],
   reactionrace: [
     {
@@ -46,6 +86,56 @@ const missionCoverage = {
         "Player naming works",
         "Game state can be forced for deterministic score submission",
         "Two browser clients stay in sync on shared scores",
+        "Baseline Status tab loads generated validation summary",
+      ],
+    },
+  ],
+  pingpong: [
+    {
+      mission: "PingPong",
+      checks: [
+        "Page renders and backend connects",
+        "Deterministic winner submission updates the shared scoreboard",
+        "Baseline Status tab loads generated validation summary",
+      ],
+    },
+  ],
+  flashcards: [
+    {
+      mission: "FlashCards",
+      checks: [
+        "Page renders and backend connects",
+        "Deterministic streak submission updates the shared scoreboard",
+        "Baseline Status tab loads generated validation summary",
+      ],
+    },
+  ],
+  quizroom: [
+    {
+      mission: "QuizRoom",
+      checks: [
+        "Page renders and shared question state loads",
+        "Correct answer submission updates the shared scoreboard",
+        "Baseline Status tab loads generated validation summary",
+      ],
+    },
+  ],
+  foursquare: [
+    {
+      mission: "FourSquare",
+      checks: [
+        "Page renders and shared board state loads",
+        "Claim and rally actions update scores and state",
+        "Baseline Status tab loads generated validation summary",
+      ],
+    },
+  ],
+  soccerscore: [
+    {
+      mission: "SoccerScore",
+      checks: [
+        "Page renders and match state loads",
+        "Goal reporting updates the shared event board",
         "Baseline Status tab loads generated validation summary",
       ],
     },
@@ -98,6 +188,11 @@ function main() {
     ? [
       path.join(repoRoot, "tests", "artifacts", "baseline-results", "reactionrace-results.json"),
       path.join(repoRoot, "tests", "artifacts", "baseline-results", "snakegame-results.json"),
+      path.join(repoRoot, "tests", "artifacts", "baseline-results", "pingpong-results.json"),
+      path.join(repoRoot, "tests", "artifacts", "baseline-results", "flashcards-results.json"),
+      path.join(repoRoot, "tests", "artifacts", "baseline-results", "quizroom-results.json"),
+      path.join(repoRoot, "tests", "artifacts", "baseline-results", "foursquare-results.json"),
+      path.join(repoRoot, "tests", "artifacts", "baseline-results", "soccerscore-results.json"),
     ]
     : [path.join(repoRoot, "tests", "artifacts", "baseline-results", `${mode}-results.json`)];
   const cases = resultsFiles.flatMap((resultsPath) => {

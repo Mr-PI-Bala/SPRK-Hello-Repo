@@ -4,7 +4,12 @@
   "scripts": {
     "test": "node tests/helpers/run-playwright.js all",
     "test:reactionrace": "node tests/helpers/run-playwright.js reactionrace",
-    "test:snakegame": "node tests/helpers/run-playwright.js snakegame"
+    "test:snakegame": "node tests/helpers/run-playwright.js snakegame",
+    "test:pingpong": "node tests/helpers/run-playwright.js pingpong",
+    "test:flashcards": "node tests/helpers/run-playwright.js flashcards",
+    "test:quizroom": "node tests/helpers/run-playwright.js quizroom",
+    "test:foursquare": "node tests/helpers/run-playwright.js foursquare",
+    "test:soccerscore": "node tests/helpers/run-playwright.js soccerscore"
   },
   "devDependencies": {
     "@playwright/test": "^1.54.2"

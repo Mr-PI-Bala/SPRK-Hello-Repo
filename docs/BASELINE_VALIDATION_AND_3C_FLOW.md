@@ -51,6 +51,11 @@ tests/
   playwright.config.js
   reactionrace.spec.js
   snakegame.spec.js
+  pingpong.spec.js
+  flashcards.spec.js
+  quizroom.spec.js
+  foursquare.spec.js
+  soccerscore.spec.js
   helpers/
   artifacts/
 missions/

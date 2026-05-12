@@ -16,6 +16,36 @@ const missions = {
     folder: path.resolve(__dirname, "..", "..", "missions", "02-SnakeGame-1P-nP"),
     port: 8002,
   },
+  pingpong: {
+    key: "pingpong",
+    title: "PingPong",
+    folder: path.resolve(__dirname, "..", "..", "missions", "03-PingPong-2P-nP"),
+    port: 8003,
+  },
+  flashcards: {
+    key: "flashcards",
+    title: "FlashCards",
+    folder: path.resolve(__dirname, "..", "..", "missions", "04-FlashCards-1P-nP"),
+    port: 8004,
+  },
+  quizroom: {
+    key: "quizroom",
+    title: "QuizRoom",
+    folder: path.resolve(__dirname, "..", "..", "missions", "05-QuizRoom-nP"),
+    port: 8005,
+  },
+  foursquare: {
+    key: "foursquare",
+    title: "FourSquare",
+    folder: path.resolve(__dirname, "..", "..", "missions", "06-FourSquare-nP"),
+    port: 8006,
+  },
+  soccerscore: {
+    key: "soccerscore",
+    title: "SoccerScore",
+    folder: path.resolve(__dirname, "..", "..", "missions", "07-SoccerScore-nP"),
+    port: 8007,
+  },
 };
 
 function getMission() {

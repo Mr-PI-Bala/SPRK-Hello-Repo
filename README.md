@@ -216,6 +216,26 @@ Run only the SnakeGame suite:
 npm run test:snakegame
 ```
 
+Run one mission at a time:
+
+```bash
+npm run test:pingpong
+npm run test:flashcards
+npm run test:quizroom
+npm run test:foursquare
+npm run test:soccerscore
+```
+
+Current baseline coverage:
+
+- `01-ReactionRace`
+- `02-SnakeGame`
+- `03-PingPong`
+- `04-FlashCards`
+- `05-QuizRoom`
+- `06-FourSquare`
+- `07-SoccerScore`
+
 Generated validation artifacts:
 
 ```text

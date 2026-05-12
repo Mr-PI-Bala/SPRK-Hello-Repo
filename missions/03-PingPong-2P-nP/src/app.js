@@ -8,6 +8,10 @@ const rightNameInput = document.querySelector("#right-name");
 const soundSelect = document.querySelector("#sound-select");
 const scoreList = document.querySelector("#score-list");
 const eventLog = document.querySelector("#event-log");
+const baselinePanel = document.querySelector("#baselinePanel");
+const baselineStatusNote = document.querySelector("#baselineStatusNote");
+const searchParams = new URLSearchParams(window.location.search);
+const testModeEnabled = searchParams.get("test") === "1";
 
 const winningScore = 5;
 const keys = new Set();
@@ -155,7 +159,28 @@ resetButton.addEventListener("click", resetRound);
 window.addEventListener("keydown", (event) => keys.add(event.key.toLowerCase()));
 window.addEventListener("keyup", (event) => keys.delete(event.key.toLowerCase()));
 
-SPRK.setupTabs();
+SPRK.setupTabs({
+  tabs: [
+    { button: document.querySelector("#scoreboardTab"), panel: document.querySelector("#scorePanel") },
+    { button: document.querySelector("#xrayTab"), panel: document.querySelector("#xrayPanel") },
+    { button: document.querySelector("#baselineTab"), panel: baselinePanel },
+  ],
+});
+SPRK.loadBaselineStatus("/_shared/generated/baseline-status.json", baselinePanel, baselineStatusNote);
 resetRound();
 refreshShared();
 requestAnimationFrame(loop);
+
+if (testModeEnabled) {
+  window.__sprkTest = {
+    async finishRoundWithWinner(winnerName, points, detail) {
+      await SPRK.postJson("/api/scores", {
+        name: winnerName,
+        points,
+        detail,
+        sound: soundSelect.value,
+      });
+      await refreshShared();
+    },
+  };
+}

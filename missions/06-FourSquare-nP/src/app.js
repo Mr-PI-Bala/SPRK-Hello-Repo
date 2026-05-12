@@ -6,6 +6,8 @@ const nextRoundButton = document.querySelector("#next-round");
 const clearBoardButton = document.querySelector("#clear-board");
 const scoreList = document.querySelector("#score-list");
 const eventLog = document.querySelector("#event-log");
+const baselinePanel = document.querySelector("#baselinePanel");
+const baselineStatusNote = document.querySelector("#baselineStatusNote");
 
 const squareNames = ["A", "B", "C", "D"];
 let roomState = { squares: { A: "", B: "", C: "", D: "" }, round: 1 };
@@ -98,7 +100,14 @@ squareBoard.addEventListener("click", (event) => {
 nextRoundButton.addEventListener("click", nextRound);
 clearBoardButton.addEventListener("click", clearBoard);
 
-SPRK.setupTabs();
+SPRK.setupTabs({
+  tabs: [
+    { button: document.querySelector("#scoreboardTab"), panel: document.querySelector("#scorePanel") },
+    { button: document.querySelector("#xrayTab"), panel: document.querySelector("#xrayPanel") },
+    { button: document.querySelector("#baselineTab"), panel: baselinePanel },
+  ],
+});
+SPRK.loadBaselineStatus("/_shared/generated/baseline-status.json", baselinePanel, baselineStatusNote);
 loadState();
 refreshShared();
 setInterval(loadState, 4000);

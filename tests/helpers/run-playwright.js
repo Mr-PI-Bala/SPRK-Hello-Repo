@@ -15,6 +15,36 @@ const modes = {
     specs: ["tests/snakegame.spec.js"],
     label: "SnakeGame Baseline",
   },
+  pingpong: {
+    mission: "pingpong",
+    baseUrl: "http://127.0.0.1:8003",
+    specs: ["tests/pingpong.spec.js"],
+    label: "PingPong Baseline",
+  },
+  flashcards: {
+    mission: "flashcards",
+    baseUrl: "http://127.0.0.1:8004",
+    specs: ["tests/flashcards.spec.js"],
+    label: "FlashCards Baseline",
+  },
+  quizroom: {
+    mission: "quizroom",
+    baseUrl: "http://127.0.0.1:8005",
+    specs: ["tests/quizroom.spec.js"],
+    label: "QuizRoom Baseline",
+  },
+  foursquare: {
+    mission: "foursquare",
+    baseUrl: "http://127.0.0.1:8006",
+    specs: ["tests/foursquare.spec.js"],
+    label: "FourSquare Baseline",
+  },
+  soccerscore: {
+    mission: "soccerscore",
+    baseUrl: "http://127.0.0.1:8007",
+    specs: ["tests/soccerscore.spec.js"],
+    label: "SoccerScore Baseline",
+  },
 };
 
 function runSingle(mode, selected) {
@@ -82,8 +112,8 @@ function main() {
   const mode = process.argv[2] || "all";
 
   if (mode === "all") {
-    const reactionRaceRun = runSingle("reactionrace", modes.reactionrace);
-    const snakeGameRun = runSingle("snakegame", modes.snakegame);
+    const orderedModes = ["reactionrace", "snakegame", "pingpong", "flashcards", "quizroom", "foursquare", "soccerscore"];
+    const runs = orderedModes.map((name) => ({ name, result: runSingle(name, modes[name]) }));
     const combinedSummaryRun = spawnSync("node", [
       "tests/helpers/write-baseline-status.js",
       "all",
@@ -95,7 +125,7 @@ function main() {
       shell: false,
     });
 
-    const exitCode = reactionRaceRun.testStatus || reactionRaceRun.summaryStatus || snakeGameRun.testStatus || snakeGameRun.summaryStatus || combinedSummaryRun.status || 0;
+    const exitCode = runs.reduce((acc, run) => acc || run.result.testStatus || run.result.summaryStatus, 0) || combinedSummaryRun.status || 0;
     process.exit(exitCode);
   }
 

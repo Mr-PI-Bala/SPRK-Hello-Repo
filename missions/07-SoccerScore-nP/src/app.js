@@ -10,6 +10,8 @@ const nextPeriodButton = document.querySelector("#next-period");
 const resetGameButton = document.querySelector("#reset-game");
 const scoreList = document.querySelector("#score-list");
 const eventLog = document.querySelector("#event-log");
+const baselinePanel = document.querySelector("#baselinePanel");
+const baselineStatusNote = document.querySelector("#baselineStatusNote");
 
 let match = {
   home: "Blue Team",
@@ -96,7 +98,14 @@ saveTeamsButton.addEventListener("click", saveTeams);
 nextPeriodButton.addEventListener("click", nextPeriod);
 resetGameButton.addEventListener("click", resetGame);
 
-SPRK.setupTabs();
+SPRK.setupTabs({
+  tabs: [
+    { button: document.querySelector("#scoreboardTab"), panel: document.querySelector("#scorePanel") },
+    { button: document.querySelector("#xrayTab"), panel: document.querySelector("#xrayPanel") },
+    { button: document.querySelector("#baselineTab"), panel: baselinePanel },
+  ],
+});
+SPRK.loadBaselineStatus("/_shared/generated/baseline-status.json", baselinePanel, baselineStatusNote);
 loadMatch();
 refreshShared();
 setInterval(loadMatch, 4000);
