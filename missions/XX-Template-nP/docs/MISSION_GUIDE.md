@@ -28,6 +28,7 @@ Use this mission as the baseline when creating the next browser-first SPRK proje
 - Student-facing docs:
   - `MISSION_GUIDE.md`
   - `CODE_WALKTHROUGH.md`
+- Language crosswalk alignment through [../../../docs/SPRK_Language_Crosswalk.md](../../../docs/SPRK_Language_Crosswalk.md)
 
 ## How To Run
 ```bash
@@ -96,3 +97,4 @@ index.html
 3. The mission guide and code walkthrough docs
 4. The repo-level baseline validation path
 5. The clean folder rule: mission files stay in the mission folder, not the repo root
+6. A mission-level callout to the language crosswalk concepts used in that mission

@@ -47,6 +47,16 @@ Terminal -> PingPong server -> Browser -> Paddle controls -> Winner -> Shared sc
 ## Play It
 Two people can share one keyboard. A whole class can watch one game and then rotate players, or multiple groups can run their own copies.
 
+## Language Crosswalk In This Mission
+Use the repo-wide guide: [../../../docs/SPRK_Language_Crosswalk.md](../../../docs/SPRK_Language_Crosswalk.md)
+
+PingPong is a strong example of:
+
+- state updates: ball movement, paddle movement, and win conditions
+- callbacks: keyboard controls and button-driven score actions
+- conditional logic: collision and scoring rules
+- frontend/backend API flow: winner reports and X-Ray events
+
 ## Try Changing One Thing
 | Challenge | Hint |
 | --- | --- |

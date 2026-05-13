@@ -51,6 +51,16 @@ Snake grows when it eats food. The game ends if the snake hits the wall or itsel
 ## Frontend And Backend
 The frontend is the browser game. The backend is the Python server. The frontend sends scores to `/api/scores` and sends learning/debug messages to `/api/events`, which appear in X-Ray Vision.
 
+## Language Crosswalk In This Mission
+Use the repo-wide guide: [../../../docs/SPRK_Language_Crosswalk.md](../../../docs/SPRK_Language_Crosswalk.md)
+
+SnakeGame is a strong example of:
+
+- arrays and iteration: the snake body and board updates
+- key-value state: current direction, score, and game status
+- callbacks: keyboard input and on-screen controls
+- frontend/backend API flow: shared score submission and event logging
+
 ## Try Changing One Thing
 | Challenge | Hint |
 | --- | --- |

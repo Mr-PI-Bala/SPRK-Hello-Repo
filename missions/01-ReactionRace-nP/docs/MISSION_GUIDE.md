@@ -128,6 +128,16 @@ That link means:
 - Opening the link shows `index.html`.
 - Scores go through `/api/scores`, which is handled by `server.py`.
 
+## Language Crosswalk In This Mission
+Use the repo-wide guide: [../../../docs/SPRK_Language_Crosswalk.md](../../../docs/SPRK_Language_Crosswalk.md)
+
+ReactionRace is a strong example of:
+
+- state machines: `idle -> waiting -> ready -> idle`
+- callbacks and timers: button clicks plus delayed round timing
+- string interpolation: player-facing status and scoreboard text
+- frontend/backend API flow: browser calls to `/api/scores` and `/api/events`
+
 ### Run From A Classroom Host Laptop
 Use this path when one laptop hosts the app and other devices join from a browser.
 

@@ -2,6 +2,11 @@
 
 This guide translates common programming concepts across different languages. If you have experience in older structured languages (C, C++, Java) or newer systems languages (Go, Lua), this document helps map your existing mental models to the languages used in SPRK missions.
 
+Use this guide in two ways:
+
+- mission guides should point to the specific concepts a student is seeing in that mission
+- the `XX-Template-nP` mission should act as the all-inclusive baseline that new missions extend
+
 ## Table of Contents
 - [Concept 1: The Sliding Window (FIFO Buffer)](#concept-1-the-sliding-window-fifo-buffer)
 - [Concept 2: Iterating Over Collections (The Foreach Loop)](#concept-2-iterating-over-collections-the-foreach-loop)

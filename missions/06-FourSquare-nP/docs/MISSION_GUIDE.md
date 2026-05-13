@@ -49,6 +49,16 @@ Laptop server -> Shared square board -> Students claim squares -> Rallies add po
 ## Play It
 This can be used as a digital scoreboard for a physical classroom game. Students can also redesign the rules and turn it into a completely new playground-style game.
 
+## Language Crosswalk In This Mission
+Use the repo-wide guide: [../../../docs/SPRK_Language_Crosswalk.md](../../../docs/SPRK_Language_Crosswalk.md)
+
+FourSquare is a strong example of:
+
+- shared state objects: players, turns, and square ownership
+- state transitions: who serves next and how rounds advance
+- arrays and iteration: player lists and square ordering
+- frontend/backend API flow: synchronized classroom game state
+
 ## Try Changing One Thing
 | Challenge | Hint |
 | --- | --- |

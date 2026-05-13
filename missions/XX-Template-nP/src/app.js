@@ -1,3 +1,14 @@
+/*
+  Template mission logic
+
+  Language crosswalk ideas already visible here:
+  - key-value state object: missionState
+  - string interpolation: template UI messages
+  - frontend/backend API flow: GET/POST/DELETE to /api/state, /api/scores, /api/events
+  - functions as callbacks: button event listeners
+  - event stream thinking: X-Ray Vision updates from shared backend events
+*/
+
 const playerNameInput = document.querySelector("#player-name");
 const soundSelect = document.querySelector("#sound-select");
 const missionStatus = document.querySelector("#mission-status");

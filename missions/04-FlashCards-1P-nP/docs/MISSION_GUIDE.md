@@ -46,6 +46,16 @@ Terminal -> FlashCards server -> Browser -> Check answer -> Submit streak -> Sha
 ## Play It
 Students can play alone, then compare streaks on the shared board. A facilitator can host it once and let many devices connect.
 
+## Language Crosswalk In This Mission
+Use the repo-wide guide: [../../../docs/SPRK_Language_Crosswalk.md](../../../docs/SPRK_Language_Crosswalk.md)
+
+FlashCards is a strong example of:
+
+- arrays and indexed access: card decks and current card position
+- key-value data: prompt, answer, streak, and score values
+- string interpolation: status messages and streak displays
+- callbacks: reveal, next-card, and submit actions
+
 ## Try Changing One Thing
 | Challenge | Hint |
 | --- | --- |

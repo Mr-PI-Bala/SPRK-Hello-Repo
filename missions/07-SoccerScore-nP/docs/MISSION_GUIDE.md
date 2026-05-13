@@ -48,6 +48,16 @@ Laptop server -> Scoreboard browser -> Goal button -> Shared match state + event
 ## Play It
 One device can be the scoreboard. Other devices can report goals if they are connected to the same backend link. This mission can become a soccer, football, softball, basketball, or classroom tournament tracker.
 
+## Language Crosswalk In This Mission
+Use the repo-wide guide: [../../../docs/SPRK_Language_Crosswalk.md](../../../docs/SPRK_Language_Crosswalk.md)
+
+SoccerScore is a strong example of:
+
+- key-value shared state: home team, away team, score, and period
+- string interpolation: event text such as goal and period updates
+- callbacks: score buttons, team-name saves, and reset actions
+- frontend/backend API flow: shared score and event tracking
+
 ## Try Changing One Thing
 | Challenge | Hint |
 | --- | --- |

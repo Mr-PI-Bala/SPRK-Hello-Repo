@@ -34,6 +34,19 @@ The repo already learned several good patterns:
 
 This template turns those learnings into one copyable starting point.
 
+## Language Crosswalk Coverage
+Use the canonical crosswalk: [../../../docs/SPRK_Language_Crosswalk.md](../../../docs/SPRK_Language_Crosswalk.md)
+
+This template already demonstrates:
+
+- key-value state with `missionState`
+- string interpolation in UI updates
+- callbacks through button event listeners
+- frontend/backend API flow through `/api/state`, `/api/scores`, and `/api/events`
+- event-stream thinking through `X-Ray Vision`
+
+When a new mission is created from this template, keep this section and replace it with the specific concepts that the mission demonstrates most clearly.
+
 ## Interaction Diagram
 ```mermaid
 sequenceDiagram

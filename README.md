@@ -8,6 +8,10 @@ Shared SPRK onboarding and governance starts in the public [SPRK-Welcome](https:
 
 This repository keeps local copies of the shared guides in [docs](docs/) so students can keep working inside `SPRK-Hello-Repo` after access is approved.
 
+Key repo-wide learning guide:
+
+- [docs/SPRK_Language_Crosswalk.md](docs/SPRK_Language_Crosswalk.md): maps common programming ideas across Python, JavaScript, Java, Go, Lua, and related patterns used in the missions.
+
 ## Start Here
 1. ~~Ask for access through the public [SPRK-Welcome](https://github.com/Mr-PI-Bala/SPRK-Welcome) repository.~~<br>
    **Victory:** if you can see this private repository, your access request worked.
@@ -177,6 +181,7 @@ Why this template matters:
   - `X-Ray Vision`
   - `Baseline Status`
 - it keeps the repository root clean
+- it includes the language-crosswalk mindset so each new mission can point students to the exact programming ideas they are seeing
 
 ## Mode Labels
 | Label | Meaning |

@@ -47,6 +47,16 @@ Facilitator laptop -> QuizRoom server -> Many browsers -> Answers -> Shared scor
 ## Play It
 One person can act as facilitator. Other devices open the same link. The shared question index lets everyone stay on the same question after the facilitator advances it.
 
+## Language Crosswalk In This Mission
+Use the repo-wide guide: [../../../docs/SPRK_Language_Crosswalk.md](../../../docs/SPRK_Language_Crosswalk.md)
+
+QuizRoom is a strong example of:
+
+- shared key-value state: current question, answers, and room progress
+- form validation: checking whether player input is acceptable
+- callbacks: submit actions and room-control buttons
+- frontend/backend API flow: browser updates to shared classroom state
+
 ## Try Changing One Thing
 | Challenge | Hint |
 | --- | --- |

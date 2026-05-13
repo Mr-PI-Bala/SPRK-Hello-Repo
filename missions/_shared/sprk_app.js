@@ -9,6 +9,10 @@ const SPRK = (() => {
   let audioContext = null;
   let previousRanks = new Map();
 
+  function eventLine(event) {
+    return `${event.time} ${event.kind}: ${event.message}`;
+  }
+
   function unlockSound() {
     if (!audioContext) {
       const AudioContextClass = window.AudioContext || window.webkitAudioContext;
@@ -122,21 +126,61 @@ const SPRK = (() => {
 
   function renderEvents(eventList, payload) {
     const events = Array.isArray(payload) ? payload : payload.events || [];
-    const lines = events.slice().reverse().map((event) => (
-      `${event.time} ${event.kind}: ${event.message}`
-    ));
-
-    if (eventList.tagName === "PRE") {
-      eventList.textContent = lines.join("\n");
+    if (events.length === 0) {
       return;
     }
 
-    eventList.innerHTML = "";
-    lines.forEach((line) => {
+    const newestEventId = Number(eventList.dataset.lastEventId || "0");
+    const supportsIds = Object.prototype.hasOwnProperty.call(events[0], "id");
+
+    if (!supportsIds) {
+      const lines = events.slice().reverse().map(eventLine);
+      if (eventList.tagName === "PRE") {
+        eventList.textContent = lines.join("\n");
+        return;
+      }
+
+      eventList.innerHTML = "";
+      lines.forEach((line) => {
+        const item = document.createElement("li");
+        item.textContent = line;
+        eventList.appendChild(item);
+      });
+      eventList.dataset.lastEventId = "0";
+      return;
+    }
+
+    let lastEventId = newestEventId;
+    const payloadNewestId = Number(events[events.length - 1].id || 0);
+
+    if (payloadNewestId < lastEventId) {
+      if (eventList.tagName === "PRE") {
+        eventList.textContent = "";
+      } else {
+        eventList.innerHTML = "";
+      }
+      lastEventId = 0;
+    }
+
+    const newEvents = events.filter((event) => Number(event.id) > lastEventId);
+    if (newEvents.length === 0) {
+      return;
+    }
+
+    if (eventList.tagName === "PRE") {
+      const existingText = eventList.textContent ? `${eventList.textContent}\n` : "";
+      const prependedText = newEvents.slice().reverse().map(eventLine).join("\n");
+      eventList.textContent = `${prependedText}${existingText}`.trim();
+      eventList.dataset.lastEventId = String(payloadNewestId);
+      return;
+    }
+
+    newEvents.forEach((event) => {
       const item = document.createElement("li");
-      item.textContent = line;
-      eventList.appendChild(item);
+      item.textContent = eventLine(event);
+      eventList.prepend(item);
     });
+    eventList.dataset.lastEventId = String(payloadNewestId);
   }
 
   function setupTabs(tabConfig) {

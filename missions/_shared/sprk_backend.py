@@ -40,14 +40,17 @@ class MissionState:
         self.scores = []
         self.events = []
         self.next_score_id = 1
+        self.next_event_id = 1
 
     def log_event(self, kind, message):
         """Print an event and save it for the frontend X-Ray Vision panel."""
         event = {
+            "id": self.next_event_id,
             "time": time.strftime("%H:%M:%S"),
             "kind": kind,
             "message": message,
         }
+        self.next_event_id += 1
         self.events.append(event)
         del self.events[:-MAX_EVENTS]
         print(f"{event['time']} {kind}: {message}")
