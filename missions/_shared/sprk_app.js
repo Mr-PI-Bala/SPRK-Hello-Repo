@@ -191,6 +191,7 @@ const SPRK = (() => {
           const isActive = item === tab;
           item.button.classList.toggle("active", isActive);
           item.button.setAttribute("aria-selected", String(isActive));
+          item.panel.classList.toggle("active", isActive);
           item.panel.classList.toggle("hidden", !isActive);
         });
       });

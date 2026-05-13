@@ -48,8 +48,11 @@ async function log(message) {
 async function loadState() {
   const payload = await SPRK.requestJson("/api/state");
   const state = payload.state || payload;
-  currentIndex = Number(state.questionIndex || 0) % questions.length;
-  showQuestion();
+  const nextIndex = Number(state.questionIndex || 0) % questions.length;
+  if (nextIndex !== currentIndex) {
+    currentIndex = nextIndex;
+    showQuestion();
+  }
 }
 
 async function submitAnswer() {

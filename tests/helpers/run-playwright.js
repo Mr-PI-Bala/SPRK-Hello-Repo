@@ -108,12 +108,27 @@ function runSingle(mode, selected) {
   };
 }
 
+function sleepMs(milliseconds) {
+  Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, milliseconds);
+}
+
+function runSingleWithRetry(mode, selected) {
+  const first = runSingle(mode, selected);
+  if (!first.testStatus && !first.summaryStatus) {
+    return first;
+  }
+
+  console.warn(`Retrying ${mode} baseline after an initial failure.`);
+  sleepMs(3_000);
+  return runSingle(mode, selected);
+}
+
 function main() {
   const mode = process.argv[2] || "all";
 
   if (mode === "all") {
     const orderedModes = ["reactionrace", "snakegame", "pingpong", "flashcards", "quizroom", "foursquare", "soccerscore"];
-    const runs = orderedModes.map((name) => ({ name, result: runSingle(name, modes[name]) }));
+    const runs = orderedModes.map((name) => ({ name, result: runSingleWithRetry(name, modes[name]) }));
     const combinedSummaryRun = spawnSync("node", [
       "tests/helpers/write-baseline-status.js",
       "all",

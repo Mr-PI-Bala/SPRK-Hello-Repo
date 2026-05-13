@@ -19,7 +19,12 @@ test("FlashCards baseline works", async ({ browser }) => {
   await pageB.reload();
   await expect(pageB.locator("#score-list")).toContainText("4");
 
+  await pageA.getByRole("tab", { name: "X-Ray Vision" }).click();
+  await expect(pageA.locator("#xrayPanel")).toBeVisible();
+  await expect(pageA.locator("#event-log")).toContainText("FlashCards");
+
   await pageA.getByRole("tab", { name: "Baseline Status" }).click();
+  await expect(pageA.locator("#baselinePanel")).toBeVisible();
   await expect(pageA.locator("#baselinePanel")).toContainText("Playwright is the current baseline validation mechanism");
 
   await contextA.close();

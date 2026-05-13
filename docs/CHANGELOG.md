@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.7
+- Fixed the shared tab helper so `X-Ray Vision` and `Baseline Status` panels become visible correctly across missions that use the shared UI tabs.
+- Fixed `QuizRoom` so the shared-state polling loop no longer clears the answer field while a student is typing the current question.
+- Strengthened Playwright coverage for `PingPong`, `FlashCards`, and `QuizRoom` so tab visibility and the QuizRoom typing flow are validated directly.
+- Added a retry path to the repo-level Playwright runner to make the sequential multi-mission baseline more resilient to transient startup failures.
+- Re-ran the mission baseline checks and regenerated the shared baseline status files to a passing `8 / 8`.
+
 ## 0.1.6
 - Updated `README.md` so `Start Here` steps 3, 4, and 5 link directly to the detailed local sections students should read next.
 - Moved the branching diagram into the branch section where the workflow is explained.

@@ -18,7 +18,12 @@ test("PingPong baseline works", async ({ browser }) => {
   await pageB.reload();
   await expect(pageB.locator("#score-list")).toContainText("Left Player");
 
+  await pageA.getByRole("tab", { name: "X-Ray Vision" }).click();
+  await expect(pageA.locator("#xrayPanel")).toBeVisible();
+  await expect(pageA.locator("#event-log")).toContainText("Left Player");
+
   await pageA.getByRole("tab", { name: "Baseline Status" }).click();
+  await expect(pageA.locator("#baselinePanel")).toBeVisible();
   await expect(pageA.locator("#baselinePanel")).toContainText("Playwright is the current baseline validation mechanism");
 
   await contextA.close();
