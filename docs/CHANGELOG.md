@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.6
+- Updated `README.md` so `Start Here` steps 3, 4, and 5 link directly to the detailed local sections students should read next.
+- Moved the branching diagram into the branch section where the workflow is explained.
+- Added a quick branch-path summary with direct links for GitHub page, Codespaces browser, and VS Code desktop branch workflows.
+- Added command explanations and quick use-case notes for the `Option A` and `Option B` branch methods, plus explanations for the stale-file sync commands.
+- Added local `README.md` sections for choosing a mission, playing first, and making one small change so students have a clearer first-run path.
+
 ## 0.1.5
 - Added `docs/SPRK_Browser_Mission_Foundation_Guide.md` to hold the common browser-mission pattern at the repo level.
 - Trimmed repeated mission-guide sections so mission docs point to shared foundations and keep only mission-specific differences locally.

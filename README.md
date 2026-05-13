@@ -17,9 +17,26 @@ Key repo-wide learning guide:
 1. ~~Ask for access through the public [SPRK-Welcome](https://github.com/Mr-PI-Bala/SPRK-Welcome) repository.~~<br>
    **Victory:** if you can see this private repository, your access request worked.
 2. [Create your own branch before changing code](#create-your-branch-before-changing-code).
-3. Pick one mission from the Mission Menu.
-4. Play the mission first.
-5. Make one small change in your own branch.
+3. [Pick one mission from the Mission Menu](#pick-one-mission).
+4. [Play the mission first](#play-the-mission-first).
+5. [Make one small change in your own branch](#make-one-small-change-in-your-own-branch).
+
+## Create Your Branch Before Changing Code
+Do this before editing files.
+
+Your branch name should be your GitHub username in lowercase.
+
+Example:
+
+```text
+maya-sprk
+```
+
+Quick summary: use the branch path that matches where you are working.
+
+- [Create A Branch From The GitHub Page](#create-a-branch-from-the-github-page): use this when you are only on the GitHub website and want GitHub to make the branch first.
+- [Create A Branch In Codespaces Browser](#create-a-branch-in-codespaces-browser): use this when you are editing inside Codespaces in the browser or on iPad.
+- [Create A Branch In VS Code Desktop](#create-a-branch-in-vs-code-desktop): use this when the repo is cloned onto your laptop and open in local VS Code.
 
 ```mermaid
 sequenceDiagram
@@ -36,17 +53,6 @@ sequenceDiagram
     Student->>Branch: Create own branch before editing
     Branch-->>Student: Branch name is visible
     Student->>Branch: Play, change, commit, and push
-```
-
-## Create Your Branch Before Changing Code
-Do this before editing files.
-
-Your branch name should be your GitHub username in lowercase.
-
-Example:
-
-```text
-maya-sprk
 ```
 
 ### Create A Branch From The GitHub Page
@@ -81,6 +87,14 @@ git branch --show-current
 git push -u origin <yourname-sprk>
 ```
 
+What each command does:
+
+- `git status`: shows your current branch and current file changes, so you know whether it is safe to branch now.
+- `git pull`: downloads the latest shared commits from GitHub so your new branch starts from current `main`.
+- `git switch -c <yourname-sprk>`: creates your branch and immediately moves you into it.
+- `git branch --show-current`: prints the current branch name so you can confirm you are no longer on `main`.
+- `git push -u origin <yourname-sprk>`: uploads the new branch to GitHub and remembers that remote branch for later pushes.
+
 Option B: VS Code branch control
 
 1. Look at the bottom-left status bar.
@@ -88,6 +102,11 @@ Option B: VS Code branch control
 3. Choose `Create new branch`.
 4. Type your branch name, such as `<yourname-sprk>`.
 5. Confirm the bottom-left branch name changed from `main` to your branch.
+
+Quick use case:
+
+- Use `Option A: terminal` when you want to see the exact Git commands and learn what Git is doing.
+- Use `Option B: VS Code branch control` when you want the visual path and do not want to memorize commands yet.
 
 ### Create A Branch In VS Code Desktop
 Use this when you cloned the repository to your own laptop and opened it in VS Code.
@@ -100,6 +119,10 @@ Option A: VS Code branch control
 4. Type your branch name, such as `<yourname-sprk>`.
 5. Confirm the bottom-left branch name changed from `main` to your branch.
 
+Quick use case:
+
+- Use `Option A: VS Code branch control` when you want the simplest desktop workflow and prefer clicking through the UI.
+
 Option B: terminal
 
 ```bash
@@ -109,6 +132,18 @@ git switch -c <yourname-sprk>
 git branch --show-current
 git push -u origin <yourname-sprk>
 ```
+
+What each command does:
+
+- `git status`: checks your current branch and changed files before you create a new branch.
+- `git pull`: updates your local copy of `main` with the latest GitHub changes.
+- `git switch -c <yourname-sprk>`: creates your personal branch and switches your terminal into it.
+- `git branch --show-current`: confirms that your terminal is now operating on your own branch.
+- `git push -u origin <yourname-sprk>`: creates the matching GitHub branch and remembers it for future pushes.
+
+Quick use case:
+
+- Use `Option B: terminal` when you want to practice the Git commands directly or need a path that works the same in any terminal.
 
 Expected result:
 
@@ -131,7 +166,47 @@ git status
 git pull
 ```
 
+What each command does:
+
+- `git status`: confirms what branch you are on and whether you already have local changes that could affect the pull.
+- `git pull`: downloads and applies the latest GitHub commits so your file tree matches the shared repository state.
+
 Then close and reopen the Markdown preview.
+
+## Pick One Mission
+Start in the [Mission Menu](#mission-menu).
+
+Quick summary:
+
+- Pick `01-ReactionRace` if you want the easiest whole-class first mission.
+- Pick `02-SnakeGame` if you want a solo game with shared classroom scores.
+- Pick one of the later missions when you want different rules, different shared state, or a different gameplay pattern.
+
+Use each mission's `MISSION_GUIDE.md` first, because that guide tells you what the mission does, how to run it, and what concept it teaches.
+
+## Play The Mission First
+Play before editing.
+
+Why this matters:
+
+- you learn what the mission is supposed to do before you change it
+- you can tell whether your later edit actually changed something
+- you understand the difference between the `RealTime`, `X-Ray Vision`, and `Baseline Status` tabs before you start modifying code
+
+Open the mission from the [Mission Menu](#mission-menu), try the default behavior, and read that mission's `MISSION_GUIDE.md` if anything is unclear.
+
+## Make One Small Change In Your Own Branch
+After playing the mission, make one small visible change in your branch.
+
+Good first changes:
+
+- rename a title
+- change a button label
+- change a color
+- change one piece of text in the `RealTime` panel
+- adjust one score rule or timing value
+
+The point of the first change is not to build everything at once. The point is to prove that you can change the code, test it, and keep that work safely in your own branch.
 
 ## Learning Phases
 We are structuring the missions into distinct phases:
