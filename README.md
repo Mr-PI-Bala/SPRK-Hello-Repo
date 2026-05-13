@@ -11,6 +11,7 @@ This repository keeps local copies of the shared guides in [docs](docs/) so stud
 Key repo-wide learning guide:
 
 - [docs/SPRK_Language_Crosswalk.md](docs/SPRK_Language_Crosswalk.md): maps common programming ideas across Python, JavaScript, Java, Go, Lua, and related patterns used in the missions.
+- [docs/SPRK_Browser_Mission_Foundation_Guide.md](docs/SPRK_Browser_Mission_Foundation_Guide.md): explains the common browser-mission structure so mission guides only need to describe what is different.
 
 ## Start Here
 1. ~~Ask for access through the public [SPRK-Welcome](https://github.com/Mr-PI-Bala/SPRK-Welcome) repository.~~<br>

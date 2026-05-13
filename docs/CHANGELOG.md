@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.5
+- Added `docs/SPRK_Browser_Mission_Foundation_Guide.md` to hold the common browser-mission pattern at the repo level.
+- Trimmed repeated mission-guide sections so mission docs point to shared foundations and keep only mission-specific differences locally.
+- Kept the template aligned with the shared foundation-guide approach.
+
 ## 0.1.4
 - Moved the X-Ray event ID and incremental event rendering pattern into the shared backend/frontend helpers so all missions inherit it.
 - Updated `ReactionRace` to use the shared X-Ray helper path instead of keeping a mission-only implementation.

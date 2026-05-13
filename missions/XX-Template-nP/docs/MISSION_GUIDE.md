@@ -16,6 +16,7 @@ Use this mission as the baseline when creating the next browser-first SPRK proje
 | I want the file map | [Code Files](#code-files) |
 | I want the deeper architecture view | [CODE_WALKTHROUGH.md](CODE_WALKTHROUGH.md) |
 | I need the shared Git workflow | [SPRK Git Repository User Guide](../../../docs/SPRK_Git_Repository_UserGuide.md) |
+| I want the common browser mission pattern | [../../../docs/SPRK_Browser_Mission_Foundation_Guide.md](../../../docs/SPRK_Browser_Mission_Foundation_Guide.md) |
 
 ## What This Template Gives You
 - A working mission folder under `missions/`

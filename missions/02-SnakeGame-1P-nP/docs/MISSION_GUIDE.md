@@ -3,6 +3,10 @@ Start here when you want a simple game loop that runs in the browser.
 
 Deep dive: [Code Walkthrough](CODE_WALKTHROUGH.md).
 
+Shared browser-mission foundation:
+
+- [../../../docs/SPRK_Browser_Mission_Foundation_Guide.md](../../../docs/SPRK_Browser_Mission_Foundation_Guide.md)
+
 ## Start Here
 1. Run the mission with `python server.py`.
 2. Open the browser link printed by the server.
@@ -37,19 +41,8 @@ Terminal -> python server.py -> Browser on port 8002 -> Play -> Submit Score -> 
 - Backend: [server.py](../server.py)
 - Shared helpers: [../_shared](../../_shared/)
 
-## How The Files Work Together
-| File | What It Does |
-| --- | --- |
-| `server.py` | Starts the mission server, serves the page, and stores shared scores/events. |
-| `index.html` | Defines the canvas, player controls, sound menu, scoreboard, and X-Ray tab. |
-| `src/app.js` | Runs the snake game loop, movement, collision, food, scoring, sound, and backend calls. |
-| `src/styles.css` | Keeps the game compact and readable on laptops, iPads, Chromebooks, and phones. |
-
 ## Play It
 Snake grows when it eats food. The game ends if the snake hits the wall or itself. Submit your score so all devices connected to the same backend can see it.
-
-## Frontend And Backend
-The frontend is the browser game. The backend is the Python server. The frontend sends scores to `/api/scores` and sends learning/debug messages to `/api/events`, which appear in X-Ray Vision.
 
 ## Language Crosswalk In This Mission
 Use the repo-wide guide: [../../../docs/SPRK_Language_Crosswalk.md](../../../docs/SPRK_Language_Crosswalk.md)
@@ -68,5 +61,9 @@ SnakeGame is a strong example of:
 | Make the snake move faster. | Change `moveEveryMs` in `src/app.js`. |
 | Add bonus food worth more points. | Start in `placeFood()` and `moveSnake()`. |
 
-## Branch Reminder
-Only change code in your own branch, such as `<yourname-sprk>`. Do not edit `main`.
+## Mission-Specific Variation
+SnakeGame's main local differences from the shared foundation are:
+
+- the `RealTime` tab is a shared score board for a solo arcade game
+- `src/app.js` owns the grid game loop, movement timing, collision, and food logic
+- the mission emphasizes arrays, repeated movement updates, and score submission

@@ -3,6 +3,10 @@ Start here when you want a shared scoreboard for sports or classroom teams.
 
 Deep dive: [Code Walkthrough](CODE_WALKTHROUGH.md).
 
+Shared browser-mission foundation:
+
+- [../../../docs/SPRK_Browser_Mission_Foundation_Guide.md](../../../docs/SPRK_Browser_Mission_Foundation_Guide.md)
+
 ## Start Here
 1. Run the mission with `python server.py`.
 2. Open the link on the scoreboard device and reporter devices.
@@ -37,14 +41,6 @@ Laptop server -> Scoreboard browser -> Goal button -> Shared match state + event
 - Styling: [src/styles.css](../src/styles.css)
 - Backend: [server.py](../server.py)
 
-## How The Files Work Together
-| File | What It Does |
-| --- | --- |
-| `server.py` | Starts port 8007 and stores match state. |
-| `index.html` | Creates team name inputs, score buttons, event board, and X-Ray panel. |
-| `src/app.js` | Updates scores, periods, team names, and shared events. |
-| `src/styles.css` | Makes the score large enough to see quickly. |
-
 ## Play It
 One device can be the scoreboard. Other devices can report goals if they are connected to the same backend link. This mission can become a soccer, football, softball, basketball, or classroom tournament tracker.
 
@@ -65,5 +61,9 @@ SoccerScore is a strong example of:
 | Add score correction buttons. | Copy the goal button pattern and subtract in `changeScore()`. |
 | Add event types. | Add buttons that send text to `/api/events`. |
 
-## Branch Reminder
-Only change code in your own branch, such as `<yourname-sprk>`. Do not edit `main`.
+## Mission-Specific Variation
+SoccerScore's main local differences from the shared foundation are:
+
+- the `RealTime` tab represents game events for a live team score board
+- `src/app.js` owns team naming, period changes, and score reporting
+- the mission emphasizes shared event tracking for real-world sports or class games

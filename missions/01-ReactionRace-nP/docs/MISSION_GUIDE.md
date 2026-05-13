@@ -33,6 +33,10 @@ https://github.com/Mr-PI-Bala/SPRK-Welcome
 
 Students can always read `SPRK-Welcome` because it is public. Working repositories like this one may be private, so they keep local guide copies after access is approved.
 
+Shared browser-mission foundation:
+
+- [../../../docs/SPRK_Browser_Mission_Foundation_Guide.md](../../../docs/SPRK_Browser_Mission_Foundation_Guide.md)
+
 ## Mission Goal
 Build a whole-class reaction game where students join from phones, tablets, Chromebooks, or laptops and compete on a live leaderboard.
 

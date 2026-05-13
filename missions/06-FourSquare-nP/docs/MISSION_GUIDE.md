@@ -3,6 +3,10 @@ Start here when you want to model a real-world group game as software state.
 
 Deep dive: [Code Walkthrough](CODE_WALKTHROUGH.md).
 
+Shared browser-mission foundation:
+
+- [../../../docs/SPRK_Browser_Mission_Foundation_Guide.md](../../../docs/SPRK_Browser_Mission_Foundation_Guide.md)
+
 ## Start Here
 1. Run the mission with `python server.py`.
 2. Open the link on multiple devices.
@@ -38,14 +42,6 @@ Laptop server -> Shared square board -> Students claim squares -> Rallies add po
 - Styling: [src/styles.css](../src/styles.css)
 - Backend: [server.py](../server.py)
 
-## How The Files Work Together
-| File | What It Does |
-| --- | --- |
-| `server.py` | Starts port 8006 and stores squares plus round number. |
-| `index.html` | Creates round controls, square board, scoreboard, and X-Ray panel. |
-| `src/app.js` | Claims squares, records rally wins, and syncs shared state. |
-| `src/styles.css` | Lays out the four tiles clearly. |
-
 ## Play It
 This can be used as a digital scoreboard for a physical classroom game. Students can also redesign the rules and turn it into a completely new playground-style game.
 
@@ -66,5 +62,9 @@ FourSquare is a strong example of:
 | Make square A worth more. | Update `winRally(square)`. |
 | Track eliminated players. | Store an `outPlayers` list in `/api/state`. |
 
-## Branch Reminder
-Only change code in your own branch, such as `<yourname-sprk>`. Do not edit `main`.
+## Mission-Specific Variation
+FourSquare's main local differences from the shared foundation are:
+
+- the `RealTime` tab represents shared square ownership and rally scores
+- `src/app.js` owns turn/rally state transitions
+- the mission emphasizes modeling a real-world group game as shared software state

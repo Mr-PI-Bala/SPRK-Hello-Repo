@@ -3,6 +3,10 @@ Start here when you want a two-player keyboard game that teaches movement and co
 
 Deep dive: [Code Walkthrough](CODE_WALKTHROUGH.md).
 
+Shared browser-mission foundation:
+
+- [../../../docs/SPRK_Browser_Mission_Foundation_Guide.md](../../../docs/SPRK_Browser_Mission_Foundation_Guide.md)
+
 ## Start Here
 1. Run the mission with `python server.py`.
 2. Open the browser link printed by the server.
@@ -36,14 +40,6 @@ Terminal -> PingPong server -> Browser -> Paddle controls -> Winner -> Shared sc
 - Styling: [src/styles.css](../src/styles.css)
 - Backend: [server.py](../server.py)
 
-## How The Files Work Together
-| File | What It Does |
-| --- | --- |
-| `server.py` | Starts port 8003 and provides score/event APIs. |
-| `index.html` | Creates the canvas, player names, sound menu, and X-Ray panel. |
-| `src/app.js` | Moves paddles, bounces the ball, detects scoring, and posts winners. |
-| `src/styles.css` | Sizes the canvas and keeps controls compact. |
-
 ## Play It
 Two people can share one keyboard. A whole class can watch one game and then rotate players, or multiple groups can run their own copies.
 
@@ -64,5 +60,9 @@ PingPong is a strong example of:
 | Make the ball faster. | Update `bounceBall()`. |
 | Add tournament points. | Change `finishRound()` before it posts the score. |
 
-## Branch Reminder
-Only change code in your own branch, such as `<yourname-sprk>`. Do not edit `main`.
+## Mission-Specific Variation
+PingPong's main local differences from the shared foundation are:
+
+- two players share one keyboard on the same screen
+- `src/app.js` owns paddle movement, ball physics, and win detection
+- the `RealTime` tab represents winner history rather than a live room state
