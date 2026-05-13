@@ -146,6 +146,38 @@ We are structuring the missions into distinct phases:
 | 06 | [FourSquare](missions/06-FourSquare-nP/docs/MISSION_GUIDE.md) ([open app](missions/06-FourSquare-nP/index.html)) | nP | A digital version of a playground-style group game with players, turns, and rounds. | Modeling real-world rules, turns, roles, shared game state, backend coordination. | No, if a facilitator hosts the game link. | Yes, to change rules, visuals, and multiplayer behavior. |
 | 07 | [SoccerScore](missions/07-SoccerScore-nP/docs/MISSION_GUIDE.md) ([open app](missions/07-SoccerScore-nP/index.html)) | nP | A team scoreboard and event tracker for soccer, football, softball, or class games. | Teams, events, timestamps, score updates, shared display, backend API. | No, if a facilitator hosts the game link. | Yes, to change sports, events, stats, and display behavior. |
 
+## Mission Template
+The canonical starter scaffold for the next browser-first mission is:
+
+- [missions/XX-Template-nP/docs/MISSION_GUIDE.md](missions/XX-Template-nP/docs/MISSION_GUIDE.md)
+- [missions/XX-Template-nP/docs/CODE_WALKTHROUGH.md](missions/XX-Template-nP/docs/CODE_WALKTHROUGH.md)
+
+Use that folder when creating the next mission. Do not start by dropping `index.html`, `app.js`, `server.py`, or mission docs into the repository root.
+
+Template structure:
+
+```text
+missions/XX-Template-nP/
+  index.html
+  server.py
+  src/
+    app.js
+    styles.css
+  docs/
+    MISSION_GUIDE.md
+    CODE_WALKTHROUGH.md
+```
+
+Why this template matters:
+
+- it keeps each mission self-contained
+- it reuses the shared classroom backend and frontend helpers
+- it preserves the stable three-tab pattern:
+  - `RealTime`
+  - `X-Ray Vision`
+  - `Baseline Status`
+- it keeps the repository root clean
+
 ## Mode Labels
 | Label | Meaning |
 | --- | --- |
@@ -187,6 +219,26 @@ maya-sprk
 
 ## Repository Boundary
 This repository is for browser-first hello missions. Advanced 3D, engine-specific, or platform-specific work belongs in a separate repository such as `SPRK-Hello-3D`.
+
+## Clean Folder Rule
+The repository root is for workspace-level files only, such as:
+
+- `README.md`
+- `VERSION`
+- `package.json`
+- `package-lock.json`
+- `docs/`
+- `tests/`
+- `missions/`
+
+Mission-specific files belong inside the mission folder under `missions/`. That includes:
+
+- `index.html`
+- `server.py`
+- `src/app.js`
+- `src/styles.css`
+- `docs/MISSION_GUIDE.md`
+- `docs/CODE_WALKTHROUGH.md`
 
 ## Direct Playwright Testing
 SPRK-Hello-Repo now has a direct baseline validation harness for local browser testing against the real Python backends used by the missions.

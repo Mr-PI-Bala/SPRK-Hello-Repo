@@ -1,0 +1,31 @@
+.template-card {
+  display: grid;
+  gap: 18px;
+  align-content: center;
+}
+
+.template-card h2 {
+  margin-bottom: 0;
+}
+
+.starter-note {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.template-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.template-actions button {
+  flex: 1 1 170px;
+}
+
+#score-list small {
+  display: block;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 400;
+}

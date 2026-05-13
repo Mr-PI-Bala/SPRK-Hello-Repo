@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SPRK Mission Template</title>
+  <link rel="stylesheet" href="../_shared/sprk_mission.css">
+  <link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+  <main class="mission-shell">
+    <section class="mission-band">
+      <div>
+        <p class="eyebrow">Mission XX Template</p>
+        <h1>Template Mission</h1>
+        <p class="lede">Use this scaffold to start the next browser-first SPRK mission with the shared frontend, backend, X-Ray Vision, and Baseline Status pattern already wired.</p>
+      </div>
+      <div class="player-row">
+        <label>Reporter <input id="player-name" value="Maya-SPRK"></label>
+        <label>Sound <select id="sound-select">
+          <option value="spark">Spark</option>
+          <option value="coin">Coin</option>
+          <option value="pop">Pop</option>
+          <option value="zap">Zap</option>
+        </select></label>
+      </div>
+    </section>
+
+    <section class="game-board">
+      <section class="play-card template-card" aria-label="Template starter mission card">
+        <div class="status-row">
+          <span id="mission-status">Ready</span>
+          <span id="starter-count">Starter actions: 0</span>
+        </div>
+        <h2>Template Starter Action</h2>
+        <p id="starter-note" class="starter-note">Replace this card with your mission's core gameplay or core classroom interaction.</p>
+        <div class="template-actions">
+          <button id="run-action" type="button">Run Starter Action</button>
+          <button id="add-point" type="button">Add Shared Point</button>
+          <button id="reset-template" type="button">Reset Template</button>
+        </div>
+      </section>
+
+      <aside class="shared-panel">
+        <div class="tab-row" role="tablist">
+          <button id="scoreboardTab" class="tab-button active" type="button" role="tab" aria-selected="true">RealTime</button>
+          <button id="xrayTab" class="tab-button" type="button" role="tab" aria-selected="false">X-Ray Vision</button>
+          <button id="baselineTab" class="tab-button" type="button" role="tab" aria-selected="false">Baseline Status</button>
+        </div>
+        <div id="scorePanel" class="tab-panel">
+          <div class="section-title-row">
+            <h2>Shared Starter Scores</h2>
+            <button id="clear-shared" type="button">Clear Shared Board</button>
+          </div>
+          <ol id="score-list" class="score-list"></ol>
+        </div>
+        <div id="xrayPanel" class="tab-panel hidden">
+          <p class="xray-note">Use X-Ray Vision to show backend and frontend events while students play and modify the mission.</p>
+          <pre id="event-log" class="event-log"></pre>
+        </div>
+        <div id="baselinePanel" class="tab-panel hidden">
+          <p id="baselineStatusNote" class="xray-note">Baseline validation appears here after the repo-level checks run.</p>
+        </div>
+      </aside>
+    </section>
+
+    <section class="student-notes">
+      <article>
+        <h3>What To Replace First</h3>
+        <ul>
+          <li>Mission name, number, and short promise in the top band.</li>
+          <li>The starter card so it matches the real classroom interaction.</li>
+          <li>The score formatter so the RealTime tab matches the mission.</li>
+        </ul>
+      </article>
+      <article>
+        <h3>What To Keep</h3>
+        <ul>
+          <li>The shared backend pattern through <code>server.py</code>.</li>
+          <li>The three-tab model: <code>RealTime</code>, <code>X-Ray Vision</code>, <code>Baseline Status</code>.</li>
+          <li>The student docs pattern: mission guide plus code walkthrough.</li>
+        </ul>
+      </article>
+      <article>
+        <h3>Why This Exists</h3>
+        <p>New missions should start from a known-good SPRK baseline instead of copying random files or rebuilding the classroom features from scratch.</p>
+      </article>
+    </section>
+  </main>
+
+  <script src="../_shared/sprk_app.js"></script>
+  <script src="src/app.js"></script>
+</body>
+</html>
