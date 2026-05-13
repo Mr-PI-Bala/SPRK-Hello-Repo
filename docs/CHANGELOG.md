@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.10
+- Fixed Mission 08 match ticking so `Start Match` actually starts live movement, ball motion, and clock updates instead of leaving the shared state paused forever.
+- Fixed Mission 08 keyboard control flow so local player movement updates are delivered reliably after join and focus changes do not leave control state stuck.
+- Hardened Mission 08 input handling and the SoccerMatch Playwright regression so the baseline now verifies that a joined player can start the match and physically move on the field.
+
 ## 0.1.9
 - Fixed Mission 08 input handling so gameplay keys no longer interfere while students are typing team names or player names into form fields.
 - Added explicit `Start Match` and `Pause Match` controls to Mission 08 so the live ball and clock do not begin until the class is ready.

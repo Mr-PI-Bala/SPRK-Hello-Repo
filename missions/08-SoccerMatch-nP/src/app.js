@@ -65,8 +65,8 @@ const teamColors = {
 };
 
 const localPlayers = {
-  wasd: { playerId: null, keys: new Set(), lastSent: 0 },
-  arrows: { playerId: null, keys: new Set(), lastSent: 0 },
+  wasd: { playerId: null, keys: new Set(), lastPayloadSignature: "", activeRequest: false, pendingSend: false },
+  arrows: { playerId: null, keys: new Set(), lastPayloadSignature: "", activeRequest: false, pendingSend: false },
 };
 
 let world = {
@@ -228,6 +228,7 @@ async function joinPlayer(slot) {
   };
   const response = await SPRK.postJson("/api/join", payload);
   localPlayers[slot].playerId = response.playerId;
+  localPlayers[slot].lastPayloadSignature = "";
   if (isWasd) {
     wasdStatus.textContent = `${payload.name} joined ${payload.team}. Move with WASD, turn with Z/X, kick with Space.`;
   } else {
@@ -258,15 +259,52 @@ async function resetMatch() {
   await refreshWorld();
 }
 
-async function maybeSendInput(slot, timeStamp) {
+async function flushInput(slot) {
   const player = localPlayers[slot];
   if (!player.playerId) return;
-  if (timeStamp - player.lastSent < 50) return;
-  player.lastSent = timeStamp;
-  await SPRK.postJson("/api/input", {
-    playerId: player.playerId,
-    ...inputPayload(slotBindings[slot], player.keys),
-  });
+  if (player.activeRequest) return;
+
+  const payload = inputPayload(slotBindings[slot], player.keys);
+  const payloadSignature = JSON.stringify(payload);
+  if (payloadSignature === player.lastPayloadSignature) return;
+
+  player.lastPayloadSignature = payloadSignature;
+  player.activeRequest = true;
+
+  try {
+    const response = await fetch("/api/input", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        playerId: player.playerId,
+        ...payload,
+      }),
+    });
+
+    if (response.status === 404) {
+      player.playerId = null;
+      player.lastPayloadSignature = "";
+      return;
+    }
+  } finally {
+    player.activeRequest = false;
+    if (player.pendingSend) {
+      player.pendingSend = false;
+      void flushInput(slot);
+    }
+  }
+}
+
+function queueInputSend(slot) {
+  const player = localPlayers[slot];
+  if (!player.playerId) return;
+  if (player.activeRequest) {
+    player.pendingSend = true;
+    return;
+  }
+  void flushInput(slot);
 }
 
 function normalizeKey(event) {
@@ -280,6 +318,16 @@ function isTypingTarget(target) {
   return tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || target.isContentEditable;
 }
 
+function releaseLocalControls() {
+  Object.entries(localPlayers).forEach(([slot, player]) => {
+    if (player.keys.size > 0) {
+      player.keys.clear();
+      player.lastPayloadSignature = "__released__";
+      queueInputSend(slot);
+    }
+  });
+}
+
 function collectKey(event, isDown) {
   if (isTypingTarget(event.target)) {
     return;
@@ -288,10 +336,14 @@ function collectKey(event, isDown) {
   Object.entries(slotBindings).forEach(([slot, binding]) => {
     const tracked = new Set(Object.values(binding));
     if (tracked.has(key)) {
+      const alreadyTracked = localPlayers[slot].keys.has(key);
       if (isDown) {
         localPlayers[slot].keys.add(key);
       } else {
         localPlayers[slot].keys.delete(key);
+      }
+      if (alreadyTracked !== isDown) {
+        queueInputSend(slot);
       }
       event.preventDefault();
     }
@@ -307,6 +359,12 @@ resetMatchButton.addEventListener("click", resetMatch);
 
 window.addEventListener("keydown", (event) => collectKey(event, true));
 window.addEventListener("keyup", (event) => collectKey(event, false));
+window.addEventListener("blur", releaseLocalControls);
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) {
+    releaseLocalControls();
+  }
+});
 
 SPRK.setupTabs({
   tabs: [
@@ -319,21 +377,35 @@ SPRK.setupTabs({
 SPRK.loadBaselineStatus("/_shared/generated/baseline-status.json", baselinePanel, baselineStatusNote);
 refreshWorld();
 window.setInterval(refreshWorld, 220);
-window.setInterval(() => {
-  const now = performance.now();
-  Promise.all([
-    maybeSendInput("wasd", now),
-    maybeSendInput("arrows", now),
-  ]).catch(() => {});
-}, 60);
 
 if (testModeEnabled) {
   window.__sprkTest = {
     async joinForTest(name, team, scheme = "wasd") {
       const response = await SPRK.postJson("/api/join", { deviceId, scheme, name, team });
       localPlayers[scheme].playerId = response.playerId;
+      localPlayers[scheme].lastPayloadSignature = "";
       await refreshWorld();
       return response.playerId;
+    },
+    async getState() {
+      const payload = await SPRK.requestJson("/api/state");
+      return payload.state || payload;
+    },
+    async startMatch() {
+      await SPRK.postJson("/api/match", { action: "start" });
+      await refreshWorld();
+    },
+    async sendInput(playerId, payload) {
+      await fetch("/api/input", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          playerId,
+          ...payload,
+        }),
+      });
     },
     async goalForTest(team) {
       await SPRK.postJson("/api/test", { action: "goal", team });

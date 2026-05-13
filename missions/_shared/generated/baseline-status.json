@@ -3,8 +3,8 @@
   "mode": "soccermatch",
   "runner": "Playwright",
   "baselinePolicy": "Playwright is the current baseline validation mechanism for browser-first SPRK missions. Additional or replacement baseline validators are allowed later.",
-  "generatedAt": "2026-05-13T14:07:54.453Z",
-  "generatedAtLabel": "May 13, 2026, 7:07:54 AM",
+  "generatedAt": "2026-05-13T14:29:25.126Z",
+  "generatedAtLabel": "May 13, 2026, 7:29:25 AM",
   "status": "passed",
   "passed": 1,
   "failed": 0,
@@ -26,7 +26,7 @@
     {
       "title": "soccermatch.spec.js > SoccerMatch baseline works",
       "status": "passed",
-      "durationMs": 10563,
+      "durationMs": 13876,
       "file": "soccermatch.spec.js"
     }
   ]

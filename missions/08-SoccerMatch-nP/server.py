@@ -18,7 +18,7 @@ MISSION_FOLDER = Path(__file__).resolve().parent
 SHARED_FOLDER = MISSION_FOLDER.parent / "_shared"
 PORT = 8008
 MAX_EVENTS = 120
-PLAYER_TIMEOUT_SECONDS = 12
+PLAYER_TIMEOUT_SECONDS = 45
 TICK_SECONDS = 1 / 30
 FIELD_WIDTH = 980
 FIELD_HEIGHT = 620
@@ -309,7 +309,7 @@ mission_state = SoccerMissionState()
 
 
 def tick_loop():
-    while mission_state.running:
+    while True:
         mission_state.tick()
         time.sleep(TICK_SECONDS)
 
@@ -379,7 +379,7 @@ class Mission08Handler(SimpleHTTPRequestHandler):
 
         if path == "/api/input":
             updated = mission_state.update_input(data)
-            make_json_response(self, 200 if updated else 404, {"ok": updated})
+            make_json_response(self, 200, {"ok": updated})
             return
 
         if path == "/api/teams":

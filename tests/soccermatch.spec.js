@@ -23,6 +23,28 @@ test("SoccerMatch baseline works", async ({ browser }) => {
   });
   await expect(pageA.locator("#scoreboard-inline")).toContainText("1 : 0");
 
+  const movement = await pageA.evaluate(async () => {
+    const firstSnapshot = await window.__sprkTest.getState();
+    const player = firstSnapshot.players.find((entry) => entry.name === "Maya");
+    await window.__sprkTest.startMatch();
+    await window.__sprkTest.sendInput(player.id, {
+      moveX: 1,
+      moveY: 0,
+      turnDirection: 0,
+      kickPressed: false,
+    });
+    await new Promise((resolve) => window.setTimeout(resolve, 350));
+    const secondSnapshot = await window.__sprkTest.getState();
+    const updated = secondSnapshot.players.find((entry) => entry.id === player.id);
+    return {
+      beforeX: player.x,
+      afterX: updated.x,
+      matchSeconds: secondSnapshot.matchSeconds,
+    };
+  });
+  expect(movement.afterX).toBeGreaterThan(movement.beforeX);
+  expect(movement.matchSeconds).toBeGreaterThan(0);
+
   await pageA.getByRole("tab", { name: "X-Ray Vision" }).click();
   await expect(pageA.locator("#xrayPanel")).toBeVisible();
   await expect(pageA.locator("#event-log")).toContainText("joined");
