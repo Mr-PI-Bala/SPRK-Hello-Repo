@@ -66,7 +66,7 @@ class SoccerMissionState:
         self.next_player_id = 1
         self.score = {"home": 0, "away": 0}
         self.match_seconds = 0.0
-        self.running = True
+        self.running = False
         self.ball = self._default_ball()
         self.teams = {"home": "Blue", "away": "Gold"}
         self.last_goal = ""
@@ -120,6 +120,10 @@ class SoccerMissionState:
             if team not in {"home", "away"}:
                 team = "home"
             name = clean_text(data.get("name"), f"{scheme.upper()} Player", 24)
+            color = clean_text(data.get("color"), "#ffffff", 16)
+            avatar = clean_text(data.get("avatar"), "circle", 16)
+            if avatar not in {"circle", "rectangle"}:
+                avatar = "circle"
 
             existing = None
             for player in self.players.values():
@@ -130,11 +134,15 @@ class SoccerMissionState:
             if existing:
                 existing["name"] = name
                 existing["team"] = team
+                existing["color"] = color
+                existing["avatar"] = avatar
                 existing["lastSeen"] = time.time()
                 self.log_event("join", f"{name} rejoined on {team}.")
                 return existing["id"]
 
             player = self._default_player(name, team, scheme, device_id)
+            player["color"] = color
+            player["avatar"] = avatar
             self.players[player["id"]] = player
             self.next_player_id += 1
             self.log_event("join", f"{name} joined {team} using {scheme}.")
@@ -166,6 +174,7 @@ class SoccerMissionState:
             self.score = {"home": 0, "away": 0}
             self.match_seconds = 0.0
             self.last_goal = ""
+            self.running = False
             self.ball = self._default_ball()
             for player in self.players.values():
                 player["x"] = FIELD_WIDTH * (0.25 if player["team"] == "home" else 0.75)
@@ -173,6 +182,11 @@ class SoccerMissionState:
                 player["angle"] = 0.0 if player["team"] == "home" else 180.0
                 player["kickCooldown"] = 0.0
             self.log_event("reset", "reset the soccer match")
+
+    def set_running(self, running):
+        with self.lock:
+            self.running = bool(running)
+            self.log_event("state", "started the match" if self.running else "paused the match")
 
     def force_goal_for_test(self, team):
         with self.lock:
@@ -197,7 +211,8 @@ class SoccerMissionState:
     def tick(self):
         with self.lock:
             self._trim_players()
-            self.match_seconds += TICK_SECONDS
+            if self.running:
+                self.match_seconds += TICK_SECONDS
 
             for player in self.players.values():
                 if player["turnDirection"] == 0:
@@ -210,7 +225,7 @@ class SoccerMissionState:
                 move_x = player["moveX"]
                 move_y = player["moveY"]
                 move_length = math.hypot(move_x, move_y)
-                if move_length > 0:
+                if self.running and move_length > 0:
                     move_x /= move_length
                     move_y /= move_length
                     player["x"] += move_x * 210.0 * TICK_SECONDS
@@ -221,7 +236,7 @@ class SoccerMissionState:
                 player["kickCooldown"] = max(0.0, player["kickCooldown"] - TICK_SECONDS)
 
                 distance_to_ball = math.hypot(player["x"] - self.ball["x"], player["y"] - self.ball["y"])
-                if distance_to_ball <= PLAYER_RADIUS + BALL_RADIUS + 8:
+                if self.running and distance_to_ball <= PLAYER_RADIUS + BALL_RADIUS + 8:
                     if player["kickPressed"] and player["kickCooldown"] <= 0:
                         angle_radians = math.radians(player["angle"])
                         kick_speed = 420.0 + player["turnHoldSeconds"] * 150.0
@@ -236,31 +251,32 @@ class SoccerMissionState:
                             self.ball["vx"] += move_x * carry_speed * TICK_SECONDS
                             self.ball["vy"] += move_y * carry_speed * TICK_SECONDS
 
-            self.ball["x"] += self.ball["vx"] * TICK_SECONDS
-            self.ball["y"] += self.ball["vy"] * TICK_SECONDS
-            self.ball["vx"] *= 0.986
-            self.ball["vy"] *= 0.986
+            if self.running:
+                self.ball["x"] += self.ball["vx"] * TICK_SECONDS
+                self.ball["y"] += self.ball["vy"] * TICK_SECONDS
+                self.ball["vx"] *= 0.986
+                self.ball["vy"] *= 0.986
 
-            if self.ball["y"] <= BALL_RADIUS:
-                self.ball["y"] = BALL_RADIUS
-                self.ball["vy"] *= -0.85
-            if self.ball["y"] >= FIELD_HEIGHT - BALL_RADIUS:
-                self.ball["y"] = FIELD_HEIGHT - BALL_RADIUS
-                self.ball["vy"] *= -0.85
+                if self.ball["y"] <= BALL_RADIUS:
+                    self.ball["y"] = BALL_RADIUS
+                    self.ball["vy"] *= -0.85
+                if self.ball["y"] >= FIELD_HEIGHT - BALL_RADIUS:
+                    self.ball["y"] = FIELD_HEIGHT - BALL_RADIUS
+                    self.ball["vy"] *= -0.85
 
-            in_goal_lane = (FIELD_HEIGHT / 2 - GOAL_WIDTH / 2) <= self.ball["y"] <= (FIELD_HEIGHT / 2 + GOAL_WIDTH / 2)
-            if self.ball["x"] <= BALL_RADIUS:
-                if in_goal_lane:
-                    self._apply_goal("away", "live play")
-                else:
-                    self.ball["x"] = BALL_RADIUS
-                    self.ball["vx"] *= -0.85
-            if self.ball["x"] >= FIELD_WIDTH - BALL_RADIUS:
-                if in_goal_lane:
-                    self._apply_goal("home", "live play")
-                else:
-                    self.ball["x"] = FIELD_WIDTH - BALL_RADIUS
-                    self.ball["vx"] *= -0.85
+                in_goal_lane = (FIELD_HEIGHT / 2 - GOAL_WIDTH / 2) <= self.ball["y"] <= (FIELD_HEIGHT / 2 + GOAL_WIDTH / 2)
+                if self.ball["x"] <= BALL_RADIUS:
+                    if in_goal_lane:
+                        self._apply_goal("away", "live play")
+                    else:
+                        self.ball["x"] = BALL_RADIUS
+                        self.ball["vx"] *= -0.85
+                if self.ball["x"] >= FIELD_WIDTH - BALL_RADIUS:
+                    if in_goal_lane:
+                        self._apply_goal("home", "live play")
+                    else:
+                        self.ball["x"] = FIELD_WIDTH - BALL_RADIUS
+                        self.ball["vx"] *= -0.85
 
     def snapshot(self):
         with self.lock:
@@ -270,6 +286,7 @@ class SoccerMissionState:
                 "score": dict(self.score),
                 "matchSeconds": round(self.match_seconds, 1),
                 "lastGoal": self.last_goal,
+                "running": self.running,
                 "ball": {key: round(value, 2) for key, value in self.ball.items()},
                 "players": [
                     {
@@ -277,6 +294,8 @@ class SoccerMissionState:
                         "name": player["name"],
                         "team": player["team"],
                         "scheme": player["scheme"],
+                        "color": player.get("color", "#ffffff"),
+                        "avatar": player.get("avatar", "circle"),
                         "x": round(player["x"], 2),
                         "y": round(player["y"], 2),
                         "angle": round(player["angle"], 1),
@@ -366,6 +385,19 @@ class Mission08Handler(SimpleHTTPRequestHandler):
         if path == "/api/teams":
             mission_state.update_teams(data)
             make_json_response(self, 200, {"state": mission_state.snapshot()})
+            return
+
+        if path == "/api/match":
+            action = clean_text(data.get("action"), "", 24)
+            if action == "start":
+                mission_state.set_running(True)
+                make_json_response(self, 200, {"state": mission_state.snapshot()})
+                return
+            if action == "pause":
+                mission_state.set_running(False)
+                make_json_response(self, 200, {"state": mission_state.snapshot()})
+                return
+            make_json_response(self, 400, {"error": "Unknown match action."})
             return
 
         if path == "/api/events":

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.9
+- Fixed Mission 08 input handling so gameplay keys no longer interfere while students are typing team names or player names into form fields.
+- Added explicit `Start Match` and `Pause Match` controls to Mission 08 so the live ball and clock do not begin until the class is ready.
+- Added per-player color selection and avatar-shape selection for both the `WASD` player and the `Arrow` player in Mission 08.
+- Kept Mission 08 validated with `npm run test:soccermatch` after the interaction changes.
+
 ## 0.1.8
 - Added `missions/08-SoccerMatch-nP` as a real multiplayer soccer mission with a live shared field, joinable players, shared ball physics, team choice, and two local control schemes per device.
 - Added Mission 08 student docs and code walkthrough so the new live-simulation pattern is documented alongside the existing browser-first mission structure.

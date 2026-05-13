@@ -29,6 +29,13 @@
           <strong id="scoreboard-inline">Blue 0 : 0 Gold</strong>
           <span id="last-goal">No goals yet.</span>
         </div>
+        <div class="status-row match-controls">
+          <span id="match-status" class="shared-status">Paused. Press Start Match when both sides are ready.</span>
+          <div class="score-actions">
+            <button id="start-match" type="button">Start Match</button>
+            <button id="pause-match" type="button">Pause Match</button>
+          </div>
+        </div>
         <canvas id="soccer-canvas" width="980" height="620" aria-label="Soccer field"></canvas>
         <div class="join-grid">
           <article class="join-card">
@@ -38,6 +45,15 @@
               <select id="wasd-team">
                 <option value="home">Home</option>
                 <option value="away">Away</option>
+              </select>
+            </label>
+            <label>Color
+              <input id="wasd-color" type="color" value="#38bdf8">
+            </label>
+            <label>Shape
+              <select id="wasd-avatar">
+                <option value="circle">Circle + marker</option>
+                <option value="rectangle">Skinny rectangle</option>
               </select>
             </label>
             <button id="join-wasd" type="button">Join WASD Player</button>
@@ -50,6 +66,15 @@
               <select id="arrow-team">
                 <option value="home">Home</option>
                 <option value="away">Away</option>
+              </select>
+            </label>
+            <label>Color
+              <input id="arrow-color" type="color" value="#facc15">
+            </label>
+            <label>Shape
+              <select id="arrow-avatar">
+                <option value="circle">Circle + marker</option>
+                <option value="rectangle">Skinny rectangle</option>
               </select>
             </label>
             <button id="join-arrow" type="button">Join Arrow Player</button>

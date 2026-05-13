@@ -11,6 +11,10 @@
   align-items: center;
 }
 
+.match-controls {
+  align-items: center;
+}
+
 #scoreboard-inline {
   font-size: 1.1rem;
 }
@@ -52,6 +56,11 @@
 .join-card label {
   display: block;
   margin-bottom: 10px;
+}
+
+.join-card input[type="color"] {
+  min-height: 44px;
+  padding: 4px;
 }
 
 .join-card button {

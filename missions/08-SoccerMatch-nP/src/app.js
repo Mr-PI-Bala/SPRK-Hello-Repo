@@ -6,12 +6,19 @@ const saveTeamsButton = document.querySelector("#save-teams");
 const clockLabel = document.querySelector("#clock-label");
 const scoreboardInline = document.querySelector("#scoreboard-inline");
 const lastGoalLabel = document.querySelector("#last-goal");
+const matchStatus = document.querySelector("#match-status");
+const startMatchButton = document.querySelector("#start-match");
+const pauseMatchButton = document.querySelector("#pause-match");
 const wasdNameInput = document.querySelector("#wasd-name");
 const wasdTeamSelect = document.querySelector("#wasd-team");
+const wasdColorInput = document.querySelector("#wasd-color");
+const wasdAvatarSelect = document.querySelector("#wasd-avatar");
 const joinWasdButton = document.querySelector("#join-wasd");
 const wasdStatus = document.querySelector("#wasd-status");
 const arrowNameInput = document.querySelector("#arrow-name");
 const arrowTeamSelect = document.querySelector("#arrow-team");
+const arrowColorInput = document.querySelector("#arrow-color");
+const arrowAvatarSelect = document.querySelector("#arrow-avatar");
 const joinArrowButton = document.querySelector("#join-arrow");
 const arrowStatus = document.querySelector("#arrow-status");
 const rosterList = document.querySelector("#roster-list");
@@ -68,9 +75,16 @@ let world = {
   score: { home: 0, away: 0 },
   matchSeconds: 0,
   lastGoal: "",
+  running: false,
   ball: { x: 490, y: 310, vx: 0, vy: 0 },
   players: [],
 };
+
+function syncInputValue(input, value) {
+  if (document.activeElement !== input) {
+    input.value = value;
+  }
+}
 
 function formatClock(seconds) {
   const whole = Math.floor(seconds);
@@ -87,7 +101,9 @@ function renderRoster() {
   });
 
   if (players.length === 0) {
-    liveSummary.textContent = "Waiting for players to join.";
+    liveSummary.textContent = world.running
+      ? "Match is live. Waiting for players to join."
+      : "Waiting for players to join.";
     return;
   }
 
@@ -129,19 +145,32 @@ function renderWorld() {
   ctx.fill();
 
   world.players.forEach((player) => {
-    const color = teamColors[player.team] || "#f8fafc";
-    ctx.fillStyle = color;
-    ctx.beginPath();
-    ctx.arc(player.x, player.y, 18, 0, Math.PI * 2);
-    ctx.fill();
-
+    const color = player.color || teamColors[player.team] || "#f8fafc";
     const angle = (player.angle * Math.PI) / 180;
-    ctx.strokeStyle = "#031018";
-    ctx.lineWidth = 4;
-    ctx.beginPath();
-    ctx.moveTo(player.x, player.y);
-    ctx.lineTo(player.x + Math.cos(angle) * 24, player.y + Math.sin(angle) * 24);
-    ctx.stroke();
+
+    if (player.avatar === "rectangle") {
+      ctx.save();
+      ctx.translate(player.x, player.y);
+      ctx.rotate(angle);
+      ctx.fillStyle = color;
+      ctx.fillRect(-10, -20, 20, 40);
+      ctx.strokeStyle = "#031018";
+      ctx.lineWidth = 3;
+      ctx.strokeRect(-10, -20, 20, 40);
+      ctx.restore();
+    } else {
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(player.x, player.y, 18, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.strokeStyle = "#031018";
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(player.x, player.y);
+      ctx.lineTo(player.x + Math.cos(angle) * 24, player.y + Math.sin(angle) * 24);
+      ctx.stroke();
+    }
 
     ctx.fillStyle = "#031018";
     ctx.font = "12px Arial";
@@ -151,11 +180,14 @@ function renderWorld() {
 }
 
 function renderState() {
-  homeTeamInput.value = world.teams.home;
-  awayTeamInput.value = world.teams.away;
+  syncInputValue(homeTeamInput, world.teams.home);
+  syncInputValue(awayTeamInput, world.teams.away);
   scoreboardInline.textContent = `${world.teams.home} ${world.score.home} : ${world.score.away} ${world.teams.away}`;
   clockLabel.textContent = formatClock(world.matchSeconds);
   lastGoalLabel.textContent = world.lastGoal || "No goals yet.";
+  matchStatus.textContent = world.running
+    ? "Match is live. Join players and play toward the opposite goal."
+    : "Paused. Press Start Match when both sides are ready.";
   renderRoster();
   renderWorld();
 }
@@ -191,6 +223,8 @@ async function joinPlayer(slot) {
     scheme: slot,
     team: isWasd ? wasdTeamSelect.value : arrowTeamSelect.value,
     name: isWasd ? wasdNameInput.value : arrowNameInput.value,
+    color: isWasd ? wasdColorInput.value : arrowColorInput.value,
+    avatar: isWasd ? wasdAvatarSelect.value : arrowAvatarSelect.value,
   };
   const response = await SPRK.postJson("/api/join", payload);
   localPlayers[slot].playerId = response.playerId;
@@ -211,6 +245,11 @@ async function saveTeams() {
     kind: "frontend",
     message: `Updated team names to ${homeTeamInput.value} and ${awayTeamInput.value}.`,
   });
+  await refreshWorld();
+}
+
+async function setMatchRunning(running) {
+  await SPRK.postJson("/api/match", { action: running ? "start" : "pause" });
   await refreshWorld();
 }
 
@@ -235,7 +274,16 @@ function normalizeKey(event) {
   return event.key.toLowerCase();
 }
 
+function isTypingTarget(target) {
+  if (!target) return false;
+  const tag = target.tagName;
+  return tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || target.isContentEditable;
+}
+
 function collectKey(event, isDown) {
+  if (isTypingTarget(event.target)) {
+    return;
+  }
   const key = normalizeKey(event);
   Object.entries(slotBindings).forEach(([slot, binding]) => {
     const tracked = new Set(Object.values(binding));
@@ -253,6 +301,8 @@ function collectKey(event, isDown) {
 joinWasdButton.addEventListener("click", () => joinPlayer("wasd"));
 joinArrowButton.addEventListener("click", () => joinPlayer("arrows"));
 saveTeamsButton.addEventListener("click", saveTeams);
+startMatchButton.addEventListener("click", () => setMatchRunning(true));
+pauseMatchButton.addEventListener("click", () => setMatchRunning(false));
 resetMatchButton.addEventListener("click", resetMatch);
 
 window.addEventListener("keydown", (event) => collectKey(event, true));
