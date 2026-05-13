@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.8
+- Added `missions/08-SoccerMatch-nP` as a real multiplayer soccer mission with a live shared field, joinable players, shared ball physics, team choice, and two local control schemes per device.
+- Added Mission 08 student docs and code walkthrough so the new live-simulation pattern is documented alongside the existing browser-first mission structure.
+- Wired Mission 08 into the repo menu, Playwright mission runner, mission-server helper, and baseline summary generation.
+- Added `tests/soccermatch.spec.js` and re-ran the full baseline so the shared generated baseline status now reports `9 / 9` passing.
+
 ## 0.1.7
 - Fixed the shared tab helper so `X-Ray Vision` and `Baseline Status` panels become visible correctly across missions that use the shared UI tabs.
 - Fixed `QuizRoom` so the shared-state polling loop no longer clears the answer field while a student is typing the current question.

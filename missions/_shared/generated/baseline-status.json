@@ -3,12 +3,12 @@
   "mode": "all",
   "runner": "Playwright",
   "baselinePolicy": "Playwright is the current baseline validation mechanism for browser-first SPRK missions. Additional or replacement baseline validators are allowed later.",
-  "generatedAt": "2026-05-13T06:45:15.910Z",
-  "generatedAtLabel": "May 12, 2026, 11:45:15 PM",
+  "generatedAt": "2026-05-13T07:40:56.454Z",
+  "generatedAtLabel": "May 13, 2026, 12:40:56 AM",
   "status": "passed",
-  "passed": 8,
+  "passed": 9,
   "failed": 0,
-  "total": 8,
+  "total": 9,
   "htmlReportPath": "tests/artifacts/playwright-report/index.html",
   "resultsJsonPath": "tests/artifacts/results/results.json",
   "checks": [
@@ -72,56 +72,71 @@
         "Goal reporting updates the shared event board",
         "Baseline Status tab loads generated validation summary"
       ]
+    },
+    {
+      "mission": "SoccerMatch",
+      "checks": [
+        "Page renders and live field state loads",
+        "A player can join the shared match",
+        "A test goal updates the shared score",
+        "X-Ray Vision and Baseline Status tabs load correctly"
+      ]
     }
   ],
   "tests": [
     {
       "title": "reactionrace.spec.js > ReactionRace supports shared multiplayer scoreboard and x-ray events",
       "status": "passed",
-      "durationMs": 5205,
+      "durationMs": 5925,
       "file": "reactionrace.spec.js"
     },
     {
       "title": "reactionrace.spec.js > ReactionRace shows an offline message when the backend calls fail",
       "status": "passed",
-      "durationMs": 842,
+      "durationMs": 1015,
       "file": "reactionrace.spec.js"
     },
     {
       "title": "snakegame.spec.js > SnakeGame supports shared scores and baseline status",
       "status": "passed",
-      "durationMs": 5476,
+      "durationMs": 5182,
       "file": "snakegame.spec.js"
     },
     {
       "title": "pingpong.spec.js > PingPong baseline works",
       "status": "passed",
-      "durationMs": 3058,
+      "durationMs": 4075,
       "file": "pingpong.spec.js"
     },
     {
       "title": "flashcards.spec.js > FlashCards baseline works",
       "status": "passed",
-      "durationMs": 2338,
+      "durationMs": 3149,
       "file": "flashcards.spec.js"
     },
     {
       "title": "quizroom.spec.js > QuizRoom baseline works",
       "status": "passed",
-      "durationMs": 9065,
+      "durationMs": 9348,
       "file": "quizroom.spec.js"
     },
     {
       "title": "foursquare.spec.js > FourSquare baseline works",
       "status": "passed",
-      "durationMs": 2963,
+      "durationMs": 3621,
       "file": "foursquare.spec.js"
     },
     {
       "title": "soccerscore.spec.js > SoccerScore baseline works",
       "status": "passed",
-      "durationMs": 3343,
+      "durationMs": 3668,
       "file": "soccerscore.spec.js"
+    },
+    {
+      "title": "soccermatch.spec.js > SoccerMatch baseline works",
+      "status": "passed",
+      "durationMs": 4525,
+      "file": "soccermatch.spec.js"
     }
   ]
 }

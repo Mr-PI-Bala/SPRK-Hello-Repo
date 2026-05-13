@@ -225,6 +225,7 @@ We are structuring the missions into distinct phases:
 | 05 | [QuizRoom](missions/05-QuizRoom-nP/docs/MISSION_GUIDE.md) ([open app](missions/05-QuizRoom-nP/index.html)) | nP | A live classroom quiz room with shared current question and scores. | Forms, validation, shared backend state, scoring, team play. | No, if a facilitator hosts the game link. | Yes, to change questions, scoring, and room behavior. |
 | 06 | [FourSquare](missions/06-FourSquare-nP/docs/MISSION_GUIDE.md) ([open app](missions/06-FourSquare-nP/index.html)) | nP | A digital version of a playground-style group game with players, turns, and rounds. | Modeling real-world rules, turns, roles, shared game state, backend coordination. | No, if a facilitator hosts the game link. | Yes, to change rules, visuals, and multiplayer behavior. |
 | 07 | [SoccerScore](missions/07-SoccerScore-nP/docs/MISSION_GUIDE.md) ([open app](missions/07-SoccerScore-nP/index.html)) | nP | A team scoreboard and event tracker for soccer, football, softball, or class games. | Teams, events, timestamps, score updates, shared display, backend API. | No, if a facilitator hosts the game link. | Yes, to change sports, events, stats, and display behavior. |
+| 08 | [SoccerMatch](missions/08-SoccerMatch-nP/docs/MISSION_GUIDE.md) ([open app](missions/08-SoccerMatch-nP/index.html)) | nP | A real shared soccer field where multiple devices join the same live match and control players on both sides. | Shared simulation, device join flow, live canvas game state, player input, ball physics, team play. | No, if a facilitator hosts the game link. | Yes, to tune gameplay, visuals, controls, and multiplayer rules. |
 
 ## Mission Template
 The canonical starter scaffold for the next browser-first mission is:
@@ -368,6 +369,7 @@ Current baseline coverage:
 - `05-QuizRoom`
 - `06-FourSquare`
 - `07-SoccerScore`
+- `08-SoccerMatch`
 
 Generated validation artifacts:
 

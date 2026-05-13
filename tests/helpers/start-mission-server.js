@@ -46,6 +46,12 @@ const missions = {
     folder: path.resolve(__dirname, "..", "..", "missions", "07-SoccerScore-nP"),
     port: 8007,
   },
+  soccermatch: {
+    key: "soccermatch",
+    title: "SoccerMatch",
+    folder: path.resolve(__dirname, "..", "..", "missions", "08-SoccerMatch-nP"),
+    port: 8008,
+  },
 };
 
 function getMission() {

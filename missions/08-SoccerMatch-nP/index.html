@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SPRK Mission 08 - SoccerMatch</title>
+  <link rel="stylesheet" href="../_shared/sprk_mission.css">
+  <link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+  <main class="mission-shell">
+    <section class="mission-band">
+      <div>
+        <p class="eyebrow">Mission 08</p>
+        <h1>SoccerMatch</h1>
+        <p class="lede">A real shared soccer field where players from multiple devices join the same live match and play together.</p>
+      </div>
+      <div class="player-row team-row">
+        <label>Home Team <input id="home-team" value="Blue"></label>
+        <label>Away Team <input id="away-team" value="Gold"></label>
+        <button id="save-teams" type="button">Save Team Names</button>
+      </div>
+    </section>
+
+    <section class="game-board soccer-board">
+      <section class="play-card soccer-card" aria-label="Shared soccer field">
+        <div class="status-row score-strip">
+          <span id="clock-label">00:00</span>
+          <strong id="scoreboard-inline">Blue 0 : 0 Gold</strong>
+          <span id="last-goal">No goals yet.</span>
+        </div>
+        <canvas id="soccer-canvas" width="980" height="620" aria-label="Soccer field"></canvas>
+        <div class="join-grid">
+          <article class="join-card">
+            <h2>WASD Player</h2>
+            <label>Name <input id="wasd-name" value="WASD Player"></label>
+            <label>Side
+              <select id="wasd-team">
+                <option value="home">Home</option>
+                <option value="away">Away</option>
+              </select>
+            </label>
+            <button id="join-wasd" type="button">Join WASD Player</button>
+            <p id="wasd-status" class="xray-note">Move with W A S D, turn with Z/X, kick with Space.</p>
+          </article>
+          <article class="join-card">
+            <h2>Arrow Player</h2>
+            <label>Name <input id="arrow-name" value="Arrow Player"></label>
+            <label>Side
+              <select id="arrow-team">
+                <option value="home">Home</option>
+                <option value="away">Away</option>
+              </select>
+            </label>
+            <button id="join-arrow" type="button">Join Arrow Player</button>
+            <p id="arrow-status" class="xray-note">Move with arrow keys, turn with PageUp/PageDown, kick with Enter.</p>
+          </article>
+          <article class="join-card">
+            <h2>How It Plays</h2>
+            <ul>
+              <li>Each device can add up to two local players.</li>
+              <li>Players choose home or away before joining.</li>
+              <li>Turning accelerates while held, so stronger facing control leads to stronger kicks.</li>
+              <li>Any device on the same host link sees the same live field.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <aside class="shared-panel">
+        <div class="tab-row" role="tablist">
+          <button id="scoreboardTab" class="tab-button active" type="button" role="tab" aria-selected="true">RealTime</button>
+          <button id="xrayTab" class="tab-button" type="button" role="tab" aria-selected="false">X-Ray Vision</button>
+          <button id="baselineTab" class="tab-button" type="button" role="tab" aria-selected="false">Baseline Status</button>
+        </div>
+        <div id="scorePanel" class="tab-panel active">
+          <div class="section-title-row">
+            <h2>Live Match Board</h2>
+            <button id="reset-match" type="button">Reset Match</button>
+          </div>
+          <p id="live-summary" class="shared-status">Waiting for players to join.</p>
+          <ol id="roster-list" class="score-list"></ol>
+        </div>
+        <div id="xrayPanel" class="tab-panel">
+          <p class="xray-note">Watch join events, goals, resets, and client-reported actions.</p>
+          <pre id="event-log" class="event-log"></pre>
+        </div>
+        <div id="baselinePanel" class="tab-panel">
+          <p class="xray-note">Baseline validation results appear here after the repo-level checks run.</p>
+          <p id="baselineStatusNote" class="xray-note">Baseline status has not been generated yet.</p>
+        </div>
+      </aside>
+    </section>
+
+    <section class="challenge-panel">
+      <h2>Try Changing One Thing</h2>
+      <div class="challenge-grid">
+        <article><h3>Starter</h3><p>Change player colors for each side. Hint: update the team color map in <code>src/app.js</code>.</p></article>
+        <article><h3>Logic</h3><p>Increase kick power or friction. Hint: adjust the ball speed values in <code>server.py</code>.</p></article>
+        <article><h3>Level Up</h3><p>Add a goalie zone rule or a time-limited match. Hint: extend the shared state and render it in the RealTime tab.</p></article>
+      </div>
+    </section>
+  </main>
+
+  <script src="../_shared/sprk_app.js"></script>
+  <script src="src/app.js"></script>
+</body>
+</html>

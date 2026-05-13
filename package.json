@@ -9,7 +9,8 @@
     "test:flashcards": "node tests/helpers/run-playwright.js flashcards",
     "test:quizroom": "node tests/helpers/run-playwright.js quizroom",
     "test:foursquare": "node tests/helpers/run-playwright.js foursquare",
-    "test:soccerscore": "node tests/helpers/run-playwright.js soccerscore"
+    "test:soccerscore": "node tests/helpers/run-playwright.js soccerscore",
+    "test:soccermatch": "node tests/helpers/run-playwright.js soccermatch"
   },
   "devDependencies": {
     "@playwright/test": "^1.54.2"

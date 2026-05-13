@@ -64,6 +64,15 @@ const missionCoverage = {
         "Baseline Status tab loads generated validation summary",
       ],
     },
+    {
+      mission: "SoccerMatch",
+      checks: [
+        "Page renders and live field state loads",
+        "A player can join the shared match",
+        "A test goal updates the shared score",
+        "X-Ray Vision and Baseline Status tabs load correctly",
+      ],
+    },
   ],
   reactionrace: [
     {
@@ -140,6 +149,17 @@ const missionCoverage = {
       ],
     },
   ],
+  soccermatch: [
+    {
+      mission: "SoccerMatch",
+      checks: [
+        "Page renders and live field state loads",
+        "A player can join the shared match",
+        "A test goal updates the shared score",
+        "X-Ray Vision and Baseline Status tabs load correctly",
+      ],
+    },
+  ],
 };
 
 function flattenSuites(suites, testCases = []) {
@@ -193,6 +213,7 @@ function main() {
       path.join(repoRoot, "tests", "artifacts", "baseline-results", "quizroom-results.json"),
       path.join(repoRoot, "tests", "artifacts", "baseline-results", "foursquare-results.json"),
       path.join(repoRoot, "tests", "artifacts", "baseline-results", "soccerscore-results.json"),
+      path.join(repoRoot, "tests", "artifacts", "baseline-results", "soccermatch-results.json"),
     ]
     : [path.join(repoRoot, "tests", "artifacts", "baseline-results", `${mode}-results.json`)];
   const cases = resultsFiles.flatMap((resultsPath) => {
