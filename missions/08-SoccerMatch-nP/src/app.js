@@ -79,6 +79,13 @@ let world = {
   ball: { x: 490, y: 310, vx: 0, vy: 0 },
   players: [],
 };
+let syncTimerId = null;
+let syncInFlight = false;
+
+const SYNC_INTERVALS = {
+  paused: 1800,
+  running: 650,
+};
 
 function syncInputValue(input, value) {
   if (document.activeElement !== input) {
@@ -207,6 +214,52 @@ async function refreshWorld() {
   await Promise.all([loadState(), refreshEvents()]);
 }
 
+function syncDelay() {
+  return world.running ? SYNC_INTERVALS.running : SYNC_INTERVALS.paused;
+}
+
+function scheduleWorldSync(delay = syncDelay()) {
+  if (syncTimerId) {
+    window.clearTimeout(syncTimerId);
+  }
+  syncTimerId = window.setTimeout(() => {
+    void runScheduledSync();
+  }, delay);
+}
+
+async function runScheduledSync() {
+  if (syncInFlight) {
+    scheduleWorldSync();
+    return;
+  }
+
+  syncInFlight = true;
+  try {
+    await refreshWorld();
+  } finally {
+    syncInFlight = false;
+    scheduleWorldSync();
+  }
+}
+
+async function refreshWorldNow() {
+  if (syncTimerId) {
+    window.clearTimeout(syncTimerId);
+    syncTimerId = null;
+  }
+  if (syncInFlight) {
+    return;
+  }
+
+  syncInFlight = true;
+  try {
+    await refreshWorld();
+  } finally {
+    syncInFlight = false;
+    scheduleWorldSync();
+  }
+}
+
 function inputPayload(binding, keys) {
   return {
     moveX: (keys.has(binding.moveRight) ? 1 : 0) - (keys.has(binding.moveLeft) ? 1 : 0),
@@ -234,7 +287,7 @@ async function joinPlayer(slot) {
   } else {
     arrowStatus.textContent = `${payload.name} joined ${payload.team}. Move with arrows, turn with PageUp/PageDown, kick with Enter.`;
   }
-  await refreshWorld();
+  await refreshWorldNow();
 }
 
 async function saveTeams() {
@@ -246,17 +299,17 @@ async function saveTeams() {
     kind: "frontend",
     message: `Updated team names to ${homeTeamInput.value} and ${awayTeamInput.value}.`,
   });
-  await refreshWorld();
+  await refreshWorldNow();
 }
 
 async function setMatchRunning(running) {
   await SPRK.postJson("/api/match", { action: running ? "start" : "pause" });
-  await refreshWorld();
+  await refreshWorldNow();
 }
 
 async function resetMatch() {
   await SPRK.deleteJson("/api/state");
-  await refreshWorld();
+  await refreshWorldNow();
 }
 
 async function flushInput(slot) {
@@ -375,8 +428,7 @@ SPRK.setupTabs({
 });
 
 SPRK.loadBaselineStatus("/_shared/generated/baseline-status.json", baselinePanel, baselineStatusNote);
-refreshWorld();
-window.setInterval(refreshWorld, 220);
+void refreshWorldNow();
 
 if (testModeEnabled) {
   window.__sprkTest = {
@@ -384,7 +436,7 @@ if (testModeEnabled) {
       const response = await SPRK.postJson("/api/join", { deviceId, scheme, name, team });
       localPlayers[scheme].playerId = response.playerId;
       localPlayers[scheme].lastPayloadSignature = "";
-      await refreshWorld();
+      await refreshWorldNow();
       return response.playerId;
     },
     async getState() {
@@ -393,7 +445,7 @@ if (testModeEnabled) {
     },
     async startMatch() {
       await SPRK.postJson("/api/match", { action: "start" });
-      await refreshWorld();
+      await refreshWorldNow();
     },
     async sendInput(playerId, payload) {
       await fetch("/api/input", {
@@ -409,7 +461,7 @@ if (testModeEnabled) {
     },
     async goalForTest(team) {
       await SPRK.postJson("/api/test", { action: "goal", team });
-      await refreshWorld();
+      await refreshWorldNow();
     },
   };
 }

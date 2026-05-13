@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.11
+- Reduced Mission 08 background chatter by removing the fixed `220ms` world polling loop and switching SoccerMatch to adaptive sync.
+- Kept Mission 08 responsive by refreshing immediately after real local actions while using lighter background sync intervals for paused and live states.
+- Revalidated SoccerMatch with `npm run test:soccermatch` after the sync behavior change.
+
 ## 0.1.10
 - Fixed Mission 08 match ticking so `Start Match` actually starts live movement, ball motion, and clock updates instead of leaving the shared state paused forever.
 - Fixed Mission 08 keyboard control flow so local player movement updates are delivered reliably after join and focus changes do not leave control state stuck.
