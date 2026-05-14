@@ -2,6 +2,8 @@
   "name": "sprk-hello-repo",
   "private": true,
   "scripts": {
+    "brancher": "python missions/_shared/tools/sprk_brancher.py",
+    "approver": "python missions/_shared/tools/sprk_approver.py",
     "test": "node tests/helpers/run-playwright.js all",
     "test:reactionrace": "node tests/helpers/run-playwright.js reactionrace",
     "test:snakegame": "node tests/helpers/run-playwright.js snakegame",
