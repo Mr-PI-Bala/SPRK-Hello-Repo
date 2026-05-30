@@ -73,6 +73,7 @@ Logic lives in `src/wave_math.js`. Tap **Launch Wave N** (or press Enter) to con
 | `README.md` | Short Quick Start for running Mission 10. | Run command or control summary. |
 | `index.html` | Page structure, canvas, controls, and shared panels. | Mission labels, controls, and student-facing copy. |
 | `src/app.js` | Game state, fleet rules, collisions, rendering, dimension shifts, and shared API calls. | Alien values, fleet speed, controls, and rendering style. |
+| `src/wave_math.js` | Detects math-special wave numbers and builds celebration text. | Add new number patterns or student-friendly insights. |
 | `src/styles.css` | Mission-specific layout and visual treatment. | Canvas size, colors, and responsive layout. |
 | `server.py` | Starts the shared SPRK backend on port `8010`. | Port, title, or initial state defaults. |
 | `docs/MISSION_GUIDE.md` | Student mission instructions. | Challenge prompts and run steps. |
