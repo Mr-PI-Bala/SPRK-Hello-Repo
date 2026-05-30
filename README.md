@@ -14,6 +14,7 @@ Key repo-wide learning guide:
 - [docs/SPRK_Browser_Mission_Foundation_Guide.md](docs/SPRK_Browser_Mission_Foundation_Guide.md): explains the common browser-mission structure so mission guides only need to describe what is different.
 - [docs/SPRK_Browser_Testing_And_Network_Architecture.md](docs/SPRK_Browser_Testing_And_Network_Architecture.md): explains the validation harness, Cursor Cloud flow, and local network hosting model for phones, tablets, and facilitator laptops.
 - [docs/SPRK_Guided_Workflow_Helper.md](docs/SPRK_Guided_Workflow_Helper.md): explains the guided Git/GitHub helper that shows status, teaches branch/PR actions, and requires confirmation before doing work.
+- [docs/SPRK_Student_AgenticOps_Guide.md](docs/SPRK_Student_AgenticOps_Guide.md): adapts agentic development practices into student-safe SPRK habits for setup, validation, hygiene, and handoff.
 
 ## Start Here
 1. ~~Ask for access through the public [SPRK-Welcome](https://github.com/Mr-PI-Bala/SPRK-Welcome) repository.~~<br>
@@ -228,7 +229,7 @@ We are structuring the missions into distinct phases:
 | 06 | [FourSquare](missions/06-FourSquare-nP/docs/MISSION_GUIDE.md) ([open app](missions/06-FourSquare-nP/index.html)) | nP | A digital version of a playground-style group game with players, turns, and rounds. | Modeling real-world rules, turns, roles, shared game state, backend coordination. | No, if a facilitator hosts the game link. | Yes, to change rules, visuals, and multiplayer behavior. |
 | 07 | [SoccerScore](missions/07-SoccerScore-nP/docs/MISSION_GUIDE.md) ([open app](missions/07-SoccerScore-nP/index.html)) | nP | A team scoreboard and event tracker for soccer, football, softball, or class games. | Teams, events, timestamps, score updates, shared display, backend API. | No, if a facilitator hosts the game link. | Yes, to change sports, events, stats, and display behavior. |
 | 08 | [SoccerMatch](missions/08-SoccerMatch-nP/docs/MISSION_GUIDE.md) ([open app](missions/08-SoccerMatch-nP/index.html)) | nP | A real shared soccer field where multiple devices join the same live match and control players on both sides. | Shared simulation, device join flow, live canvas game state, player input, ball physics, team play. | No, if a facilitator hosts the game link. | Yes, to tune gameplay, visuals, controls, and multiplayer rules. |
-| 10 | [Space Invaders](missions/10-Space-Invaders/docs/MISSION_GUIDE.md) ([open app](missions/10-Space-Invaders/index.html)) | 1P-nP | A classic 2D Space Invaders wave that shifts into a 3D rail shooter and then an FPS-style cannon view. | Canvas rendering, state machines, collision, destructible bunkers, camera transitions, unified game state. | No, if a facilitator hosts the game link. | Yes, to tune gameplay, visuals, controls, and dimension rules. |
+| 10 | [Space Invaders](missions/10-SpaceInvaders-1P-nP/docs/MISSION_GUIDE.md) ([open app](missions/10-SpaceInvaders-1P-nP/index.html)) | 1P-nP | A classic 2D Space Invaders wave that shifts into a 3D rail shooter and then an FPS-style cannon view. | Canvas rendering, state machines, collision, destructible bunkers, camera transitions, unified game state. | No, if a facilitator hosts the game link. | Yes, to tune gameplay, visuals, controls, and dimension rules. |
 
 ## Mission Template
 The canonical starter scaffold for the next browser-first mission is:
@@ -328,18 +329,25 @@ Mission-specific files belong inside the mission folder under `missions/`. That 
 ## Direct Playwright Testing
 SPRK-Hello-Repo now has a direct baseline validation harness for local browser testing against the real Python backends used by the missions.
 
-Install the test tools:
+Automatic setup for forked and branched work:
+
+- `.devcontainer/devcontainer.json` runs `npm run setup:missions` when a GitHub Codespace or compatible dev container is created from this repository.
+- `.github/workflows/mission-baseline.yml` runs browser mission validation on pushed branches and pull requests.
+- Because those files are committed to the repo, students inherit the setup when they branch or fork this repository.
+
+Install the test tools manually when working outside a dev container:
 
 ```bash
-npm install
-npx playwright install
+npm run setup:missions
 ```
 
 Run the full browser test suite:
 
 ```bash
-npm test
+npm run validate
 ```
+
+`npm run validate` currently delegates to `npm test`, which runs the full Playwright mission baseline.
 
 Run only the ReactionRace suite:
 
@@ -374,7 +382,7 @@ Current baseline coverage:
 - `06-FourSquare`
 - `07-SoccerScore`
 - `08-SoccerMatch`
-- `10-Space-Invaders`
+- `10-SpaceInvaders-1P-nP`
 
 Generated validation artifacts:
 

@@ -3,8 +3,8 @@
   "mode": "spaceinvaders",
   "runner": "Playwright",
   "baselinePolicy": "Playwright is the current baseline validation mechanism for browser-first SPRK missions. Additional or replacement baseline validators are allowed later.",
-  "generatedAt": "2026-05-30T01:37:40.801Z",
-  "generatedAtLabel": "May 30, 2026, 1:37:40 AM",
+  "generatedAt": "2026-05-30T05:25:10.369Z",
+  "generatedAtLabel": "May 30, 2026, 5:25:10 AM",
   "status": "passed",
   "passed": 1,
   "failed": 0,
@@ -27,7 +27,7 @@
     {
       "title": "spaceinvaders.spec.js > Space Invaders dimensional shift baseline works",
       "status": "passed",
-      "durationMs": 3244,
+      "durationMs": 3206,
       "file": "spaceinvaders.spec.js"
     }
   ]
