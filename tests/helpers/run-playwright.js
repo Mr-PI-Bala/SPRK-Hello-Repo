@@ -64,6 +64,7 @@ function runSingle(mode, selected) {
     ...process.env,
     SPRK_MISSION: selected.mission,
     PLAYWRIGHT_BASE_URL: selected.baseUrl,
+    PYTHON: process.env.PYTHON || (process.platform === "win32" ? "python" : "python3"),
   };
   const repoRoot = path.resolve(__dirname, "..", "..");
   const args = [

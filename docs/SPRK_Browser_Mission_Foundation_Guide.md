@@ -13,6 +13,19 @@ Most browser-first SPRK missions share the same foundation:
 - `missions/_shared/sprk_app.js`: shared frontend helpers
 - `missions/_shared/sprk_backend.py`: shared backend behavior
 
+## Mission Folder Naming
+Every mission folder under `missions/` must follow:
+
+```text
+NN-GameName-<mode-label>
+```
+
+Examples: `01-ReactionRace-nP`, `03-PingPong-2P-nP`, `10-SpaceInvaders-1P-nP`.
+
+The mode label (`1P`, `2P`, `nP`, `1P-nP`, `2P-nP`) tells students how many players the mission starts with and whether it can grow into classroom multiplayer. Use PascalCase for `GameName` with no hyphens inside the name.
+
+Canonical rules: [MERIT.instructions](../MERIT.instructions) at the repository root.
+
 ## Common Run Pattern
 For most missions, the run shape is:
 
@@ -23,7 +36,7 @@ python server.py
 
 What each command does:
 
-- `cd missions/<MissionFolder>`: moves the terminal into the mission folder you want to run.
+- `cd missions/<MissionFolder>`: moves the terminal into the mission folder you want to run (for example `missions/10-SpaceInvaders-1P-nP`).
 - `python server.py`: starts the local mission backend and serves the mission page plus its shared APIs.
 
 Then open the mission link shown in the terminal.

@@ -55,7 +55,7 @@ const missions = {
   spaceinvaders: {
     key: "spaceinvaders",
     title: "Space Invaders: Dimensional Shift",
-    folder: path.resolve(__dirname, "..", "..", "missions", "10-Space-Invaders"),
+    folder: path.resolve(__dirname, "..", "..", "missions", "10-SpaceInvaders-1P-nP"),
     port: 8010,
   },
 };

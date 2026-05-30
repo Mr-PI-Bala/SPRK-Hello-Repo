@@ -31,7 +31,7 @@ Build and play a Space Invaders mission that begins as a classic 2D defense game
 
 ## How To Run
 ```bash
-cd missions/10-Space-Invaders
+cd missions/10-SpaceInvaders-1P-nP
 python server.py
 ```
 
@@ -43,7 +43,7 @@ python3 server.py
 
 What each command does:
 
-- `cd missions/10-Space-Invaders`: moves the terminal into this mission folder.
+- `cd missions/10-SpaceInvaders-1P-nP`: moves the terminal into this mission folder.
 - `python server.py`: starts the local backend and serves the mission page.
 - `python3 server.py`: starts the same backend on Linux/macOS environments where Python is exposed as `python3`.
 

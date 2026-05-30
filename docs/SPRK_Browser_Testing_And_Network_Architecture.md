@@ -1,7 +1,7 @@
 # SPRK Browser Testing And Network Architecture
 This guide explains how SPRK browser missions run, how automated validation works, and how a facilitator laptop can host a mission for phones, tablets, and other laptops on the same local network.
 
-Mission 10, `10-Space-Invaders`, is the example throughout this document.
+Mission 10, `10-SpaceInvaders-1P-nP`, is the example throughout this document.
 
 ## Visual Map
 Use this map when you want to jump to the diagram that answers your question.
@@ -37,7 +37,7 @@ flowchart TD
     User["Student or facilitator<br>Windows laptop browser"] --> CursorUI["Cursor Web UI"]
     CursorUI --> Agent["Cursor Cloud Agent<br>remote Linux VM"]
     Agent --> Workspace["/workspace<br>git checkout"]
-    Workspace --> Mission["missions/10-Space-Invaders"]
+    Workspace --> Mission["missions/10-SpaceInvaders-1P-nP"]
     Agent --> GitHub["GitHub<br>Mr-PI-Bala/SPRK-Hello-Repo"]
     Agent --> Node["Node.js and npm"]
     Agent --> Python["python3"]
@@ -183,7 +183,7 @@ sequenceDiagram
 | npm script | `package.json` | Names the command students run. | `tests/helpers/run-playwright.js` |
 | Test runner helper | `tests/helpers/run-playwright.js` | Selects mission, base URL, and spec file. | Playwright CLI |
 | Server helper | `tests/helpers/start-mission-server.js` | Starts the correct Python backend for the chosen mission. | `server.py` |
-| Mission backend | `missions/10-Space-Invaders/server.py` | Serves files and shared JSON APIs. | Browser, shared backend helper |
+| Mission backend | `missions/10-SpaceInvaders-1P-nP/server.py` | Serves files and shared JSON APIs. | Browser, shared backend helper |
 | Browser test | `tests/spaceinvaders.spec.js` | Makes assertions about Mission 10 behavior. | Headless Chromium page |
 | Test hooks | `window.__sprkTest` in `src/app.js` | Provide deterministic controls for tests. | Playwright spec |
 | Baseline writer | `tests/helpers/write-baseline-status.js` | Publishes test summary for Baseline Status tab. | `missions/_shared/generated/` |
@@ -242,7 +242,7 @@ flowchart LR
 For Mission 10:
 
 ```text
-missions/10-Space-Invaders/
+missions/10-SpaceInvaders-1P-nP/
   index.html
   server.py
   src/app.js
@@ -345,7 +345,7 @@ flowchart LR
 Use this when the code is running in Cursor's remote environment.
 
 ```bash
-cd /workspace/missions/10-Space-Invaders
+cd /workspace/missions/10-SpaceInvaders-1P-nP
 python3 server.py
 ```
 
@@ -368,7 +368,7 @@ On the facilitator laptop:
 git clone https://github.com/Mr-PI-Bala/SPRK-Hello-Repo.git
 cd SPRK-Hello-Repo
 git checkout cursor/10-space-invaders-de64
-cd missions/10-Space-Invaders
+cd missions/10-SpaceInvaders-1P-nP
 python server.py
 ```
 
@@ -525,14 +525,14 @@ If phones/tablets cannot reach a facilitator laptop:
 Run Mission 10 in Cursor Cloud:
 
 ```bash
-cd /workspace/missions/10-Space-Invaders
+cd /workspace/missions/10-SpaceInvaders-1P-nP
 python3 server.py
 ```
 
 Run Mission 10 locally on Windows:
 
 ```bash
-cd missions/10-Space-Invaders
+cd missions/10-SpaceInvaders-1P-nP
 python server.py
 ```
 

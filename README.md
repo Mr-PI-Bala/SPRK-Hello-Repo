@@ -15,6 +15,13 @@ Key repo-wide learning guide:
 - [docs/SPRK_Browser_Testing_And_Network_Architecture.md](docs/SPRK_Browser_Testing_And_Network_Architecture.md): explains the validation harness, Cursor Cloud flow, and local network hosting model for phones, tablets, and facilitator laptops.
 - [docs/SPRK_Guided_Workflow_Helper.md](docs/SPRK_Guided_Workflow_Helper.md): explains the guided Git/GitHub helper that shows status, teaches branch/PR actions, and requires confirmation before doing work.
 
+Student-safe AgenticOps and coding-agent entry points (public repo only; no private MERIT vault text):
+
+- [MERIT.instructions](MERIT.instructions): canonical mission naming and student-safe MERIT principles for this repository.
+- [AgentDraven.instructions](AgentDraven.instructions): classroom mentor tone for students and agents working in SPRK missions.
+- [AGENTS.md](AGENTS.md): read order, validation commands, and repository shape for coding agents.
+- [docs/SPRK_Student_AgenticOps_Guide.md](docs/SPRK_Student_AgenticOps_Guide.md): MERIT-to-SPRK compare/contrast for students learning how enterprise AgenticOps maps to this repo.
+
 ## Start Here
 1. ~~Ask for access through the public [SPRK-Welcome](https://github.com/Mr-PI-Bala/SPRK-Welcome) repository.~~<br>
    **Victory:** if you can see this private repository, your access request worked.
@@ -228,7 +235,7 @@ We are structuring the missions into distinct phases:
 | 06 | [FourSquare](missions/06-FourSquare-nP/docs/MISSION_GUIDE.md) ([open app](missions/06-FourSquare-nP/index.html)) | nP | A digital version of a playground-style group game with players, turns, and rounds. | Modeling real-world rules, turns, roles, shared game state, backend coordination. | No, if a facilitator hosts the game link. | Yes, to change rules, visuals, and multiplayer behavior. |
 | 07 | [SoccerScore](missions/07-SoccerScore-nP/docs/MISSION_GUIDE.md) ([open app](missions/07-SoccerScore-nP/index.html)) | nP | A team scoreboard and event tracker for soccer, football, softball, or class games. | Teams, events, timestamps, score updates, shared display, backend API. | No, if a facilitator hosts the game link. | Yes, to change sports, events, stats, and display behavior. |
 | 08 | [SoccerMatch](missions/08-SoccerMatch-nP/docs/MISSION_GUIDE.md) ([open app](missions/08-SoccerMatch-nP/index.html)) | nP | A real shared soccer field where multiple devices join the same live match and control players on both sides. | Shared simulation, device join flow, live canvas game state, player input, ball physics, team play. | No, if a facilitator hosts the game link. | Yes, to tune gameplay, visuals, controls, and multiplayer rules. |
-| 10 | [Space Invaders](missions/10-Space-Invaders/docs/MISSION_GUIDE.md) ([open app](missions/10-Space-Invaders/index.html)) | 1P-nP | A classic 2D Space Invaders wave that shifts into a 3D rail shooter and then an FPS-style cannon view. | Canvas rendering, state machines, collision, destructible bunkers, camera transitions, unified game state. | No, if a facilitator hosts the game link. | Yes, to tune gameplay, visuals, controls, and dimension rules. |
+| 10 | [Space Invaders](missions/10-SpaceInvaders-1P-nP/docs/MISSION_GUIDE.md) ([open app](missions/10-SpaceInvaders-1P-nP/index.html)) | 1P-nP | A classic 2D Space Invaders wave that shifts into a 3D rail shooter and then an FPS-style cannon view. | Canvas rendering, state machines, collision, destructible bunkers, camera transitions, unified game state. | No, if a facilitator hosts the game link. | Yes, to tune gameplay, visuals, controls, and dimension rules. |
 
 ## Mission Template
 The canonical starter scaffold for the next browser-first mission is:
@@ -271,6 +278,29 @@ Why this template matters:
 | nP | Many players, usually classroom mode. |
 | 1P-nP | Starts as one-player and can grow into many-player mode. |
 | 2P-nP | Starts as two-player and can grow into many-player mode. |
+
+## Mission Folder Naming
+Every playable mission folder under `missions/` must use this pattern:
+
+```text
+NN-GameName-<mode-label>
+```
+
+Examples:
+
+- `01-ReactionRace-nP`
+- `02-SnakeGame-1P-nP`
+- `03-PingPong-2P-nP`
+- `10-SpaceInvaders-1P-nP`
+
+Rules:
+
+- `NN` is the two-digit mission number used in the menu and tests.
+- `GameName` is PascalCase with no spaces (not `Space-Invaders`).
+- `<mode-label>` is one of `1P`, `2P`, `nP`, `1P-nP`, or `2P-nP` and must match the mission menu Mode column.
+- Do not keep a second folder for the same mission under a different name. One mission, one folder, one Playwright entry in `tests/helpers/start-mission-server.js`.
+
+Full rules live in [MERIT.instructions](MERIT.instructions).
 
 ## Mission Pattern
 Every mission should support the same classroom rhythm:
@@ -374,7 +404,7 @@ Current baseline coverage:
 - `06-FourSquare`
 - `07-SoccerScore`
 - `08-SoccerMatch`
-- `10-Space-Invaders`
+- `10-SpaceInvaders-1P-nP`
 
 Generated validation artifacts:
 
