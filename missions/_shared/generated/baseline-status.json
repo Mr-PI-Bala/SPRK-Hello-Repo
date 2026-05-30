@@ -3,12 +3,12 @@
   "mode": "all",
   "runner": "Playwright",
   "baselinePolicy": "Playwright is the current baseline validation mechanism for browser-first SPRK missions. Additional or replacement baseline validators are allowed later.",
-  "generatedAt": "2026-05-30T02:43:20.296Z",
-  "generatedAtLabel": "May 30, 2026, 2:43:20 AM",
+  "generatedAt": "2026-05-30T02:52:58.481Z",
+  "generatedAtLabel": "May 30, 2026, 2:52:58 AM",
   "status": "passed",
-  "passed": 9,
+  "passed": 10,
   "failed": 0,
-  "total": 9,
+  "total": 10,
   "htmlReportPath": "tests/artifacts/playwright-report/index.html",
   "resultsJsonPath": "tests/artifacts/results/results.json",
   "checks": [
@@ -81,62 +81,78 @@
         "A test goal updates the shared score",
         "X-Ray Vision and Baseline Status tabs load correctly"
       ]
+    },
+    {
+      "mission": "Space Invaders",
+      "checks": [
+        "Page renders and dimensional game state loads",
+        "The 55-alien fleet scores and accelerates as aliens are destroyed",
+        "Bunker voxel damage updates shared mission state",
+        "2D, 3D rail, and FPS modes preserve score and wave state",
+        "X-Ray Vision and Baseline Status tabs load correctly"
+      ]
     }
   ],
   "tests": [
     {
       "title": "reactionrace.spec.js > ReactionRace supports shared multiplayer scoreboard and x-ray events",
       "status": "passed",
-      "durationMs": 539,
+      "durationMs": 575,
       "file": "reactionrace.spec.js"
     },
     {
       "title": "reactionrace.spec.js > ReactionRace shows an offline message when the backend calls fail",
       "status": "passed",
-      "durationMs": 66,
+      "durationMs": 70,
       "file": "reactionrace.spec.js"
     },
     {
       "title": "snakegame.spec.js > SnakeGame supports shared scores and baseline status",
       "status": "passed",
-      "durationMs": 630,
+      "durationMs": 646,
       "file": "snakegame.spec.js"
     },
     {
       "title": "pingpong.spec.js > PingPong baseline works",
       "status": "passed",
-      "durationMs": 306,
+      "durationMs": 325,
       "file": "pingpong.spec.js"
     },
     {
       "title": "flashcards.spec.js > FlashCards baseline works",
       "status": "passed",
-      "durationMs": 342,
+      "durationMs": 371,
       "file": "flashcards.spec.js"
     },
     {
       "title": "quizroom.spec.js > QuizRoom baseline works",
       "status": "passed",
-      "durationMs": 4895,
+      "durationMs": 4894,
       "file": "quizroom.spec.js"
     },
     {
       "title": "foursquare.spec.js > FourSquare baseline works",
       "status": "passed",
-      "durationMs": 372,
+      "durationMs": 390,
       "file": "foursquare.spec.js"
     },
     {
       "title": "soccerscore.spec.js > SoccerScore baseline works",
       "status": "passed",
-      "durationMs": 301,
+      "durationMs": 310,
       "file": "soccerscore.spec.js"
     },
     {
       "title": "soccermatch.spec.js > SoccerMatch baseline works",
       "status": "passed",
-      "durationMs": 699,
+      "durationMs": 672,
       "file": "soccermatch.spec.js"
+    },
+    {
+      "title": "spaceinvaders.spec.js > Space Invaders dimensional shift baseline works",
+      "status": "passed",
+      "durationMs": 3183,
+      "file": "spaceinvaders.spec.js"
     }
   ]
 }
