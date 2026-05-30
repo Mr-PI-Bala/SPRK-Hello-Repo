@@ -14,6 +14,7 @@ Build and play a Space Invaders mission that begins as a classic 2D defense game
 | I want to run the mission | [How To Run](#how-to-run) |
 | I want the controls | [Controls](#controls) |
 | I want the file map | [Code Files](#code-files) |
+| I want the original product requirement | [PRD.md](PRD.md) |
 | I want the deeper architecture view | [CODE_WALKTHROUGH.md](CODE_WALKTHROUGH.md) |
 | I need the shared Git workflow | [SPRK Git Repository User Guide](../../../docs/SPRK_Git_Repository_UserGuide.md) |
 | I want the common browser mission pattern | [../../../docs/SPRK_Browser_Mission_Foundation_Guide.md](../../../docs/SPRK_Browser_Mission_Foundation_Guide.md) |
@@ -34,10 +35,17 @@ cd missions/10-Space-Invaders
 python server.py
 ```
 
+On Linux/macOS or Cursor Cloud, use:
+
+```bash
+python3 server.py
+```
+
 What each command does:
 
 - `cd missions/10-Space-Invaders`: moves the terminal into this mission folder.
 - `python server.py`: starts the local backend and serves the mission page.
+- `python3 server.py`: starts the same backend on Linux/macOS environments where Python is exposed as `python3`.
 
 Open the browser link shown in the terminal. This mission uses port `8010`.
 
@@ -51,12 +59,14 @@ Open the browser link shown in the terminal. This mission uses port `8010`.
 ## Code Files
 | File | What It Does | What You Usually Change First |
 | --- | --- | --- |
+| `README.md` | Short Quick Start for running Mission 10. | Run command or control summary. |
 | `index.html` | Page structure, canvas, controls, and shared panels. | Mission labels, controls, and student-facing copy. |
 | `src/app.js` | Game state, fleet rules, collisions, rendering, dimension shifts, and shared API calls. | Alien values, fleet speed, controls, and rendering style. |
 | `src/styles.css` | Mission-specific layout and visual treatment. | Canvas size, colors, and responsive layout. |
 | `server.py` | Starts the shared SPRK backend on port `8010`. | Port, title, or initial state defaults. |
 | `docs/MISSION_GUIDE.md` | Student mission instructions. | Challenge prompts and run steps. |
 | `docs/CODE_WALKTHROUGH.md` | Deeper code explanation and diagrams. | Architecture notes and extension ideas. |
+| `docs/PRD.md` | Original product requirement document plus implementation mapping. | Acceptance criteria or future scope notes. |
 
 ## How The Game Rules Map To The PRD
 | PRD Requirement | Mission Implementation |

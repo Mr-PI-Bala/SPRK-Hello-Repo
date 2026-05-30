@@ -4,6 +4,9 @@ This walkthrough explains how Mission 10 uses the shared browser mission baselin
 ## File Map
 ```text
 10-Space-Invaders/
+  README.md
+    The short Quick Start for running Mission 10.
+
   index.html
     The mission page, canvas, controls, and shared RealTime/X-Ray/Baseline panel.
 
@@ -21,6 +24,9 @@ This walkthrough explains how Mission 10 uses the shared browser mission baselin
 
   docs/CODE_WALKTHROUGH.md
     This architecture explanation.
+
+  docs/PRD.md
+    The original product requirement document and implementation mapping.
 ```
 
 ## Why The Game Uses One State Object
