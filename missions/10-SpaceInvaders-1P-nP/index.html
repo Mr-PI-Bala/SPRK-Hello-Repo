@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SPRK Mission 10 - Space Invaders</title>
   <link rel="stylesheet" href="../_shared/sprk_mission.css">
+  <link rel="stylesheet" href="../_shared/sprk_touch.css">
   <link rel="stylesheet" href="src/styles.css">
 </head>
 <body>
@@ -27,7 +28,7 @@
     </section>
 
     <section class="game-board invader-board">
-      <section class="play-card invader-card" aria-label="Space Invaders dimensional shift game">
+      <section class="play-card invader-card sprk-play-surface" aria-label="Space Invaders dimensional shift game">
         <div class="status-row invader-hud">
           <span id="mode-label">2D Classic</span>
           <strong id="score-label">Score 0000</strong>
@@ -35,6 +36,7 @@
           <span id="lives-label">Lives 3</span>
         </div>
         <canvas id="invader-canvas" width="960" height="680" aria-label="Dimensional Space Invaders playfield"></canvas>
+        <p class="sprk-touch-hint">Touch: drag on the cannon to move it, quick tap or second finger to fire. Triple-tap the play area for fullscreen. Use on-screen buttons for dimension shift in FPS.</p>
         <div class="status-row invader-readouts">
           <span id="alien-count">55 aliens remain</span>
           <span id="fleet-speed">Fleet beat 0.88s</span>
@@ -99,6 +101,7 @@
   </main>
 
   <script src="../_shared/sprk_app.js"></script>
+  <script src="../_shared/sprk_touch.js"></script>
   <script src="src/app.js"></script>
 </body>
 </html>

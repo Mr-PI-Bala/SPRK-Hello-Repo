@@ -198,6 +198,18 @@ window.addEventListener("keydown", (event) => {
   if (event.key === "ArrowRight" || event.key.toLowerCase() === "d") setDirection({ x: 1, y: 0 });
 });
 
+SPRK_TOUCH.attach({
+  target: canvas,
+  onDirection: (dx, dy) => {
+    if (dx === 0 && dy === 0) {
+      return;
+    }
+    setDirection({ x: dx, y: dy });
+  },
+  unlockSound: () => SPRK.unlockSound(),
+  fullscreenElement: document.querySelector(".play-card"),
+});
+
 resetGame();
 SPRK.loadBaselineStatus("/_shared/generated/baseline-status.json", baselinePanel, baselineStatusNote);
 refreshSharedPanels();

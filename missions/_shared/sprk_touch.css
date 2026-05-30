@@ -1,0 +1,81 @@
+/* Shared touch / pointer overlays for SPRK canvas missions */
+
+.sprk-touch-target {
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.sprk-touch-hint {
+  margin: 0.35rem 0 0;
+  color: var(--muted, #a9bac8);
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.sprk-touch-hint kbd {
+  padding: 0.1rem 0.35rem;
+  border: 1px solid var(--border, #30485c);
+  border-radius: 4px;
+  background: var(--panel-strong, #1f3448);
+  font-size: 0.78rem;
+}
+
+.sprk-touch-zone-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+}
+
+.sprk-touch-zone-overlay span {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 0.35rem;
+  color: rgba(242, 247, 251, 0.35);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.sprk-touch-zone-overlay span + span {
+  border-left: 1px dashed rgba(48, 72, 92, 0.8);
+}
+
+.sprk-play-surface {
+  position: relative;
+}
+
+.sprk-touch-fullscreen-active .mission-shell,
+.sprk-touch-fullscreen-active .app-shell,
+.sprk-touch-fullscreen-active .sprk-play-surface:fullscreen {
+  width: 100%;
+  max-width: none;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0.5rem;
+}
+
+.sprk-touch-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 1.25rem;
+  z-index: 9999;
+  transform: translateX(-50%);
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(15, 24, 32, 0.92);
+  border: 1px solid var(--border, #30485c);
+  color: var(--text, #f2f7fb);
+  font-size: 0.82rem;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.sprk-touch-toast.visible {
+  opacity: 1;
+}

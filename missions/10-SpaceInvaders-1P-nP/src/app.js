@@ -1161,6 +1161,30 @@ canvas.addEventListener("click", () => {
   }
   firePlayerShot();
 });
+
+SPRK_TOUCH.attach({
+  target: canvas,
+  keys,
+  onAction: () => {
+    if (runtime.running) {
+      firePlayerShot();
+    }
+  },
+  unlockSound: () => SPRK.unlockSound(),
+  fullscreenElement: document.querySelector(".invader-card"),
+  magnetic: {
+    radius: 78,
+    isEnabled: () => runtime.running && gameState.mode !== "fps",
+    getFocusPoint: () => ({
+      x: WIDTH / 2 + gameState.player.x,
+      y: gameState.mode === "lateral3d" ? HEIGHT - 96 : 600,
+    }),
+    applyFocusPoint: (x) => {
+      gameState.player.x = clamp(x - WIDTH / 2, -PLAYER_LIMIT_X, PLAYER_LIMIT_X);
+    },
+  },
+});
+
 document.addEventListener("keydown", handleKeyDown);
 document.addEventListener("keyup", handleKeyUp);
 document.addEventListener("mousemove", handleMouseMove);
