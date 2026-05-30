@@ -14,6 +14,7 @@ Key repo-wide learning guide:
 - [docs/SPRK_Browser_Mission_Foundation_Guide.md](docs/SPRK_Browser_Mission_Foundation_Guide.md): explains the common browser-mission structure so mission guides only need to describe what is different.
 - [docs/SPRK_Browser_Testing_And_Network_Architecture.md](docs/SPRK_Browser_Testing_And_Network_Architecture.md): explains the validation harness, Cursor Cloud flow, and local network hosting model for phones, tablets, and facilitator laptops.
 - [docs/SPRK_Guided_Workflow_Helper.md](docs/SPRK_Guided_Workflow_Helper.md): explains the guided Git/GitHub helper that shows status, teaches branch/PR actions, and requires confirmation before doing work.
+- [docs/SPRK_Student_AgenticOps_Guide.md](docs/SPRK_Student_AgenticOps_Guide.md): adapts agentic development practices into student-safe SPRK habits for setup, validation, hygiene, and handoff.
 
 Student-safe AgenticOps and coding-agent entry points (public repo only; no private MERIT vault text):
 
@@ -358,18 +359,25 @@ Mission-specific files belong inside the mission folder under `missions/`. That 
 ## Direct Playwright Testing
 SPRK-Hello-Repo now has a direct baseline validation harness for local browser testing against the real Python backends used by the missions.
 
-Install the test tools:
+Automatic setup for forked and branched work:
+
+- `.devcontainer/devcontainer.json` runs `npm run setup:missions` when a GitHub Codespace or compatible dev container is created from this repository.
+- `.github/workflows/mission-baseline.yml` runs browser mission validation on pushed branches and pull requests.
+- Because those files are committed to the repo, students inherit the setup when they branch or fork this repository.
+
+Install the test tools manually when working outside a dev container:
 
 ```bash
-npm install
-npx playwright install
+npm run setup:missions
 ```
 
 Run the full browser test suite:
 
 ```bash
-npm test
+npm run validate
 ```
+
+`npm run validate` currently delegates to `npm test`, which runs the full Playwright mission baseline.
 
 Run only the ReactionRace suite:
 

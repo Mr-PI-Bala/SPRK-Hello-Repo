@@ -26,6 +26,12 @@ Students, classroom facilitators, and coding agents helping in `SPRK-Hello-Repo`
 
 Always use `NN-GameName-<mode-label>` under `missions/`. Example: `10-SpaceInvaders-1P-nP`, not `10-Space-Invaders`.
 
+## Branch and PR discipline
+
+Use one branch and one PR per task. Review changes, conflict fixes, validation refreshes, and follow-up edits stay on that same PR. If duplicate PRs appear for the same task, choose the canonical PR, move useful changes there, and close the duplicates.
+
+When reporting work, name the canonical branch and PR so students and agents know where forward progress lives.
+
 ## Git and GitHub help
 
 - Guided helper: [docs/SPRK_Guided_Workflow_Helper.md](docs/SPRK_Guided_Workflow_Helper.md) and `npm run workflow`

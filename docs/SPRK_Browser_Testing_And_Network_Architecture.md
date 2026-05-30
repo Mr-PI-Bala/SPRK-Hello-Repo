@@ -86,6 +86,15 @@ Object interaction summary:
 5. Tests run inside the cloud VM unless the repo is cloned and tested locally.
 
 ## What The Setup Commands Do
+### `npm run setup:missions`
+`npm run setup:missions` is the inherited one-command setup path for browser mission validation. It runs:
+
+```bash
+npm ci && npx playwright install chromium
+```
+
+This installs JavaScript dependencies from the lockfile and downloads the Chromium browser that Playwright uses for automated tests.
+
 ### `npm install`
 `npm install` reads the repo-level files:
 
@@ -127,7 +136,8 @@ Run these commands in order when setting up a fresh machine for automated browse
 
 ```mermaid
 flowchart LR
-    PackageFiles["package.json<br>package-lock.json"] --> NpmInstall["npm install"]
+    Setup["npm run setup:missions"] --> NpmInstall["npm ci"]
+    PackageFiles["package.json<br>package-lock.json"] --> NpmInstall
     NpmInstall --> NodeModules["node_modules/<br>@playwright/test"]
     NodeModules --> Npx["npx playwright install chromium"]
     Npx --> BrowserCache["Playwright browser cache<br>Chromium + headless shell"]
@@ -139,6 +149,7 @@ flowchart LR
 
 | Command | Reads | Creates Or Uses | Main Purpose |
 | --- | --- | --- | --- |
+| `npm run setup:missions` | `package.json`, `package-lock.json` | `node_modules/` and Playwright browser cache | One inherited setup command for students, agents, Codespaces, and local clones. |
 | `npm install` | `package.json`, `package-lock.json` | `node_modules/` | Install JavaScript test tooling. |
 | `npx playwright install chromium` | installed Playwright package | Playwright browser cache | Download the browser used by automated tests. |
 | `npm run test:spaceinvaders` | `package.json`, test helpers, mission files | Playwright report and baseline status artifacts | Start the backend and verify the mission in a real browser. |
@@ -507,10 +518,9 @@ Replace `192.168.1.42` with the actual address from the facilitator laptop.
 ## Troubleshooting Checklist
 If the automated test fails:
 
-1. Run `npm install`.
-2. Run `npx playwright install chromium`.
-3. Run `npm run test:spaceinvaders`.
-4. Confirm no other process is already using port `8010`.
+1. Run `npm run setup:missions`.
+2. Run `npm run test:spaceinvaders`.
+3. Confirm no other process is already using port `8010`.
 
 If phones/tablets cannot reach a facilitator laptop:
 
@@ -545,10 +555,10 @@ py server.py
 Install test tools:
 
 ```bash
-npm install
+npm run setup:missions
 ```
 
-Install the Playwright test browser:
+Install only the Playwright test browser, if npm dependencies are already installed:
 
 ```bash
 npx playwright install chromium

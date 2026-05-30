@@ -1,5 +1,7 @@
 .env
+.env.local
 node_modules/
 tests/artifacts/
 __pycache__/
 *.pyc
+output/

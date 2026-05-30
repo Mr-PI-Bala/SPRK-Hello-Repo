@@ -5,6 +5,8 @@
     "setup:missions": "npm ci && npx playwright install chromium",
     "validate": "npm test",
     "workflow": "python3 missions/_shared/tools/sprk_workflow.py",
+    "setup:missions": "npm ci && npx playwright install chromium",
+    "validate": "npm test",
     "test": "node tests/helpers/run-playwright.js all",
     "test:reactionrace": "node tests/helpers/run-playwright.js reactionrace",
     "test:snakegame": "node tests/helpers/run-playwright.js snakegame",

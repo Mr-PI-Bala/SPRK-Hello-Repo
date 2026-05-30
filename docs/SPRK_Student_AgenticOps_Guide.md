@@ -2,25 +2,24 @@
 
 This guide translates MERIT AgenticOps practices into a classroom-friendly shape for `SPRK-Hello-Repo`.
 
-The full MERIT instruction file is an enterprise/private-vault artifact. This public/student repo should carry only the safe operating principles that help students learn: clear structure, validation, secrets hygiene, readable docs, and clean handoff.
+The full enterprise MERIT instruction set remains in the private MERIT vault. This public/student repo carries the safe operating principles that help students and agents learn: clear structure, one source of truth, validation, branch discipline, secrets hygiene, readable docs, and clean handoff.
 
 ## Compare and contrast
 
 | Area | MERIT enterprise pattern | SPRK student adaptation |
 | --- | --- | --- |
 | Instruction source | Private vault hierarchy with L1/L2/L3 instructions | Public repo uses `MERIT.instructions`, `AgentDraven.instructions`, `AGENTS.md`, this guide, and mission docs |
-| Documentation folder | `{Name} docs/` for product/operator docs | Keep existing `docs/` because the curriculum and mission links already depend on it |
-| Entry points | `run_[project].py` and `test_[project].py` | Browser missions use `server.py` per mission and npm scripts for validation |
-| Configuration | Central `cfg/` for product settings | Keep mission constants close to small learning apps; move shared or sensitive values into config only when complexity requires it |
-| Validation | Unified test runner, health checks, hygiene gates | `npm run setup:missions`, `npm run validate`, Playwright baseline, and generated Baseline Status tab |
-| Ops surface | `ops/` for hygiene, cleanup, validation, archiving | Lightweight `ops/README.md` describes student-safe hygiene and validation commands |
-| Secrets | `.env.example` committed; `.env.local` local only | Same principle; `.env.local` is ignored even though current missions do not require secrets |
-| Versioning | Strict semantic versioning, tags, changelog closeout | Keep `VERSION` and `docs/CHANGELOG.md`; reserve baseline/version bumps for intentional releases |
-| Executive reporting | 3-3 Done/State/Next report | Use short student handoff summaries: what changed, how tested, what to try next |
+| Documentation folder | `{Name} docs/` for product/operator docs | Keep existing `docs/` because curriculum and mission links depend on it |
+| Entry points | Product-specific runners and service commands | Mission `server.py`, npm scripts, and `npm run workflow` |
+| Setup | Environment bootstrap scripts | `npm run setup:missions` and devcontainer post-create setup |
+| Validation | CI gates, health checks, and release checks | Playwright mission baseline through `npm run validate` |
+| Workflow | One task, one branch, one PR | Guided by `docs/SPRK_Guided_Workflow_Helper.md`; duplicate PRs are closed after consolidation |
+| Secrets | Local environment files and secret stores | `.env.local` is ignored; commit only safe examples |
+| Closeout | Structured handoff reports | Short 3-3: Done, State, Next |
 
 ## Mission folder naming (required)
 
-Enterprise MERIT products often use internal codenames; SPRK missions use one public folder name per game:
+SPRK missions use one public folder name per game:
 
 ```text
 NN-GameName-<mode-label>
@@ -30,16 +29,18 @@ Examples: `02-SnakeGame-1P-nP`, `10-SpaceInvaders-1P-nP`.
 
 Rules are canonical in [MERIT.instructions](../MERIT.instructions). Do not add a second folder for the same mission under a different spelling.
 
-## What to bring in now
+## What to bring into student work
 
 ### 1. Single source of truth
 
 Use one canonical place for each topic:
 
 - Student start path: `README.md`
-- Mission naming: `MERIT.instructions`
+- Mission naming and branch/PR governance: `MERIT.instructions`
 - Mentor tone: `AgentDraven.instructions`
-- Mission architecture: `docs/SPRK_Browser_Mission_Foundation_Guide.md`
+- Guided workflow: `docs/SPRK_Guided_Workflow_Helper.md`
+- Browser mission architecture: `docs/SPRK_Browser_Mission_Foundation_Guide.md`
+- Testing and network architecture: `docs/SPRK_Browser_Testing_And_Network_Architecture.md`
 - Validation flow: `docs/BASELINE_VALIDATION_AND_3C_FLOW.md`
 - Language concepts: `docs/SPRK_Language_Crosswalk.md`
 - Mission-specific play/build steps: `missions/<NN-GameName-mode>/docs/MISSION_GUIDE.md`
@@ -48,25 +49,44 @@ When adding a new explanation, link to the existing guide if it already exists. 
 
 ### 2. Inherited setup and validation
 
-Branches and forks inherit these repo-owned setup paths:
+Branches and forks inherit these repo-owned commands:
 
 ```bash
 npm run setup:missions
 npm run validate
 ```
 
-### 3. Student closeout checklist
+Codespaces-compatible environments run setup from `.devcontainer/devcontainer.json`. GitHub Actions runs mission validation from `.github/workflows/mission-baseline.yml`.
+
+### 3. Branch and PR discipline
+
+Use one named branch and one PR per task. If a task needs more review, more validation, or conflict fixes, update the same branch and PR instead of creating a new branch. If duplicate PRs already exist, pick one canonical PR, move useful changes into it, and close the duplicates.
+
+This is the classroom version of the enterprise MERIT rule: forward progress should have one source of truth.
+
+### 4. Guided GitHub workflow
+
+Use:
+
+```bash
+npm run workflow
+```
+
+The helper shows status first, explains each operation, and requires confirmation before changing branches, committing, opening PRs, approving, or merging.
+
+### 5. Student closeout checklist
 
 Before a student or agent says a change is ready:
 
 - Check the branch is not `main`.
-- Run `npm run validate` for mission-safe changes.
+- Confirm the branch is the canonical branch for the current task.
+- Run the targeted mission test or `npm run validate`.
 - Check `git status --short` for only intended files.
 - Do not stage secrets, caches, `node_modules/`, `tests/artifacts/`, or local output.
 - Commit with a clear message.
-- Push the branch.
+- Push the branch and open or update the canonical PR.
 
-### 4. Secrets and local state
+### 6. Secrets and local state
 
 Current missions do not need API keys. If a future mission does:
 
@@ -75,16 +95,16 @@ Current missions do not need API keys. If a future mission does:
 - Keep `.env.local` ignored.
 - Never paste real secrets into issues, chats, docs, generated reports, or screenshots.
 
-### 5. Hard-coded paths
+### 7. Hard-coded paths
 
 Avoid machine-specific paths such as `/Users/name/...` or `C:\Users\name\...` in repo code and docs. Prefer relative paths from the repo root, mission folder paths, or helper scripts.
 
-### 6. Error and recovery language
+### 8. Error and recovery language
 
 Student-facing errors should include the next action. Prefer:
 
 ```text
-[FAIL] Mission backend did not start on port 8005. Try closing the old server or rerun npm run validate.
+[FAIL] Mission backend did not start on port 8010. Close the old server or rerun npm run validate.
 ```
 
 Avoid unexplained failures such as:
@@ -93,28 +113,28 @@ Avoid unexplained failures such as:
 Error: failed
 ```
 
-### 7. Documentation hygiene
+## What not to import
 
-Use short docs that point to the source of truth. A good student guide answers:
+Do not force enterprise-only patterns into this classroom repo unless the project grows into them:
 
-- What is this?
-- Where do I start?
-- What command do I run?
-- What does success look like?
-- What should I try if it fails?
+- private vault paths or private instruction contents
+- heavy admin-console requirements for beginner missions
+- billing, subscriber, tenant, or production operations architecture
+- duplicate branches or PRs for the same task
+- duplicate mission folders or alternate naming schemes for the same game
 
-## What not to import directly
+## Recommended student handoff
 
-Do not force these enterprise-only patterns into this classroom repo unless the project grows into them:
+Use three short sections:
 
-- Private vault paths or private instruction contents.
-- Product-specific DIRT/SoulOS phase names.
-- Heavy admin-console requirements for every beginner mission.
-- A mandatory `{Name} docs/` rename that would break existing SPRK links.
-- Billing, subscriber, or tenant architecture in simple classroom games.
+```markdown
+Done
+- What changed
 
-## Recommended next steps
+State
+- What passed or failed
+- Canonical branch and PR
 
-1. Keep `MERIT.instructions`, `AgentDraven.instructions`, `AGENTS.md`, and this guide as the public MERIT-to-SPRK bridge.
-2. Use `ops/README.md` for hygiene reminders before commit.
-3. Continue using Playwright Baseline Status as the shared confidence signal for missions.
+Next
+- What someone should try next
+```

@@ -50,6 +50,21 @@ When adding a mission, also register it in `tests/helpers/start-mission-server.j
 
 The folder suffix must match the Mode column in `README.md` Mission Menu.
 
+## Branch and PR governance (required)
+
+One task equals one named branch and one pull request. Do not create a second branch or PR for the same task unless the first branch/PR is explicitly abandoned and the reason is recorded in the replacement PR.
+
+Rules:
+
+- Start every task by identifying the canonical task branch and PR.
+- Put follow-up fixes, conflict resolution, validation refreshes, and review changes for that task on the same branch and PR.
+- If a task needs multiple review checkpoints, track them in the same PR body or checklist; do not create parallel branches for the same intent.
+- If someone asks to track multiple PRs for one task, treat them as views/checkpoints of the same canonical branch unless they explicitly approve separate scoped branches.
+- If duplicate PRs already exist, choose one canonical PR, port any missing useful changes into it, and close the duplicates.
+- Separate branches are allowed only for separate tasks, separate base branches, or explicitly abandoned/restarted work.
+
+This rule prevents duplicate mission folders, split validation evidence, and branch tentacles that make `main` hard to reason about.
+
 ## Repository shape
 
 - Root: workspace files only (`README.md`, `package.json`, `docs/`, `tests/`, instruction files).

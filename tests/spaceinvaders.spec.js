@@ -42,10 +42,18 @@ test("Space Invaders dimensional shift baseline works", async ({ browser }) => {
   await expect(pageA.locator("#event-log")).toContainText("destroyed");
 
   await pageB.goto("/?test=1");
-  const sharedState = await pageB.evaluate(() => window.__sprkTest.getState());
-  expect(sharedState.mode).toBe("fps");
-  expect(sharedState.score).toBe(afterFpsShot.score);
-  expect(sharedState.aliveCount).toBe(53);
+  await expect.poll(async () => {
+    const snapshot = await pageB.evaluate(() => window.__sprkTest.getState());
+    return {
+      mode: snapshot.mode,
+      score: snapshot.score,
+      aliveCount: snapshot.aliveCount,
+    };
+  }).toEqual({
+    mode: "fps",
+    score: afterFpsShot.score,
+    aliveCount: 53,
+  });
 
   await pageA.getByRole("tab", { name: "Baseline Status" }).click();
   await expect(pageA.locator("#baselinePanel")).toBeVisible();
