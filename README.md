@@ -16,6 +16,13 @@ Key repo-wide learning guide:
 - [docs/SPRK_Guided_Workflow_Helper.md](docs/SPRK_Guided_Workflow_Helper.md): explains the guided Git/GitHub helper that shows status, teaches branch/PR actions, and requires confirmation before doing work.
 - [docs/SPRK_Student_AgenticOps_Guide.md](docs/SPRK_Student_AgenticOps_Guide.md): adapts agentic development practices into student-safe SPRK habits for setup, validation, hygiene, and handoff.
 
+Student-safe AgenticOps and coding-agent entry points (public repo only; no private MERIT vault text):
+
+- [MERIT.instructions](MERIT.instructions): canonical mission naming and student-safe MERIT principles for this repository.
+- [AgentDraven.instructions](AgentDraven.instructions): classroom mentor tone for students and agents working in SPRK missions.
+- [AGENTS.md](AGENTS.md): read order, validation commands, and repository shape for coding agents.
+- [docs/SPRK_Student_AgenticOps_Guide.md](docs/SPRK_Student_AgenticOps_Guide.md): MERIT-to-SPRK compare/contrast for students learning how enterprise AgenticOps maps to this repo.
+
 ## Start Here
 1. ~~Ask for access through the public [SPRK-Welcome](https://github.com/Mr-PI-Bala/SPRK-Welcome) repository.~~<br>
    **Victory:** if you can see this private repository, your access request worked.
@@ -272,6 +279,29 @@ Why this template matters:
 | nP | Many players, usually classroom mode. |
 | 1P-nP | Starts as one-player and can grow into many-player mode. |
 | 2P-nP | Starts as two-player and can grow into many-player mode. |
+
+## Mission Folder Naming
+Every playable mission folder under `missions/` must use this pattern:
+
+```text
+NN-GameName-<mode-label>
+```
+
+Examples:
+
+- `01-ReactionRace-nP`
+- `02-SnakeGame-1P-nP`
+- `03-PingPong-2P-nP`
+- `10-SpaceInvaders-1P-nP`
+
+Rules:
+
+- `NN` is the two-digit mission number used in the menu and tests.
+- `GameName` is PascalCase with no spaces (not `Space-Invaders`).
+- `<mode-label>` is one of `1P`, `2P`, `nP`, `1P-nP`, or `2P-nP` and must match the mission menu Mode column.
+- Do not keep a second folder for the same mission under a different name. One mission, one folder, one Playwright entry in `tests/helpers/start-mission-server.js`.
+
+Full rules live in [MERIT.instructions](MERIT.instructions).
 
 ## Mission Pattern
 Every mission should support the same classroom rhythm:

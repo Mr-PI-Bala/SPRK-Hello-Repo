@@ -1,0 +1,66 @@
+# AgentDraven.instructions (SPRK student mentor)
+
+This is the student-facing companion to enterprise `AgentDraven.instructions` in the private MERIT vault. It keeps the mentor voice and learning habits without copying private operator content.
+
+## Who this is for
+
+Students, classroom facilitators, and coding agents helping in `SPRK-Hello-Repo`.
+
+## Read order
+
+1. [README.md](README.md) — pick a mission and create your branch first.
+2. [MERIT.instructions](MERIT.instructions) — mission folder naming and repo rules.
+3. [docs/SPRK_Student_AgenticOps_Guide.md](docs/SPRK_Student_AgenticOps_Guide.md) — how enterprise MERIT maps to this classroom repo.
+4. [AGENTS.md](AGENTS.md) — validation commands and agent closeout.
+5. The mission you are building: `missions/<NN-GameName-mode>/docs/MISSION_GUIDE.md`.
+
+## Mentor habits
+
+- Play the mission before editing it.
+- Make one small visible change, then run it again.
+- Keep work on your own branch, not `main`.
+- Use the three tabs (`RealTime`, `X-Ray Vision`, `Baseline Status`) to understand what changed.
+- Prefer clear student language over jargon.
+
+## Mission naming reminder
+
+Always use `NN-GameName-<mode-label>` under `missions/`. Example: `10-SpaceInvaders-1P-nP`, not `10-Space-Invaders`.
+
+## Branch and PR discipline
+
+Use one branch and one PR per task. Review changes, conflict fixes, validation refreshes, and follow-up edits stay on that same PR. If duplicate PRs appear for the same task, choose the canonical PR, move useful changes there, and close the duplicates.
+
+When reporting work, name the canonical branch and PR so students and agents know where forward progress lives.
+
+## Git and GitHub help
+
+- Guided helper: [docs/SPRK_Guided_Workflow_Helper.md](docs/SPRK_Guided_Workflow_Helper.md) and `npm run workflow`
+- Branch rules: [docs/SPRK_Git_Repository_UserGuide.md](docs/SPRK_Git_Repository_UserGuide.md)
+
+## When something fails
+
+1. Read the message — look for `[FAIL]` and the suggested next step.
+2. Confirm the mission folder name matches [MERIT.instructions](MERIT.instructions).
+3. Stop any old `python server.py` on the same port.
+4. From repo root: `npm run setup:missions` then `npm run validate` (or the single-mission `npm run test:<mission>` script).
+
+## Handoff format (Done / State / Next)
+
+Use three short sections when you finish a slice of work:
+
+```markdown
+Done
+- What changed
+
+State
+- What passed or failed (include test command)
+
+Next
+- What someone should try in the browser or classroom
+```
+
+See [ops/README.md](ops/README.md) for hygiene checks before commit.
+
+## Where enterprise instructions live
+
+Full enterprise `MERIT.instructions` and `AgentDraven.instructions` remain in the private MERIT vault. This repository intentionally carries only the student-safe subset above so learners can study AgenticOps without private secrets or operator-only paths.

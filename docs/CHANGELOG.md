@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+- Renamed Mission 10 folder to `missions/10-SpaceInvaders-1P-nP` so the directory matches the `NN-GameName-<mode-label>` convention.
+- Added student-safe `MERIT.instructions`, `AgentDraven.instructions`, `AGENTS.md`, `docs/SPRK_Student_AgenticOps_Guide.md`, and `ops/README.md`.
+- Documented mission folder naming in `README.md`, `MERIT.instructions`, and `docs/SPRK_Browser_Mission_Foundation_Guide.md`.
+- Added `npm run setup:missions` and `npm run validate`; Playwright runner defaults to `python3` on Unix.
+
 ## 0.1.11
 - Reduced Mission 08 background chatter by removing the fixed `220ms` world polling loop and switching SoccerMatch to adaptive sync.
 - Kept Mission 08 responsive by refreshing immediately after real local actions while using lighter background sync intervals for paused and live states.

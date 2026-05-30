@@ -1,56 +1,57 @@
 # SPRK Agent Guide
 
-This repo uses a student-safe subset of agentic development practices. Keep this file practical, public, and classroom-friendly. Do not copy private instruction vault text, secrets, or operator-only paths into this repository.
+This repo uses a student-safe subset of MERIT AgenticOps practices. The private MERIT instruction vault remains private; do not copy private instruction text, secrets, or operator-only paths into this repository.
 
-## Read Order
+## Read order
+
 1. `README.md` for the student workflow and mission menu.
-2. `docs/SPRK_Guided_Workflow_Helper.md` for the guided branch/PR helper.
-3. `docs/SPRK_Student_AgenticOps_Guide.md` for student-safe agentic habits.
-4. `docs/SPRK_Browser_Mission_Foundation_Guide.md` for shared mission architecture.
-5. The selected mission guide under `missions/<mission>/docs/MISSION_GUIDE.md`.
-6. `docs/BASELINE_VALIDATION_AND_3C_FLOW.md` for baseline status flow.
+2. `MERIT.instructions` for canonical mission folder naming and branch/PR governance.
+3. `docs/SPRK_Student_AgenticOps_Guide.md` for the MERIT-to-SPRK practice mapping.
+4. `AgentDraven.instructions` for classroom mentor tone and handoff format.
+5. `docs/SPRK_Browser_Mission_Foundation_Guide.md` for the shared mission architecture.
+6. The selected mission guide under `missions/<NN-GameName-mode>/docs/MISSION_GUIDE.md`.
+7. `docs/BASELINE_VALIDATION_AND_3C_FLOW.md` for validation status flow.
 
-## Repository Shape
-- Keep classroom missions under `missions/`.
-- Keep shared browser/backend helpers under `missions/_shared/`.
-- Keep mission-specific files inside their mission folder.
-- Keep repo-wide guides under `docs/`.
-- Keep Playwright tests under `tests/`.
-- Keep lightweight operations notes under `ops/`.
-- Keep generated Playwright artifacts under `tests/artifacts/`.
-- Keep shared mission-readable baseline files under `missions/_shared/generated/`.
+## Branch and PR governance
 
-## Current Mission 10 Path
-Mission 10 uses the standard mode suffix:
+One task equals one named branch and one PR. Do not create a second branch or PR for the same task unless the first one is explicitly abandoned. Follow-up fixes, conflict resolution, validation refreshes, and review edits all go back to the canonical task branch.
 
-```text
-missions/10-SpaceInvaders-1P-nP
-```
+If multiple PRs appear for the same task:
 
-## Setup And Validation
-Use the inherited setup and validation commands:
+1. Pick the canonical PR.
+2. Move any useful missing changes into that branch.
+3. Close the duplicate PRs.
+4. Report the canonical branch/PR in handoff.
+
+## Repository shape
+
+- Keep the SPRK classroom layout: `missions/`, `missions/_shared/`, `tests/`, `docs/`, and `ops/`.
+- One mission, one folder under `missions/` — see `MERIT.instructions` (no duplicate paths such as `10-Space-Invaders` and `10-SpaceInvaders-1P-nP`).
+- Do not rename `docs/` to a MERIT `{Name} docs/` folder; curriculum links depend on `docs/`.
+- Keep mission-specific files inside their mission folder. Do not add mission app files to the repository root.
+- Keep generated Playwright artifacts under `tests/artifacts/` and shared mission-readable baseline files under `missions/_shared/generated/`.
+
+## Validation and closeout
+
+Run these before handing off changes:
 
 ```bash
 npm run setup:missions
 npm run validate
 ```
 
-Use the guided workflow helper when teaching or practicing branch/PR flow:
+Closeout checklist:
 
-```bash
-npm run workflow
-```
-
-## Closeout Checklist
 - Confirm `git status --short` contains only intended files.
 - Confirm no `.env`, `.env.local`, `node_modules/`, `tests/artifacts/`, `output/`, Python caches, or browser artifacts are staged.
-- Run targeted validation for mission changes, or `npm run validate` for broad changes.
-- Commit with a clear message.
-- Push the branch and create or update the PR.
+- Confirm work is on the canonical task branch/PR.
+- Commit with a clear conventional-style message such as `docs: add student AgenticOps guide` or `test: refresh mission baseline`.
+- Push the branch so students, reviewers, and CI see the same state.
 
-## Student-Safe Principles
-- Single source of truth: link to existing guides instead of duplicating long explanations.
-- Validation before confidence: mission changes should pass Playwright baseline checks.
-- Secrets stay local: use `.env.local` for local secrets; commit only safe examples.
-- No hard-coded machine paths: prefer repo-relative paths.
-- Recovery over mystery: errors and docs should tell students what to try next.
+## Student-safe MERIT principles
+
+- Single source of truth: one clear guide for each topic; link instead of duplicating long explanations.
+- Validation before confidence: mission changes should pass the Playwright baseline before being considered ready.
+- Secrets stay local: use `.env.local` for local secrets if a future mission needs them; commit only `.env.example` templates.
+- No hard-coded machine paths: use relative paths and repo helpers so forks, branches, Codespaces, and local clones work.
+- Recovery over mystery: errors, docs, and test failures should tell students what to try next.

@@ -1,0 +1,113 @@
+# MERIT.instructions (SPRK student-safe)
+
+This file is the public, student-safe adaptation of enterprise MERIT AgenticOps for `SPRK-Hello-Repo`. It does not copy private vault text, operator secrets, or machine-specific paths from the enterprise MERIT instruction set.
+
+## Purpose
+
+- Give students and coding agents one canonical rules file for how this repository is organized.
+- Keep classroom missions consistent, testable, and easy to navigate.
+
+## Mission folder naming (required)
+
+Every playable mission under `missions/` must use exactly one folder with this shape:
+
+```text
+NN-GameName-<mode-label>
+```
+
+| Part | Rule | Example |
+| --- | --- | --- |
+| `NN` | Two-digit mission number; matches menu, docs, and Playwright registry | `10` |
+| `GameName` | PascalCase mission name; no spaces; no internal hyphens | `SpaceInvaders`, `SnakeGame` |
+| `<mode-label>` | Player/sync mode: `1P`, `2P`, `nP`, `1P-nP`, or `2P-nP` | `1P-nP` |
+
+Valid examples already in this repo:
+
+- `01-ReactionRace-nP`
+- `02-SnakeGame-1P-nP`
+- `03-PingPong-2P-nP`
+- `10-SpaceInvaders-1P-nP`
+
+Invalid patterns (do not introduce):
+
+- `10-Space-Invaders` (hyphenated game name; missing mode label)
+- `missions/10-Space-Invaders` alongside `missions/10-SpaceInvaders-1P-nP` (duplicate mission folders)
+- Mission app files in the repository root
+
+Scaffold for the next mission: copy `missions/XX-Template-nP/` and rename to the real `NN-GameName-<mode-label>` before adding gameplay.
+
+When adding a mission, also register it in `tests/helpers/start-mission-server.js`, `tests/helpers/run-playwright.js`, and `package.json` test scripts.
+
+## Mode labels
+
+| Label | Meaning |
+| --- | --- |
+| `1P` | One player |
+| `2P` | Two players |
+| `nP` | Many players (classroom) |
+| `1P-nP` | Starts single-player; can grow to classroom multiplayer |
+| `2P-nP` | Starts two-player; can grow to classroom multiplayer |
+
+The folder suffix must match the Mode column in `README.md` Mission Menu.
+
+## Branch and PR governance (required)
+
+One task equals one named branch and one pull request. Do not create a second branch or PR for the same task unless the first branch/PR is explicitly abandoned and the reason is recorded in the replacement PR.
+
+Rules:
+
+- Start every task by identifying the canonical task branch and PR.
+- Put follow-up fixes, conflict resolution, validation refreshes, and review changes for that task on the same branch and PR.
+- If a task needs multiple review checkpoints, track them in the same PR body or checklist; do not create parallel branches for the same intent.
+- If someone asks to track multiple PRs for one task, treat them as views/checkpoints of the same canonical branch unless they explicitly approve separate scoped branches.
+- If duplicate PRs already exist, choose one canonical PR, port any missing useful changes into it, and close the duplicates.
+- Separate branches are allowed only for separate tasks, separate base branches, or explicitly abandoned/restarted work.
+
+This rule prevents duplicate mission folders, split validation evidence, and branch tentacles that make `main` hard to reason about.
+
+## Repository shape
+
+- Root: workspace files only (`README.md`, `package.json`, `docs/`, `tests/`, instruction files).
+- `missions/<NN-GameName-mode>/`: each mission’s `index.html`, `server.py`, `src/`, and `docs/`.
+- `missions/_shared/`: shared backend/frontend helpers and generated baseline status.
+- `tests/`: Playwright specs and artifacts (not committed when generated during local runs).
+
+Do not rename `docs/` to a MERIT `{Name} docs/` folder in this student repo; curriculum links depend on `docs/`.
+
+## Validation before confidence
+
+From the repository root:
+
+```bash
+npm run setup:missions
+npm run validate
+```
+
+Mission-specific quick check:
+
+```bash
+npm run test:spaceinvaders
+```
+
+A mission change is not ready until the relevant Playwright baseline passes and only intended files are staged.
+
+## Student-safe MERIT principles
+
+1. Single source of truth — link to an existing guide instead of duplicating long explanations.
+2. Validation before confidence — Playwright baseline and Baseline Status tab reflect real backends.
+3. Secrets stay local — use `.env.local` if needed; commit only `.env.example` templates.
+4. No hard-coded machine paths — use repo-relative paths and helpers.
+5. Recovery over mystery — errors and docs should say what to try next.
+
+## Related student files
+
+- [AGENTS.md](AGENTS.md) — agent read order and closeout checklist
+- [AgentDraven.instructions](AgentDraven.instructions) — classroom mentor tone
+- [docs/SPRK_Student_AgenticOps_Guide.md](docs/SPRK_Student_AgenticOps_Guide.md) — MERIT enterprise vs SPRK student compare/contrast
+- [ops/README.md](ops/README.md) — hygiene and handoff format
+
+## What not to import from enterprise MERIT
+
+- Private vault paths or full enterprise instruction bodies
+- Operator-only billing, tenant, or admin-console requirements for beginner missions
+- Duplicate mission folders or alternate naming schemes for the same game
