@@ -3,7 +3,7 @@ This walkthrough explains how Mission 10 uses the shared browser mission baselin
 
 ## File Map
 ```text
-10-Space-Invaders/
+10-SpaceInvaders-1P-nP/
   README.md
     The short Quick Start for running Mission 10.
 

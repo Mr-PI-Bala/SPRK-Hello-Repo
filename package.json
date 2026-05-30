@@ -2,6 +2,8 @@
   "name": "sprk-hello-repo",
   "private": true,
   "scripts": {
+    "setup:missions": "npm ci && npx playwright install chromium",
+    "validate": "npm test",
     "workflow": "python3 missions/_shared/tools/sprk_workflow.py",
     "test": "node tests/helpers/run-playwright.js all",
     "test:reactionrace": "node tests/helpers/run-playwright.js reactionrace",
