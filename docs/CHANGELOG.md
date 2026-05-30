@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+- Added a student-safe MERIT-to-SPRK AgenticOps guide that compares enterprise practices with the existing mission repository workflow.
+- Added root `AGENTS.md` and `ops/README.md` as lightweight bootstrap and hygiene surfaces for students, agents, branches, and forks.
+- Added `npm run validate` as the student-facing mission validation command and kept Playwright baseline validation passing at `9 / 9`.
+
 ## 0.1.11
 - Reduced Mission 08 background chatter by removing the fixed `220ms` world polling loop and switching SoccerMatch to adaptive sync.
 - Kept Mission 08 responsive by refreshing immediately after real local actions while using lighter background sync intervals for paused and live states.

@@ -12,6 +12,7 @@ Key repo-wide learning guide:
 
 - [docs/SPRK_Language_Crosswalk.md](docs/SPRK_Language_Crosswalk.md): maps common programming ideas across Python, JavaScript, Java, Go, Lua, and related patterns used in the missions.
 - [docs/SPRK_Browser_Mission_Foundation_Guide.md](docs/SPRK_Browser_Mission_Foundation_Guide.md): explains the common browser-mission structure so mission guides only need to describe what is different.
+- [docs/SPRK_Student_AgenticOps_Guide.md](docs/SPRK_Student_AgenticOps_Guide.md): adapts MERIT enterprise practices into student-safe SPRK habits for setup, validation, hygiene, and handoff.
 
 ## Start Here
 1. ~~Ask for access through the public [SPRK-Welcome](https://github.com/Mr-PI-Bala/SPRK-Welcome) repository.~~<br>
@@ -340,8 +341,10 @@ npm run setup:missions
 Run the full browser test suite:
 
 ```bash
-npm test
+npm run validate
 ```
+
+`npm run validate` currently delegates to `npm test`, which runs the full Playwright mission baseline.
 
 Run only the ReactionRace suite:
 
