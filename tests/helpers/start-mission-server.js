@@ -52,6 +52,12 @@ const missions = {
     folder: path.resolve(__dirname, "..", "..", "missions", "08-SoccerMatch-nP"),
     port: 8008,
   },
+  spaceinvaders: {
+    key: "spaceinvaders",
+    title: "Space Invaders: Dimensional Shift",
+    folder: path.resolve(__dirname, "..", "..", "missions", "10-Space-Invaders"),
+    port: 8010,
+  },
 };
 
 function getMission() {
@@ -130,7 +136,7 @@ function shutdownChild(child) {
 
 async function main() {
   const mission = getMission();
-  const python = process.env.PYTHON || "python";
+  const python = process.env.PYTHON || (process.platform === "win32" ? "python" : "python3");
 
   if (await isPortOpen("127.0.0.1", mission.port)) {
     console.error(`Port ${mission.port} is already in use. Stop the existing ${mission.title} server before running Playwright.`);
