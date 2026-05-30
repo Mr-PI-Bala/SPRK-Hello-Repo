@@ -2,6 +2,8 @@
 
 Use this guide when a **facilitator hosts the game backend in Cursor Cloud** (or any remote Linux environment) and students join from **iPhone, iPad, Chromebook, Android, or any browser** — even when they are **not** on the same Wi‑Fi as a laptop.
 
+**New facilitators:** start with the [SPRK Facilitator Guide](SPRK_Facilitator_Guide.md) for the one-page cheat sheet, Path A vs Path B decision chart, bit.ly workflow, and what to tell the class. This document is the **deep dive for Path B (cloud + tunnel)** only.
+
 This is different from the [SPRK Classroom Network Test Guide](SPRK_Classroom_Network_Test_Guide.md) **local network** model, where students open `http://<facilitator-laptop-ip>:<port>`.
 
 ## When To Use This Guide
@@ -192,22 +194,12 @@ That setup is beyond this quick classroom guide. Use quick tunnels + bit.ly for 
 
 ## Facilitator Checklist
 
-Before class:
+Use the full before/during/after lists in the [SPRK Facilitator Guide](SPRK_Facilitator_Guide.md#facilitator-checklist-full). Path B minimum:
 
-- [ ] Backend starts: `python3 server.py` in the mission folder
-- [ ] Tunnel starts and prints `https://...`
-- [ ] Open the tunnel URL on one student device (phone or Chromebook) and confirm the game loads
-- [ ] Update bit.ly (if used) to the current tunnel URL
-- [ ] Post the **short** class link in chat or on the board
-
-During class:
-
-- [ ] Keep both terminals/sessions running
-- [ ] If the tunnel dies, restart tunnel, copy new URL, update bit.ly, tell students to refresh
-
-After class:
-
-- [ ] Stop tunnel and server (Ctrl+C) so the public link goes offline
+- [ ] `python3 server.py` running in the mission folder
+- [ ] Tunnel running; `https://....trycloudflare.com` copied
+- [ ] bit.ly destination updated (if used)
+- [ ] One student device smoke-tested before class starts
 
 ## Troubleshooting
 
@@ -221,6 +213,7 @@ After class:
 
 ## Related Guides
 
+- [SPRK Facilitator Guide](SPRK_Facilitator_Guide.md) — main entry for teachers; cheat sheet and Path A vs B
 - [SPRK Classroom Network Test Guide](SPRK_Classroom_Network_Test_Guide.md) — same-room Wi‑Fi / laptop IP hosting
 - [SPRK Browser Testing And Network Architecture](SPRK_Browser_Testing_And_Network_Architecture.md) — validation harness and address tables
 - [Mission 10 guide](../missions/10-SpaceInvaders-1P-nP/docs/MISSION_GUIDE.md) — running Space Invaders

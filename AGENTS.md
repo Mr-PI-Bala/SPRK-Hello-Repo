@@ -9,8 +9,9 @@ This repo uses a student-safe subset of MERIT AgenticOps practices. The private 
 3. `docs/SPRK_Student_AgenticOps_Guide.md` for the MERIT-to-SPRK practice mapping.
 4. `AgentDraven.instructions` for classroom mentor tone and handoff format.
 5. `docs/SPRK_Browser_Mission_Foundation_Guide.md` for the shared mission architecture.
-6. The selected mission guide under `missions/<NN-GameName-mode>/docs/MISSION_GUIDE.md`.
-7. `docs/BASELINE_VALIDATION_AND_3C_FLOW.md` for validation status flow.
+6. `docs/SPRK_Facilitator_Guide.md` when helping a teacher or lab host run a live class (hosting paths, cheat sheet, student links).
+7. The selected mission guide under `missions/<NN-GameName-mode>/docs/MISSION_GUIDE.md`.
+8. `docs/BASELINE_VALIDATION_AND_3C_FLOW.md` for validation status flow.
 
 ## Branch and PR governance
 

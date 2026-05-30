@@ -386,7 +386,8 @@ Do not give students `localhost`, the cloud VM's public IP, or a LocalTunnel IP 
 
 | Topic | Guide |
 | --- | --- |
-| Full classroom steps, LocalTunnel alternative, bit.ly pattern | [SPRK Cloud Facilitator Hosting Guide](SPRK_Cloud_Facilitator_Hosting_Guide.md) |
+| Facilitator cheat sheet, Path A vs B, bit.ly, class script | [SPRK Facilitator Guide](SPRK_Facilitator_Guide.md) |
+| Cloud tunnel details, LocalTunnel alternative | [SPRK Cloud Facilitator Hosting Guide](SPRK_Cloud_Facilitator_Hosting_Guide.md) |
 | Same-room laptop IP hosting | [SPRK Classroom Network Test Guide](SPRK_Classroom_Network_Test_Guide.md) |
 | Tunnel helper command | `bash missions/_shared/tools/sprk_public_tunnel.sh 8010` |
 

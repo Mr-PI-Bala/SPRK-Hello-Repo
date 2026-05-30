@@ -1,6 +1,8 @@
 ﻿# SPRK Classroom Network Test Guide
 This guide explains how to test a classroom setup where one laptop hosts a backend and students join from Chromebooks, iPads, iPhones, Android phones, or other laptops.
 
+**Facilitators:** for the full hosting playbook (laptop Wi‑Fi **and** Cursor Cloud tunnels), one-page cheat sheet, and bit.ly pattern, read the [SPRK Facilitator Guide](SPRK_Facilitator_Guide.md) first.
+
 The goal is to prove this pattern before class:
 
 ```text
@@ -14,6 +16,7 @@ Student devices open the app in a browser
 ```
 
 ## Table Of Contents
+- [SPRK Facilitator Guide](SPRK_Facilitator_Guide.md) (main playbook — read first)
 - [Recommended Device Roles](#recommended-device-roles)
 - [Network Options](#network-options)
 - [Option D - Cursor Cloud Facilitator With Public Tunnel](#option-d---cursor-cloud-facilitator-with-public-tunnel)
@@ -97,7 +100,11 @@ Use this when the backend runs in **Cursor Cloud** (or another remote Linux work
 
 Students open one shared **HTTPS tunnel URL** (for example from Cloudflare Quick Tunnel), not a laptop LAN address.
 
-Full steps, Cloudflare vs LocalTunnel, bit.ly shortcuts, and troubleshooting:
+Full facilitator playbook and cheat sheet:
+
+- [SPRK Facilitator Guide](SPRK_Facilitator_Guide.md)
+
+Tunnel technical details (Cloudflare vs LocalTunnel):
 
 - [SPRK Cloud Facilitator Hosting Guide](SPRK_Cloud_Facilitator_Hosting_Guide.md)
 
