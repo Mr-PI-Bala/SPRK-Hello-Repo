@@ -325,11 +325,16 @@ Mission-specific files belong inside the mission folder under `missions/`. That 
 ## Direct Playwright Testing
 SPRK-Hello-Repo now has a direct baseline validation harness for local browser testing against the real Python backends used by the missions.
 
-Install the test tools:
+Automatic setup for forked and branched work:
+
+- `.devcontainer/devcontainer.json` runs `npm run setup:missions` when a GitHub Codespace or compatible dev container is created from this repository.
+- `.github/workflows/mission-baseline.yml` runs the same setup and then `npm test` on pushed branches and pull requests.
+- Because those files are committed to the repo, students inherit the setup when they branch this repo or fork it.
+
+Install the test tools manually when working outside a dev container:
 
 ```bash
-npm install
-npx playwright install
+npm run setup:missions
 ```
 
 Run the full browser test suite:

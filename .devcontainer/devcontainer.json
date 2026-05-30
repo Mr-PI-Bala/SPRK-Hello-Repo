@@ -1,0 +1,26 @@
+{
+  "name": "SPRK Hello Repo",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-22-bookworm",
+  "features": {
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3"
+    }
+  },
+  "postCreateCommand": "npm run setup:missions",
+  "forwardPorts": [8000, 8002, 8003, 8004, 8005, 8006, 8007, 8008],
+  "portsAttributes": {
+    "8000": { "label": "ReactionRace" },
+    "8002": { "label": "SnakeGame" },
+    "8003": { "label": "PingPong" },
+    "8004": { "label": "FlashCards" },
+    "8005": { "label": "QuizRoom" },
+    "8006": { "label": "FourSquare" },
+    "8007": { "label": "SoccerScore" },
+    "8008": { "label": "SoccerMatch" }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": ["ms-playwright.playwright"]
+    }
+  }
+}
