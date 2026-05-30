@@ -43,6 +43,19 @@ const TWO_D_BUNKER_Y = 500;
 const BUNKER_CELL_SIZE = 12;
 const BUNKER_ROWS = 4;
 const BUNKER_COLS = 7;
+const RAIL_TILT_MAX_DEGREES = 70;
+const RAIL_TILT_DEGREES = 64;
+const OVERVIEW = {
+  width: 214,
+  height: 154,
+  margin: 18,
+  world: {
+    minX: -470,
+    maxX: 470,
+    minZ: -1280,
+    maxZ: 260,
+  },
+};
 
 const ALIEN_TYPES = {
   squid: {
@@ -94,8 +107,8 @@ const ALIEN_TYPES = {
 
 const MODE_LABELS = {
   "2d": "2D Classic",
-  lateral3d: "3D Rail",
-  fps: "FPS Climax",
+  lateral3d: "2.5D Rail",
+  fps: "3D FPS",
 };
 
 const keys = new Set();
@@ -241,6 +254,18 @@ function aliveAlienCount() {
   return aliveAliens().length;
 }
 
+function railRowGapForTest() {
+  const rowPoints = aliveAliens()
+    .filter((alien) => alien.col === 5)
+    .map((alien) => projectRail(alien.x, alien.z, 58))
+    .filter(Boolean)
+    .sort((a, b) => a.y - b.y);
+  if (rowPoints.length < 2) return 0;
+  return rowPoints.slice(1).reduce((minimum, point, index) => (
+    Math.min(minimum, point.y - rowPoints[index].y)
+  ), Number.POSITIVE_INFINITY);
+}
+
 function bunkerCellCount() {
   return gameState.bunkers.reduce((total, bunker) => (
     total + bunker.cells.filter(Boolean).length
@@ -271,6 +296,19 @@ function wrapAngle(angle) {
   while (wrapped > Math.PI) wrapped -= Math.PI * 2;
   while (wrapped < -Math.PI) wrapped += Math.PI * 2;
   return wrapped;
+}
+
+function degreesToRadians(degrees) {
+  return degrees * Math.PI / 180;
+}
+
+function smoothStep(progress) {
+  const t = clamp(progress, 0, 1);
+  return t * t * (3 - 2 * t);
+}
+
+function railTiltRadians() {
+  return degreesToRadians(clamp(RAIL_TILT_DEGREES, 0, RAIL_TILT_MAX_DEGREES));
 }
 
 function modeScore(mode) {
@@ -378,14 +416,20 @@ function addParticles(x, y, color, count = 10) {
 
 function projectRail(x, z, y = 45) {
   const cameraZ = 260;
-  const cameraY = 88;
-  const focal = 520;
   const depth = cameraZ - z;
   if (depth <= 18) return null;
+  const tilt = railTiltRadians();
+  const { minZ, maxZ } = OVERVIEW.world;
+  const depthRatio = clamp((z - minZ) / (maxZ - minZ), 0, 1);
+  const perspective = 520 / depth;
+  const scale = clamp(0.42 + depthRatio * 0.78 + perspective * 0.1, 0.38, 1.08);
+  const runwaySpread = 390 * Math.sin(tilt);
+  const horizon = HEIGHT * (0.22 + (RAIL_TILT_MAX_DEGREES - RAIL_TILT_DEGREES) / 900);
+  const heightLift = y * clamp(0.38 + perspective * 0.28, 0.42, 0.68);
   return {
-    x: WIDTH / 2 + (x - gameState.player.x * 0.35) * focal / depth,
-    y: HEIGHT * 0.36 + (cameraY - y) * focal / depth,
-    scale: focal / depth,
+    x: WIDTH / 2 + (x - gameState.player.x * 0.35) * scale,
+    y: horizon + depthRatio * runwaySpread - heightLift,
+    scale,
     depth,
   };
 }
@@ -536,6 +580,104 @@ function drawWeaponFps() {
   ctx.stroke();
 }
 
+function overviewPoint(x, z) {
+  const { world, margin, width, height } = OVERVIEW;
+  const innerPad = 18;
+  const mapX = WIDTH - margin - width;
+  const mapY = margin;
+  return {
+    x: mapX + innerPad + clamp((x - world.minX) / (world.maxX - world.minX), 0, 1) * (width - innerPad * 2),
+    y: mapY + innerPad + clamp((z - world.minZ) / (world.maxZ - world.minZ), 0, 1) * (height - innerPad * 2),
+  };
+}
+
+function drawOverviewShip(x, y, yaw) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(yaw);
+  ctx.fillStyle = "#1df25b";
+  ctx.beginPath();
+  ctx.moveTo(0, -8);
+  ctx.lineTo(-6, 7);
+  ctx.lineTo(6, 7);
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawLandscapeOverview(alpha = 1) {
+  const { width, height, margin, world } = OVERVIEW;
+  const x = WIDTH - margin - width;
+  const y = margin;
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  ctx.fillStyle = "rgba(2, 6, 23, 0.82)";
+  ctx.fillRect(x, y, width, height);
+  ctx.strokeStyle = "rgba(103, 232, 249, 0.72)";
+  ctx.lineWidth = 1;
+  ctx.strokeRect(x + 0.5, y + 0.5, width - 1, height - 1);
+
+  ctx.fillStyle = "rgba(223, 247, 255, 0.88)";
+  ctx.font = "11px system-ui, sans-serif";
+  ctx.fillText("TACTICAL OVERVIEW", x + 12, y + 14);
+  ctx.strokeStyle = "rgba(103, 232, 249, 0.18)";
+  for (let index = 1; index < 4; index += 1) {
+    const gridX = x + (width * index) / 4;
+    const gridY = y + (height * index) / 4;
+    ctx.beginPath();
+    ctx.moveTo(gridX, y + 22);
+    ctx.lineTo(gridX, y + height - 10);
+    ctx.moveTo(x + 10, gridY);
+    ctx.lineTo(x + width - 10, gridY);
+    ctx.stroke();
+  }
+
+  ctx.fillStyle = "rgba(29, 242, 91, 0.72)";
+  gameState.bunkers.forEach((bunker) => {
+    const point = overviewPoint(bunker.x, bunker.z);
+    ctx.fillRect(point.x - 8, point.y - 3, 16, 6);
+  });
+
+  aliveAliens().forEach((alien) => {
+    const point = overviewPoint(alien.x, alien.z);
+    ctx.fillStyle = ALIEN_TYPES[alien.type].color;
+    ctx.fillRect(point.x - 2, point.y - 2, 4, 4);
+  });
+
+  const playerPoint = overviewPoint(gameState.player.x, gameState.player.z);
+  const playerYaw = gameState.mode === "fps" ? gameState.player.yaw : 0;
+  if (gameState.mode === "fps") {
+    const coneDepth = 210;
+    const left = overviewPoint(
+      gameState.player.x + Math.sin(playerYaw - 0.35) * coneDepth,
+      gameState.player.z - Math.cos(playerYaw - 0.35) * coneDepth,
+    );
+    const right = overviewPoint(
+      gameState.player.x + Math.sin(playerYaw + 0.35) * coneDepth,
+      gameState.player.z - Math.cos(playerYaw + 0.35) * coneDepth,
+    );
+    ctx.fillStyle = "rgba(103, 232, 249, 0.16)";
+    ctx.beginPath();
+    ctx.moveTo(playerPoint.x, playerPoint.y);
+    ctx.lineTo(left.x, left.y);
+    ctx.lineTo(right.x, right.y);
+    ctx.closePath();
+    ctx.fill();
+  } else {
+    const farLeft = overviewPoint(world.minX + 55, world.minZ + 80);
+    const nearRight = overviewPoint(world.maxX - 55, world.maxZ - 55);
+    ctx.strokeStyle = "rgba(103, 232, 249, 0.36)";
+    ctx.strokeRect(farLeft.x, farLeft.y, nearRight.x - farLeft.x, nearRight.y - farLeft.y);
+  }
+  drawOverviewShip(playerPoint.x, playerPoint.y, playerYaw);
+
+  ctx.fillStyle = "rgba(223, 247, 255, 0.72)";
+  ctx.font = "10px system-ui, sans-serif";
+  ctx.fillText("back wave", x + 12, y + height - 9);
+  ctx.fillText("cannon", x + width - 50, y + height - 9);
+  ctx.restore();
+}
+
 function drawMysteryShip2D(alpha = 1) {
   if (!gameState.mystery.active) return;
   const x = WIDTH / 2 + gameState.mystery.x;
@@ -553,7 +695,7 @@ function drawRunway(alpha = 1, blend = 1) {
   ctx.globalAlpha = alpha;
   ctx.strokeStyle = "rgba(103, 232, 249, 0.45)";
   ctx.lineWidth = 1;
-  const horizon = HEIGHT * (0.34 + (1 - blend) * 0.12);
+  const horizon = HEIGHT * (0.22 + (1 - blend) * 0.12);
   ctx.fillStyle = "#020617";
   ctx.fillRect(0, 0, WIDTH, HEIGHT);
   ctx.strokeStyle = "rgba(103, 232, 249, 0.3)";
@@ -639,6 +781,7 @@ function drawRailScene(alpha = 1, blend = 1) {
     ctx.fill();
   });
   drawPlayerRail();
+  drawLandscapeOverview(alpha);
   ctx.restore();
 }
 
@@ -673,23 +816,28 @@ function drawFpsScene(alpha = 1) {
   ctx.fillStyle = "rgba(103, 232, 249, 0.18)";
   ctx.fillRect(0, HEIGHT * 0.62, WIDTH, HEIGHT * 0.38);
   drawWeaponFps();
+  drawLandscapeOverview(alpha);
   ctx.restore();
 }
 
 function drawDimensionalBlend(blend) {
-  draw2DScene(1 - blend * 0.45);
+  const railBlend = smoothStep(blend);
+  draw2DScene(1 - railBlend * 0.45);
   ctx.save();
-  ctx.globalAlpha = blend;
-  drawRunway(blend, blend);
-  drawBunkers3D(projectRail, blend);
+  ctx.globalAlpha = railBlend;
+  drawRunway(railBlend, railBlend);
+  drawBunkers3D(projectRail, railBlend);
   gameState.aliens.forEach((alien) => {
     if (!alien.alive) return;
     const point = projectRail(alien.x, alien.z, 58);
     if (!point) return;
-    const screenX = WIDTH / 2 + alien.x + (point.x - (WIDTH / 2 + alien.x)) * blend;
-    const screenY = alien.y + (point.y - alien.y) * blend;
-    drawAlienIcon(screenX, screenY, alien.type, 4 + (clamp(point.scale * 10, 2.5, 10) - 4) * blend, blend);
+    const screenX = WIDTH / 2 + alien.x + (point.x - (WIDTH / 2 + alien.x)) * railBlend;
+    const screenY = alien.y + (point.y - alien.y) * railBlend;
+    drawAlienIcon(screenX, screenY, alien.type, 4 + (clamp(point.scale * 10, 2.5, 10) - 4) * railBlend, railBlend);
   });
+  if (railBlend > 0.35) {
+    drawLandscapeOverview((railBlend - 0.35) / 0.65);
+  }
   ctx.restore();
 }
 
@@ -1068,7 +1216,7 @@ function startTransition(targetMode, reason = "operator input") {
     from: gameState.mode,
     to: targetMode,
     elapsed: 0,
-    duration: targetMode === "lateral3d" ? 1.5 : 1.1,
+    duration: targetMode === "lateral3d" ? 1.8 : 1.1,
     progress: 0,
   };
   gameState.status = `Dimension shift to ${MODE_LABELS[targetMode]} started (${reason}).`;
@@ -1191,6 +1339,10 @@ window.__sprkTest = {
       aliveCount: aliveAlienCount(),
       bunkerCells: bunkerCellCount(),
       fleetInterval: fleetIntervalSeconds(),
+      railTiltDegrees: RAIL_TILT_DEGREES,
+      railTiltMaxDegrees: RAIL_TILT_MAX_DEGREES,
+      railRowGap: railRowGapForTest(),
+      overviewVisible: gameState.mode !== "2d",
       transitionActive: Boolean(runtime.transition),
     };
   },
@@ -1213,7 +1365,7 @@ window.__sprkTest = {
   },
   async shiftToLateral() {
     startTransition("lateral3d", "test harness");
-    await new Promise((resolve) => window.setTimeout(resolve, 1600));
+    await new Promise((resolve) => window.setTimeout(resolve, 1900));
     return this.getState();
   },
   async enterFps() {

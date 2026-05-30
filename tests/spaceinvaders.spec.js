@@ -26,9 +26,14 @@ test("Space Invaders dimensional shift baseline works", async ({ browser }) => {
   const railState = await pageA.evaluate(async () => window.__sprkTest.shiftToLateral());
   expect(railState.mode).toBe("lateral3d");
   expect(railState.score).toBe(30);
+  expect(railState.railTiltDegrees).toBeLessThanOrEqual(railState.railTiltMaxDegrees);
+  expect(railState.railTiltMaxDegrees).toBe(70);
+  expect(railState.railRowGap).toBeGreaterThan(12);
+  expect(railState.overviewVisible).toBe(true);
 
   const fpsState = await pageA.evaluate(async () => window.__sprkTest.enterFps());
   expect(fpsState.mode).toBe("fps");
+  expect(fpsState.overviewVisible).toBe(true);
   const lookedState = await pageA.evaluate(async () => window.__sprkTest.lookForTest(20, -6));
   expect(lookedState.player.yaw).not.toBe(fpsState.player.yaw);
 
