@@ -1,0 +1,56 @@
+const { test, expect } = require("@playwright/test");
+
+test("Space Invaders dimensional shift baseline works", async ({ browser }) => {
+  const contextA = await browser.newContext();
+  const contextB = await browser.newContext();
+  const pageA = await contextA.newPage();
+  const pageB = await contextB.newPage();
+
+  await pageA.goto("/?test=1");
+  await expect(pageA.getByRole("heading", { name: "Space Invaders: Dimensional Shift" })).toBeVisible();
+
+  const initial = await pageA.evaluate(async () => window.__sprkTest.resetGame());
+  expect(initial.mode).toBe("2d");
+  expect(initial.aliveCount).toBe(55);
+  expect(initial.score).toBe(0);
+  expect(initial.bunkerCells).toBeGreaterThan(0);
+
+  const afterAlien = await pageA.evaluate(async () => window.__sprkTest.destroyFirstAlienForTest());
+  expect(afterAlien.score).toBe(30);
+  expect(afterAlien.aliveCount).toBe(54);
+  expect(afterAlien.fleetInterval).toBeLessThan(initial.fleetInterval);
+
+  const afterBunker = await pageA.evaluate(async () => window.__sprkTest.hitFirstBunkerForTest());
+  expect(afterBunker.bunkerCells).toBe(afterAlien.bunkerCells - 1);
+
+  const railState = await pageA.evaluate(async () => window.__sprkTest.shiftToLateral());
+  expect(railState.mode).toBe("lateral3d");
+  expect(railState.score).toBe(30);
+
+  const fpsState = await pageA.evaluate(async () => window.__sprkTest.enterFps());
+  expect(fpsState.mode).toBe("fps");
+  const lookedState = await pageA.evaluate(async () => window.__sprkTest.lookForTest(20, -6));
+  expect(lookedState.player.yaw).not.toBe(fpsState.player.yaw);
+
+  const afterFpsShot = await pageA.evaluate(async () => window.__sprkTest.fireAtFirstAlienForTest());
+  expect(afterFpsShot.mode).toBe("fps");
+  expect(afterFpsShot.score).toBeGreaterThan(30);
+  expect(afterFpsShot.aliveCount).toBe(53);
+
+  await expect(pageA.locator("#score-list")).toContainText("Maya-SPRK");
+  await pageA.getByRole("tab", { name: "X-Ray Vision" }).click();
+  await expect(pageA.locator("#event-log")).toContainText("destroyed");
+
+  await pageB.goto("/?test=1");
+  const sharedState = await pageB.evaluate(() => window.__sprkTest.getState());
+  expect(sharedState.mode).toBe("fps");
+  expect(sharedState.score).toBe(afterFpsShot.score);
+  expect(sharedState.aliveCount).toBe(53);
+
+  await pageA.getByRole("tab", { name: "Baseline Status" }).click();
+  await expect(pageA.locator("#baselinePanel")).toBeVisible();
+  await expect(pageA.locator("#baselinePanel")).toContainText("Playwright is the current baseline validation mechanism");
+
+  await contextA.close();
+  await contextB.close();
+});

@@ -13,6 +13,7 @@ Key repo-wide learning guide:
 - [docs/SPRK_Language_Crosswalk.md](docs/SPRK_Language_Crosswalk.md): maps common programming ideas across Python, JavaScript, Java, Go, Lua, and related patterns used in the missions.
 - [docs/SPRK_Browser_Mission_Foundation_Guide.md](docs/SPRK_Browser_Mission_Foundation_Guide.md): explains the common browser-mission structure so mission guides only need to describe what is different.
 - [docs/SPRK_Student_AgenticOps_Guide.md](docs/SPRK_Student_AgenticOps_Guide.md): adapts MERIT enterprise practices into student-safe SPRK habits for setup, validation, hygiene, and handoff.
+- [docs/SPRK_Browser_Testing_And_Network_Architecture.md](docs/SPRK_Browser_Testing_And_Network_Architecture.md): explains the validation harness, Cursor Cloud flow, and local network hosting model for phones, tablets, and facilitator laptops.
 
 ## Start Here
 1. ~~Ask for access through the public [SPRK-Welcome](https://github.com/Mr-PI-Bala/SPRK-Welcome) repository.~~<br>
@@ -227,6 +228,7 @@ We are structuring the missions into distinct phases:
 | 06 | [FourSquare](missions/06-FourSquare-nP/docs/MISSION_GUIDE.md) ([open app](missions/06-FourSquare-nP/index.html)) | nP | A digital version of a playground-style group game with players, turns, and rounds. | Modeling real-world rules, turns, roles, shared game state, backend coordination. | No, if a facilitator hosts the game link. | Yes, to change rules, visuals, and multiplayer behavior. |
 | 07 | [SoccerScore](missions/07-SoccerScore-nP/docs/MISSION_GUIDE.md) ([open app](missions/07-SoccerScore-nP/index.html)) | nP | A team scoreboard and event tracker for soccer, football, softball, or class games. | Teams, events, timestamps, score updates, shared display, backend API. | No, if a facilitator hosts the game link. | Yes, to change sports, events, stats, and display behavior. |
 | 08 | [SoccerMatch](missions/08-SoccerMatch-nP/docs/MISSION_GUIDE.md) ([open app](missions/08-SoccerMatch-nP/index.html)) | nP | A real shared soccer field where multiple devices join the same live match and control players on both sides. | Shared simulation, device join flow, live canvas game state, player input, ball physics, team play. | No, if a facilitator hosts the game link. | Yes, to tune gameplay, visuals, controls, and multiplayer rules. |
+| 10 | [Space Invaders](missions/10-SpaceInvaders-1P-nP/docs/MISSION_GUIDE.md) ([open app](missions/10-SpaceInvaders-1P-nP/index.html)) | 1P-nP | A classic 2D Space Invaders wave that shifts into a 3D rail shooter and then an FPS-style cannon view. | Canvas rendering, state machines, collision, destructible bunkers, camera transitions, unified game state. | No, if a facilitator hosts the game link. | Yes, to tune gameplay, visuals, controls, and dimension rules. |
 
 ## Mission Template
 The canonical starter scaffold for the next browser-first mission is:
@@ -366,6 +368,7 @@ npm run test:flashcards
 npm run test:quizroom
 npm run test:foursquare
 npm run test:soccerscore
+npm run test:spaceinvaders
 ```
 
 Current baseline coverage:
@@ -378,6 +381,7 @@ Current baseline coverage:
 - `06-FourSquare`
 - `07-SoccerScore`
 - `08-SoccerMatch`
+- `10-SpaceInvaders-1P-nP`
 
 Generated validation artifacts:
 

@@ -12,7 +12,8 @@
     "test:quizroom": "node tests/helpers/run-playwright.js quizroom",
     "test:foursquare": "node tests/helpers/run-playwright.js foursquare",
     "test:soccerscore": "node tests/helpers/run-playwright.js soccerscore",
-    "test:soccermatch": "node tests/helpers/run-playwright.js soccermatch"
+    "test:soccermatch": "node tests/helpers/run-playwright.js soccermatch",
+    "test:spaceinvaders": "node tests/helpers/run-playwright.js spaceinvaders"
   },
   "devDependencies": {
     "@playwright/test": "^1.54.2"

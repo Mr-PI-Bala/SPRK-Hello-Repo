@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SPRK Mission 10 - Space Invaders</title>
+  <link rel="stylesheet" href="../_shared/sprk_mission.css">
+  <link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+  <main class="mission-shell">
+    <section class="mission-band">
+      <div>
+        <p class="eyebrow">Mission 10</p>
+        <h1>Space Invaders: Dimensional Shift</h1>
+        <p class="lede">Defend the bunkers in classic 2D, shift into a 3D rail runway, then dive into first-person cannon mode without losing the alien wave state.</p>
+      </div>
+      <div class="player-row invader-operator-row">
+        <label>Operator <input id="player-name" value="Maya-SPRK"></label>
+        <label>Sound <select id="sound-select">
+          <option value="zap">Zap</option>
+          <option value="laser">Laser</option>
+          <option value="coin">Coin</option>
+          <option value="level">Level</option>
+        </select></label>
+      </div>
+    </section>
+
+    <section class="game-board invader-board">
+      <section class="play-card invader-card" aria-label="Space Invaders dimensional shift game">
+        <div class="status-row invader-hud">
+          <span id="mode-label">2D Classic</span>
+          <strong id="score-label">Score 0000</strong>
+          <span id="wave-label">Wave 1</span>
+          <span id="lives-label">Lives 3</span>
+        </div>
+        <canvas id="invader-canvas" width="960" height="680" aria-label="Dimensional Space Invaders playfield"></canvas>
+        <div class="status-row invader-readouts">
+          <span id="alien-count">55 aliens remain</span>
+          <span id="fleet-speed">Fleet beat 0.88s</span>
+          <span id="bunker-status">Bunkers 100%</span>
+          <span id="mission-status">Ready</span>
+        </div>
+        <div class="invader-actions">
+          <button id="start-game" type="button">Start / Resume</button>
+          <button id="dimension-shift" type="button">Dimension Shift</button>
+          <button id="fps-shift" type="button">FPS Dive</button>
+          <button id="reset-game" type="button">Reset Wave</button>
+        </div>
+        <div class="control-grid">
+          <article>
+            <h2>Classic 2D</h2>
+            <p>Move with A/D or arrow keys. Fire one laser at a time with Space. Aliens drop when the fleet hits the wall.</p>
+          </article>
+          <article>
+            <h2>3D Rail</h2>
+            <p>Press Shift or Dimension Shift to rotate the camera over 1.5 seconds. The same fleet now advances down the runway.</p>
+          </article>
+          <article>
+            <h2>FPS Climax</h2>
+            <p>Press F or FPS Dive for mouse-look aiming. WASD moves across the ground plane and the cannon becomes rapid fire.</p>
+          </article>
+        </div>
+      </section>
+
+      <aside class="shared-panel">
+        <div class="tab-row" role="tablist">
+          <button id="scoreboardTab" class="tab-button active" type="button" role="tab" aria-selected="true">RealTime</button>
+          <button id="xrayTab" class="tab-button" type="button" role="tab" aria-selected="false">X-Ray Vision</button>
+          <button id="baselineTab" class="tab-button" type="button" role="tab" aria-selected="false">Baseline Status</button>
+        </div>
+        <div id="scorePanel" class="tab-panel active">
+          <div class="section-title-row">
+            <h2>Invader Command</h2>
+            <button id="clear-shared" type="button">Clear Board</button>
+          </div>
+          <p id="live-summary" class="shared-status">Load the wave to see alien, bunker, and dimension state.</p>
+          <ol id="score-list" class="score-list"></ol>
+        </div>
+        <div id="xrayPanel" class="tab-panel">
+          <p class="xray-note">Watch score, dimension, bunker, mystery ship, and wave events while the game runs.</p>
+          <pre id="event-log" class="event-log"></pre>
+        </div>
+        <div id="baselinePanel" class="tab-panel">
+          <p class="xray-note">Baseline validation results appear here after the repo-level checks run.</p>
+          <p id="baselineStatusNote" class="xray-note">Baseline status has not been generated yet.</p>
+        </div>
+      </aside>
+    </section>
+
+    <section class="challenge-panel">
+      <h2>Try Changing One Thing</h2>
+      <div class="challenge-grid">
+        <article><h3>Starter</h3><p>Change alien colors or point values. Hint: edit <code>ALIEN_TYPES</code> in <code>src/app.js</code>.</p></article>
+        <article><h3>Logic</h3><p>Tune fleet acceleration. Hint: adjust <code>fleetIntervalSeconds()</code> so the beat changes faster or slower.</p></article>
+        <article><h3>Level Up</h3><p>Add a new dimension rule such as shield repair pickups, boss UFOs, or multiplayer operators.</p></article>
+      </div>
+    </section>
+  </main>
+
+  <script src="../_shared/sprk_app.js"></script>
+  <script src="src/app.js"></script>
+</body>
+</html>

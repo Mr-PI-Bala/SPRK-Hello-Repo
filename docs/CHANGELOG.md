@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Added Mission 10 Space Invaders as `10-SpaceInvaders-1P-nP`, including docs, Playwright coverage, and mission-runner wiring.
 - Added a student-safe MERIT-to-SPRK AgenticOps guide that compares enterprise practices with the existing mission repository workflow.
 - Added root `AGENTS.md` and `ops/README.md` as lightweight bootstrap and hygiene surfaces for students, agents, branches, and forks.
 - Added `npm run validate` as the student-facing mission validation command and kept Playwright baseline validation passing at `9 / 9`.
