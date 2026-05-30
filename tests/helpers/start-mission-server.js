@@ -52,6 +52,12 @@ const missions = {
     folder: path.resolve(__dirname, "..", "..", "missions", "08-SoccerMatch-nP"),
     port: 8008,
   },
+  spaceinvaders: {
+    key: "spaceinvaders",
+    title: "Space Invaders: Dimensional Shift",
+    folder: path.resolve(__dirname, "..", "..", "missions", "10-Space-Invaders"),
+    port: 8010,
+  },
 };
 
 function getMission() {

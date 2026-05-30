@@ -73,6 +73,16 @@ const missionCoverage = {
         "X-Ray Vision and Baseline Status tabs load correctly",
       ],
     },
+    {
+      mission: "Space Invaders",
+      checks: [
+        "Page renders and dimensional game state loads",
+        "The 55-alien fleet scores and accelerates as aliens are destroyed",
+        "Bunker voxel damage updates shared mission state",
+        "2D, 3D rail, and FPS modes preserve score and wave state",
+        "X-Ray Vision and Baseline Status tabs load correctly",
+      ],
+    },
   ],
   reactionrace: [
     {
@@ -160,6 +170,18 @@ const missionCoverage = {
       ],
     },
   ],
+  spaceinvaders: [
+    {
+      mission: "Space Invaders",
+      checks: [
+        "Page renders and dimensional game state loads",
+        "The 55-alien fleet scores and accelerates as aliens are destroyed",
+        "Bunker voxel damage updates shared mission state",
+        "2D, 3D rail, and FPS modes preserve score and wave state",
+        "X-Ray Vision and Baseline Status tabs load correctly",
+      ],
+    },
+  ],
 };
 
 function flattenSuites(suites, testCases = []) {
@@ -214,6 +236,7 @@ function main() {
       path.join(repoRoot, "tests", "artifacts", "baseline-results", "foursquare-results.json"),
       path.join(repoRoot, "tests", "artifacts", "baseline-results", "soccerscore-results.json"),
       path.join(repoRoot, "tests", "artifacts", "baseline-results", "soccermatch-results.json"),
+      path.join(repoRoot, "tests", "artifacts", "baseline-results", "spaceinvaders-results.json"),
     ]
     : [path.join(repoRoot, "tests", "artifacts", "baseline-results", `${mode}-results.json`)];
   const cases = resultsFiles.flatMap((resultsPath) => {

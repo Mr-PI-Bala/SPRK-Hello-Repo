@@ -51,6 +51,12 @@ const modes = {
     specs: ["tests/soccermatch.spec.js"],
     label: "SoccerMatch Baseline",
   },
+  spaceinvaders: {
+    mission: "spaceinvaders",
+    baseUrl: "http://127.0.0.1:8010",
+    specs: ["tests/spaceinvaders.spec.js"],
+    label: "Space Invaders Baseline",
+  },
 };
 
 function runSingle(mode, selected) {
@@ -133,7 +139,7 @@ function main() {
   const mode = process.argv[2] || "all";
 
   if (mode === "all") {
-    const orderedModes = ["reactionrace", "snakegame", "pingpong", "flashcards", "quizroom", "foursquare", "soccerscore", "soccermatch"];
+    const orderedModes = ["reactionrace", "snakegame", "pingpong", "flashcards", "quizroom", "foursquare", "soccerscore", "soccermatch", "spaceinvaders"];
     const runs = orderedModes.map((name) => ({ name, result: runSingleWithRetry(name, modes[name]) }));
     const combinedSummaryRun = spawnSync("node", [
       "tests/helpers/write-baseline-status.js",
