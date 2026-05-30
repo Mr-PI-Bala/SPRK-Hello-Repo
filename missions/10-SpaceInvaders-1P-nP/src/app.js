@@ -5,6 +5,9 @@
   camera rules, but aliens, bunkers, score, wave, and player health stay shared.
 */
 
+const searchParams = new URLSearchParams(window.location.search);
+const testModeEnabled = searchParams.get("test") === "1";
+
 const canvas = document.querySelector("#invader-canvas");
 const ctx = canvas.getContext("2d");
 const playerNameInput = document.querySelector("#player-name");
@@ -97,6 +100,16 @@ const MODE_LABELS = {
   lateral3d: "3D Rail",
   fps: "FPS Climax",
 };
+
+/*
+  3D rail and FPS modes are paused for classroom play until touch and mobile UX
+  are stable. Playwright tests enable them with ?test=1.
+*/
+const EXPERIMENTAL_DIMENSION_MODES = testModeEnabled;
+
+function dimensionModesEnabled() {
+  return EXPERIMENTAL_DIMENSION_MODES;
+}
 
 const keys = new Set();
 const runtime = {
@@ -222,6 +235,9 @@ function normalizeState(rawState) {
     ? raw.bunkers
     : createBunkers();
   next.mode = ["2d", "lateral3d", "fps"].includes(next.mode) ? next.mode : "2d";
+  if (!dimensionModesEnabled() && next.mode !== "2d") {
+    next.mode = "2d";
+  }
   next.score = Number(next.score || 0);
   next.wave = Number(next.wave || 1);
   next.lives = Number(next.lives || 3);
@@ -852,7 +868,7 @@ function updateFleet(dt) {
     loseLife("The fleet reached the bunkers in 2D.");
   }
 
-  if (gameState.mode === "lateral3d" && alive.some((alien) => alien.z > -230)) {
+  if (dimensionModesEnabled() && gameState.mode === "lateral3d" && alive.some((alien) => alien.z > -230)) {
     startTransition("fps", "proximity threshold");
   }
 
@@ -1057,6 +1073,7 @@ function updateTransition(dt) {
 }
 
 function startTransition(targetMode, reason = "operator input") {
+  if (!dimensionModesEnabled()) return;
   if (runtime.transition || gameState.mode === targetMode) return;
   const allowed = (
     (gameState.mode === "2d" && targetMode === "lateral3d") ||
@@ -1135,10 +1152,10 @@ function handleKeyDown(event) {
   if (key === " ") {
     firePlayerShot();
   }
-  if (key === "shift") {
+  if (dimensionModesEnabled() && key === "shift") {
     startTransition(gameState.mode === "2d" ? "lateral3d" : "fps", "Shift key");
   }
-  if (key === "f") {
+  if (dimensionModesEnabled() && key === "f") {
     startTransition("fps", "F key");
   }
 }
@@ -1162,7 +1179,21 @@ canvas.addEventListener("click", () => {
   firePlayerShot();
 });
 
-SPRK_TOUCH.attach({
+function configureDimensionControls() {
+  const hidden = !dimensionModesEnabled();
+  [dimensionShiftButton, fpsShiftButton].forEach((button) => {
+    if (!button) return;
+    button.hidden = hidden;
+    button.disabled = hidden;
+  });
+  document.querySelectorAll("[data-experimental-dimension]").forEach((node) => {
+    node.hidden = hidden;
+  });
+}
+
+configureDimensionControls();
+
+const touchControls = SPRK_TOUCH.attach({
   target: canvas,
   keys,
   onAction: () => {
@@ -1172,6 +1203,8 @@ SPRK_TOUCH.attach({
   },
   unlockSound: () => SPRK.unlockSound(),
   fullscreenElement: document.querySelector(".invader-card"),
+  fullscreenButton: document.querySelector("#fullscreen-toggle"),
+  enableFullscreenTripleTap: false,
   magnetic: {
     radius: 78,
     isEnabled: () => runtime.running && gameState.mode !== "fps",
@@ -1189,14 +1222,16 @@ document.addEventListener("keydown", handleKeyDown);
 document.addEventListener("keyup", handleKeyUp);
 document.addEventListener("mousemove", handleMouseMove);
 startGameButton.addEventListener("click", startGame);
-dimensionShiftButton.addEventListener("click", () => {
-  SPRK.unlockSound();
-  startTransition(gameState.mode === "2d" ? "lateral3d" : "fps", "button");
-});
-fpsShiftButton.addEventListener("click", () => {
-  SPRK.unlockSound();
-  startTransition("fps", "button");
-});
+if (dimensionModesEnabled()) {
+  dimensionShiftButton.addEventListener("click", () => {
+    SPRK.unlockSound();
+    startTransition(gameState.mode === "2d" ? "lateral3d" : "fps", "button");
+  });
+  fpsShiftButton.addEventListener("click", () => {
+    SPRK.unlockSound();
+    startTransition("fps", "button");
+  });
+}
 resetGameButton.addEventListener("click", resetGame);
 clearSharedButton.addEventListener("click", clearSharedBoard);
 

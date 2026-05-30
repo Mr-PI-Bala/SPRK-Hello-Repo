@@ -75,13 +75,18 @@ const SPRK_TOUCH = (() => {
     const onDirection = typeof config.onDirection === "function" ? config.onDirection : null;
     const splitZones = Array.isArray(config.splitZones) ? config.splitZones : null;
     const fullscreenElement = config.fullscreenElement || target.closest(".sprk-play-surface") || target.parentElement;
-    const enableFullscreenTripleTap = config.enableFullscreenTripleTap !== false;
+    const coarsePointer = isCoarsePointer();
+    const enableFullscreenTripleTap = config.enableFullscreenTripleTap === true
+      || (config.enableFullscreenTripleTap !== false && !coarsePointer);
+    const enableLongPressFullscreen = config.enableLongPressFullscreen !== false && coarsePointer;
+    const longPressMs = config.longPressMs ?? 1200;
     const unlockSound = typeof config.unlockSound === "function" ? config.unlockSound : () => {};
 
     const moveKeyList = allMovementKeys(movement);
     const pointers = new Map();
     let primaryPointerId = null;
     let tripleTapTimes = [];
+    let longPressTimer = null;
 
     target.classList.add("sprk-touch-target");
     const playSurface = target.closest(".sprk-play-surface");
@@ -185,6 +190,7 @@ const SPRK_TOUCH = (() => {
 
       const point = canvasPoint(target, event);
       const pointerState = {
+        id: event.pointerId,
         startX: point.x,
         startY: point.y,
         lastX: point.x,
@@ -197,6 +203,7 @@ const SPRK_TOUCH = (() => {
         role: pointerRole(event.pointerId),
       };
       pointers.set(event.pointerId, pointerState);
+      scheduleLongPress(pointerState);
 
       if (pointerState.role === "action") {
         pulseAction();
@@ -213,6 +220,7 @@ const SPRK_TOUCH = (() => {
       const pointerState = pointers.get(event.pointerId);
       if (!pointerState) return;
       event.preventDefault();
+      clearLongPressTimer();
 
       if (pointerState.role === "action") {
         return;
@@ -235,6 +243,7 @@ const SPRK_TOUCH = (() => {
       const pointerState = pointers.get(event.pointerId);
       if (!pointerState) return;
       event.preventDefault();
+      clearLongPressTimer();
 
       if (pointerState.role !== "action") {
         const point = canvasPoint(target, event);
@@ -267,25 +276,78 @@ const SPRK_TOUCH = (() => {
       onPointerUp(event);
     }
 
+    function isExpanded() {
+      const element = fullscreenElement || document.documentElement;
+      return element.classList.contains("sprk-touch-expanded")
+        || Boolean(document.fullscreenElement);
+    }
+
+    function setExpanded(on) {
+      const element = fullscreenElement || document.documentElement;
+      element.classList.toggle("sprk-touch-expanded", on);
+      document.documentElement.classList.toggle("sprk-touch-fullscreen-active", on);
+    }
+
     function toggleFullscreen() {
       const element = fullscreenElement || document.documentElement;
-      if (!document.fullscreenElement) {
-        const request = element.requestFullscreen || element.webkitRequestFullscreen;
-        if (request) {
-          Promise.resolve(request.call(element)).then(() => {
-            document.documentElement.classList.add("sprk-touch-fullscreen-active");
-            showToast("Fullscreen on — triple-tap to exit");
-          }).catch(() => showToast("Fullscreen not available in this browser"));
+      const expanded = isExpanded();
+
+      if (expanded) {
+        setExpanded(false);
+        const exit = document.exitFullscreen || document.webkitExitFullscreen;
+        if (document.fullscreenElement && exit) {
+          Promise.resolve(exit.call(document)).catch(() => {});
         }
+        showToast("Fullscreen off");
         return;
       }
-      const exit = document.exitFullscreen || document.webkitExitFullscreen;
-      if (exit) {
-        Promise.resolve(exit.call(document)).finally(() => {
-          document.documentElement.classList.remove("sprk-touch-fullscreen-active");
-          showToast("Fullscreen off");
-        });
+
+      if (coarsePointer) {
+        setExpanded(true);
+        showToast("Fullscreen on — tap Fullscreen again to exit");
+        return;
       }
+
+      const request = element.requestFullscreen || element.webkitRequestFullscreen;
+      if (request) {
+        Promise.resolve(request.call(element)).then(() => {
+          document.documentElement.classList.add("sprk-touch-fullscreen-active");
+          showToast("Fullscreen on — tap Fullscreen again to exit");
+        }).catch(() => {
+          setExpanded(true);
+          showToast("Using expanded play area (browser fullscreen blocked)");
+        });
+        return;
+      }
+
+      setExpanded(true);
+      showToast("Fullscreen on — tap Fullscreen again to exit");
+    }
+
+    function clearLongPressTimer() {
+      if (longPressTimer) {
+        window.clearTimeout(longPressTimer);
+        longPressTimer = null;
+      }
+    }
+
+    function scheduleLongPress(pointerState) {
+      if (!enableLongPressFullscreen || pointerState.role === "action") {
+        return;
+      }
+      clearLongPressTimer();
+      longPressTimer = window.setTimeout(() => {
+        longPressTimer = null;
+        if (!pointers.has(pointerState.id)) {
+          return;
+        }
+        const point = { x: pointerState.lastX, y: pointerState.lastY };
+        const dx = point.x - pointerState.startX;
+        const dy = point.y - pointerState.startY;
+        if (Math.hypot(dx, dy) < actionThresholdPx * 2) {
+          toggleFullscreen();
+        }
+      }, longPressMs);
     }
 
     function onTripleTap(event) {
@@ -313,8 +375,18 @@ const SPRK_TOUCH = (() => {
       clearMovement();
     });
 
+    if (config.fullscreenButton) {
+      config.fullscreenButton.addEventListener("click", (event) => {
+        event.preventDefault();
+        unlockSound();
+        toggleFullscreen();
+      });
+    }
+
     return {
+      toggleFullscreen,
       destroy() {
+        clearLongPressTimer();
         target.removeEventListener("pointerdown", onPointerDown);
         target.removeEventListener("pointermove", onPointerMove);
         target.removeEventListener("pointerup", onPointerUp);

@@ -36,7 +36,7 @@
           <span id="lives-label">Lives 3</span>
         </div>
         <canvas id="invader-canvas" width="960" height="680" aria-label="Dimensional Space Invaders playfield"></canvas>
-        <p class="sprk-touch-hint">Touch: drag on the cannon to move it, quick tap or second finger to fire. Triple-tap the play area for fullscreen. Use on-screen buttons for dimension shift in FPS.</p>
+        <p class="sprk-touch-hint">Touch: drag on the cannon to move, quick tap or second finger to fire. Tap <strong>Fullscreen</strong> (or hold the board ~1.2s on iPhone). Classic 2D mode only for now — 3D/FPS return in a later update.</p>
         <div class="status-row invader-readouts">
           <span id="alien-count">55 aliens remain</span>
           <span id="fleet-speed">Fleet beat 0.88s</span>
@@ -45,22 +45,23 @@
         </div>
         <div class="invader-actions">
           <button id="start-game" type="button">Start / Resume</button>
-          <button id="dimension-shift" type="button">Dimension Shift</button>
-          <button id="fps-shift" type="button">FPS Dive</button>
+          <button id="fullscreen-toggle" type="button" class="sprk-fullscreen-button">Fullscreen</button>
+          <button id="dimension-shift" type="button" data-experimental-dimension>Dimension Shift</button>
+          <button id="fps-shift" type="button" data-experimental-dimension>FPS Dive</button>
           <button id="reset-game" type="button">Reset Wave</button>
         </div>
         <div class="control-grid">
           <article>
-            <h2>Classic 2D</h2>
-            <p>Move with A/D or arrow keys. Fire one laser at a time with Space. Aliens drop when the fleet hits the wall.</p>
+            <h2>Classic 2D (class play)</h2>
+            <p>Move with A/D, arrows, or touch drag. Fire with Space, tap, or a second finger. Clear all 55 aliens to advance the <strong>wave</strong>.</p>
           </article>
           <article>
-            <h2>3D Rail</h2>
-            <p>Press Shift or Dimension Shift to rotate the camera over 1.5 seconds. The same fleet now advances down the runway.</p>
+            <h2>Waves (your “levels”)</h2>
+            <p>There is no fixed level 100. Each cleared fleet starts <strong>Wave 2, 3, 4…</strong> with faster aliens. Your score and wave number are what you brag about — tuning higher waves is VibeCoding.</p>
           </article>
-          <article>
-            <h2>FPS Climax</h2>
-            <p>Press F or FPS Dive for mouse-look aiming. WASD moves across the ground plane and the cannon becomes rapid fire.</p>
+          <article data-experimental-dimension>
+            <h2>3D / FPS (paused)</h2>
+            <p>Dimension Shift and FPS Dive are hidden until mobile play is stable. The code stays in the repo for desktop experiments later.</p>
           </article>
         </div>
       </section>

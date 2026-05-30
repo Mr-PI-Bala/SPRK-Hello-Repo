@@ -16,7 +16,9 @@ Facilitators hosting a class should also read [SPRK Facilitator Guide](SPRK_Faci
 | **Drag** on play area | Hold movement keys (arrows + WASD) for that direction, or **magnetic** slide on the player |
 | **Quick tap** on play area | Same as **Space** (fire, confirm, primary action) |
 | **Second finger** down while first holds | **Space** / action (fire without stopping movement) |
-| **Triple-tap** play surface | Toggle **fullscreen** on the mission play card |
+| **Fullscreen** button | Toggle expanded play area (works on iPhone; native fullscreen when the browser allows) |
+| **Long-press ~1.2s** on play area (phone) | Same fullscreen toggle without triple-tap (avoids iOS system menus) |
+| **Triple-tap** play surface | Fullscreen on **desktop only** (disabled on phones — iOS intercepts triple-tap) |
 | **On-screen buttons** | Still work (dimension shift, start, quiz next, and so on) |
 
 ## How Touch Maps To Keyboard
@@ -146,14 +148,19 @@ This is the main classroom pattern for nP missions:
 
 No special touch code is required beyond each client handling its own input.
 
-## Fullscreen (Triple-Tap)
+## Fullscreen On iPhone
 
-Triple-tap the **play surface** (canvas area) within about 0.65 seconds.
+iOS often opens **system menus** on triple-tap, so SPRK uses safer options:
 
-- First triple-tap: enter fullscreen on the play card (or configured element).
-- Second triple-tap: exit fullscreen.
+| Method | Device |
+| --- | --- |
+| Tap the **Fullscreen** button | All touch devices (recommended) |
+| **Press and hold** the canvas ~1.2 seconds without moving | Phones / tablets |
+| **Triple-tap** the canvas | Desktop browsers only |
 
-iOS Safari supports fullscreen on a user gesture; if fullscreen fails, the game still runs in the normal layout.
+On iPhone, fullscreen usually means an **expanded play card** (CSS) that fills the screen. That works even when Safari blocks the browser Fullscreen API. Tap **Fullscreen** again to exit.
+
+Mission 10 hides **Dimension Shift** and **FPS Dive** on touch until those modes are reworked. Classic **2D waves** are the classroom path.
 
 ## Facilitator Checklist (Touch Classes)
 

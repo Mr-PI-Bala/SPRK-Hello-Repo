@@ -59,6 +59,29 @@
   padding: 0.5rem;
 }
 
+/* iPhone-friendly "fullscreen" when the browser blocks the Fullscreen API */
+.sprk-touch-expanded {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 10000 !important;
+  width: 100vw !important;
+  max-width: none !important;
+  height: 100dvh !important;
+  margin: 0 !important;
+  padding: 0.5rem !important;
+  overflow: auto !important;
+  background: var(--bg, #101820) !important;
+  box-sizing: border-box !important;
+}
+
+.sprk-fullscreen-button {
+  font-weight: 700;
+}
+
+.sprk-touch-expanded .sprk-fullscreen-button {
+  border-color: var(--accent, #1fb6ff);
+}
+
 .sprk-touch-toast {
   position: fixed;
   left: 50%;
