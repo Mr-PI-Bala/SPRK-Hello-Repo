@@ -58,6 +58,7 @@ function runSingle(mode, selected) {
     ...process.env,
     SPRK_MISSION: selected.mission,
     PLAYWRIGHT_BASE_URL: selected.baseUrl,
+    PYTHON: process.env.PYTHON || (process.platform === "win32" ? "python" : "python3"),
   };
   const repoRoot = path.resolve(__dirname, "..", "..");
   const args = [
@@ -65,9 +66,16 @@ function runSingle(mode, selected) {
     ...selected.specs,
     "--config=tests/playwright.config.js",
   ];
-  const playwrightBin = path.join(repoRoot, "node_modules", ".bin", "playwright.cmd");
+  const playwrightBin = path.join(
+    repoRoot,
+    "node_modules",
+    ".bin",
+    process.platform === "win32" ? "playwright.cmd" : "playwright",
+  );
+  const command = process.platform === "win32" ? "cmd.exe" : playwrightBin;
+  const commandArgs = process.platform === "win32" ? ["/c", playwrightBin, ...args] : args;
 
-  const testRun = spawnSync("cmd.exe", ["/c", playwrightBin, ...args], {
+  const testRun = spawnSync(command, commandArgs, {
     cwd: repoRoot,
     env,
     stdio: "inherit",
