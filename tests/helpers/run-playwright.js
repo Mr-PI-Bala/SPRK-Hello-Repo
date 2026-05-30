@@ -71,9 +71,12 @@ function runSingle(mode, selected) {
     ...selected.specs,
     "--config=tests/playwright.config.js",
   ];
-  const playwrightBin = path.join(repoRoot, "node_modules", ".bin", "playwright.cmd");
+  const isWindows = process.platform === "win32";
+  const playwrightBin = path.join(repoRoot, "node_modules", ".bin", isWindows ? "playwright.cmd" : "playwright");
+  const command = isWindows ? "cmd.exe" : playwrightBin;
+  const commandArgs = isWindows ? ["/c", playwrightBin, ...args] : args;
 
-  const testRun = spawnSync("cmd.exe", ["/c", playwrightBin, ...args], {
+  const testRun = spawnSync(command, commandArgs, {
     cwd: repoRoot,
     env,
     stdio: "inherit",
