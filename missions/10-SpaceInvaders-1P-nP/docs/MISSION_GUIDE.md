@@ -49,6 +49,17 @@ What each command does:
 
 Open the browser link shown in the terminal. This mission uses port `8010`.
 
+## Math Wave Celebrations
+
+When you clear a fleet and the next wave number is special, a celebration card appears with a short math insight. Examples:
+
+- **Primes** from wave 3 onward: 3, 5, 7, 11, 13…
+- **Fibonacci**: 1, 2, 3, 5, 8, 13, 21…
+- **π, φ, e** milestone digit patterns
+- **Palindromes**, perfect squares, powers of two, happy numbers, angle waves (θ), and more
+
+Logic lives in `src/wave_math.js`. Tap **Launch Wave N** (or press Enter) to continue fighting.
+
 ## Controls
 | Mode | Movement | Fire | Shift |
 | --- | --- | --- | --- |

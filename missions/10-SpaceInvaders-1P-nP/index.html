@@ -35,7 +35,19 @@
           <span id="wave-label">Wave 1</span>
           <span id="lives-label">Lives 3</span>
         </div>
-        <canvas id="invader-canvas" width="960" height="680" aria-label="Dimensional Space Invaders playfield"></canvas>
+        <div class="invader-canvas-wrap">
+          <canvas id="invader-canvas" width="960" height="680" aria-label="Dimensional Space Invaders playfield"></canvas>
+          <div id="wave-celebration" class="wave-celebration hidden" role="dialog" aria-modal="true" aria-labelledby="celebration-title">
+            <div class="wave-celebration-card">
+              <p class="wave-celebration-eyebrow" id="celebration-eyebrow">Prime power wave</p>
+              <h2 id="celebration-title">Wave 7</h2>
+              <p class="wave-celebration-badge" id="celebration-badge">Prime</p>
+              <p id="celebration-insight" class="wave-celebration-insight">Insight text loads here.</p>
+              <p id="celebration-extra" class="wave-celebration-extra hidden"></p>
+              <button id="celebration-continue" type="button">Launch this wave</button>
+            </div>
+          </div>
+        </div>
         <p class="sprk-touch-hint">Touch: drag on the cannon to move, quick tap or second finger to fire. Tap <strong>Fullscreen</strong> (or hold the board ~1.2s on iPhone). Classic 2D mode only for now — 3D/FPS return in a later update.</p>
         <div class="status-row invader-readouts">
           <span id="alien-count">55 aliens remain</span>
@@ -57,7 +69,7 @@
           </article>
           <article>
             <h2>Waves (your “levels”)</h2>
-            <p>There is no fixed level 100. Each cleared fleet starts <strong>Wave 2, 3, 4…</strong> with faster aliens. Your score and wave number are what you brag about — tuning higher waves is VibeCoding.</p>
+            <p>Each cleared fleet starts the next wave. Hit a <strong>math milestone</strong> (prime 3, 5, 7, 11…, Fibonacci, π, palindrome, and more) for a celebration screen with a number insight before you fight.</p>
           </article>
           <article data-experimental-dimension>
             <h2>3D / FPS (paused)</h2>
@@ -103,6 +115,7 @@
 
   <script src="../_shared/sprk_app.js"></script>
   <script src="../_shared/sprk_touch.js"></script>
+  <script src="src/wave_math.js"></script>
   <script src="src/app.js"></script>
 </body>
 </html>

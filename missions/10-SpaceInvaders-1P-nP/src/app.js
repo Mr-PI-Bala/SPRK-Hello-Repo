@@ -36,6 +36,13 @@ const xrayTab = document.querySelector("#xrayTab");
 const baselineTab = document.querySelector("#baselineTab");
 const scorePanel = document.querySelector("#scorePanel");
 const xrayPanel = document.querySelector("#xrayPanel");
+const waveCelebration = document.querySelector("#wave-celebration");
+const celebrationEyebrow = document.querySelector("#celebration-eyebrow");
+const celebrationTitle = document.querySelector("#celebration-title");
+const celebrationBadge = document.querySelector("#celebration-badge");
+const celebrationInsight = document.querySelector("#celebration-insight");
+const celebrationExtra = document.querySelector("#celebration-extra");
+const celebrationContinue = document.querySelector("#celebration-continue");
 
 const WIDTH = canvas.width;
 const HEIGHT = canvas.height;
@@ -127,6 +134,7 @@ const runtime = {
   })),
   transition: null,
   saveTimer: null,
+  celebration: null,
 };
 
 let gameState = createDefaultState();
@@ -810,11 +818,57 @@ async function destroyAlien(alien, source = "cannon") {
   ]);
 }
 
+function dismissWaveCelebration() {
+  if (!runtime.celebration) return;
+  runtime.celebration = null;
+  waveCelebration.classList.add("hidden");
+  gameState.status = `Wave ${gameState.wave} deployed.`;
+  gameState.lastEvent = gameState.status;
+  renderHud();
+}
+
+function showWaveCelebration(details) {
+  if (!details || testModeEnabled) {
+    return;
+  }
+
+  celebrationEyebrow.textContent = details.eyebrow;
+  celebrationTitle.textContent = details.headline;
+  celebrationBadge.textContent = details.badge;
+  celebrationInsight.textContent = details.insight;
+  if (details.extraLine) {
+    celebrationExtra.textContent = details.extraLine;
+    celebrationExtra.classList.remove("hidden");
+  } else {
+    celebrationExtra.textContent = "";
+    celebrationExtra.classList.add("hidden");
+  }
+  celebrationContinue.textContent = `Launch Wave ${details.wave}`;
+
+  runtime.celebration = {
+    wave: details.wave,
+    startedAt: performance.now(),
+  };
+  waveCelebration.classList.remove("hidden");
+  gameState.status = `${details.eyebrow} — Wave ${details.wave}`;
+  gameState.lastEvent = gameState.status;
+  SPRK.playSound("level");
+  renderHud();
+  void logEvent(`Math celebration: ${details.headline}`, "wave");
+}
+
 function startNextWave() {
   gameState.wave += 1;
   gameState.aliens = createAlienFleet(gameState.wave);
   gameState.fleet = { direction: 1, stepTimer: 0, beatIndex: 0 };
   gameState.mystery = { active: false, x: -520, direction: 1, timer: 7, points: 100 };
+
+  const celebration = WAVE_MATH.getCelebration(gameState.wave);
+  if (celebration) {
+    showWaveCelebration(celebration);
+    return;
+  }
+
   gameState.status = `Wave ${gameState.wave} deployed.`;
   gameState.lastEvent = gameState.status;
 }
@@ -1096,6 +1150,7 @@ function startTransition(targetMode, reason = "operator input") {
 
 function updateGame(dt) {
   updateTransition(dt);
+  if (runtime.celebration) return;
   if (!runtime.running || runtime.transition) return;
   updatePlayer(dt);
   updateFleet(dt);
@@ -1128,6 +1183,8 @@ async function resetGame() {
   runtime.enemyShots = [];
   runtime.particles = [];
   runtime.transition = null;
+  runtime.celebration = null;
+  waveCelebration.classList.add("hidden");
   gameState = createDefaultState();
   renderHud();
   await SPRK.deleteJson("/api/state");
@@ -1145,6 +1202,11 @@ async function clearSharedBoard() {
 
 function handleKeyDown(event) {
   const key = event.key.toLowerCase();
+  if (runtime.celebration && (key === "enter" || key === " ")) {
+    event.preventDefault();
+    dismissWaveCelebration();
+    return;
+  }
   keys.add(key);
   if ([" ", "arrowleft", "arrowright", "arrowup", "arrowdown"].includes(key)) {
     event.preventDefault();
@@ -1221,6 +1283,11 @@ const touchControls = SPRK_TOUCH.attach({
 document.addEventListener("keydown", handleKeyDown);
 document.addEventListener("keyup", handleKeyUp);
 document.addEventListener("mousemove", handleMouseMove);
+celebrationContinue.addEventListener("click", () => {
+  SPRK.unlockSound();
+  dismissWaveCelebration();
+});
+
 startGameButton.addEventListener("click", startGame);
 if (dimensionModesEnabled()) {
   dimensionShiftButton.addEventListener("click", () => {
