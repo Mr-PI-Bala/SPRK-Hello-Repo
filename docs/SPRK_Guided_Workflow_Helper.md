@@ -1,0 +1,125 @@
+# SPRK Guided Workflow Helper
+This helper is a learning tool for Git and GitHub workflow. It does not hide the workflow; it shows status first, explains what will happen, and asks for explicit confirmation before it changes anything.
+
+Script location:
+
+```text
+missions/_shared/tools/sprk_workflow.py
+```
+
+Run from the repository root:
+
+```bash
+npm run workflow
+```
+
+The npm script uses `python3` because Cursor Cloud and most Linux/macOS environments expose Python that way.
+
+If npm is not available, run directly on Linux/macOS/Cursor Cloud:
+
+```bash
+python3 missions/_shared/tools/sprk_workflow.py
+```
+
+On Windows, use whichever Python launcher is installed:
+
+```bash
+py missions/_shared/tools/sprk_workflow.py
+```
+
+or:
+
+```bash
+python missions/_shared/tools/sprk_workflow.py
+```
+
+## Default Behavior
+By default, the helper shows status and then opens a menu.
+
+```mermaid
+flowchart TD
+    Start["npm run workflow"] --> Status["Show current branch, changed files, GitHub user, open PRs"]
+    Status --> Menu["Guided menu"]
+    Menu --> StatusAgain["1. Show status again"]
+    Menu --> Branch["2. Start new work branch"]
+    Menu --> Submit["3. Save current work and open PR"]
+    Menu --> Approve["4. Review / approve / optionally merge a PR"]
+    Menu --> Exit["5. Exit"]
+```
+
+## Menu Options
+| Option | Who Should Use It | What It Does | Confirmation Required |
+| --- | --- | --- | --- |
+| Show status | Everyone | Prints branch, changed files, GitHub user, and open PRs. | No |
+| Start new work branch | Student or agent | Checks out `main`, pulls latest `main`, creates a new branch. | Yes |
+| Save current work and open PR | Student or agent | Shows changed files, stages all current changes, commits, pushes, and opens a PR. | Yes |
+| Review / approve / optionally merge PR | Teacher/admin/maintainer | Shows PR details, approves it, and optionally merges it. | Yes, with extra warning for self-approval |
+
+## Why This Is Safer Than The Old Experiment
+The earlier brancher/approver experiment was removed because it ran shell strings directly. This helper avoids that pattern.
+
+| Safety Area | This Helper's Behavior |
+| --- | --- |
+| Shell execution | Uses argument arrays, not `shell=True`. |
+| Status first | Shows branch and changed files before menu actions. |
+| Teaching moment | Prints the exact commands before running them. |
+| Confirmation | Requires typing `I UNDERSTAND` before changes. |
+| Self-approval | Warns and requires `I UNDERSTAND SELF APPROVAL`. |
+| Branch names | Validates branch names before creation. |
+| GitHub rules | Lets GitHub enforce review/check/merge rules and prints failures. |
+
+## Object Interaction Diagram
+```mermaid
+sequenceDiagram
+    participant User as Student / Teacher
+    participant Script as sprk_workflow.py
+    participant Git as git CLI
+    participant GH as GitHub CLI
+    participant GitHub as GitHub Repository
+
+    User->>Script: npm run workflow
+    Script->>Git: git branch --show-current
+    Script->>Git: git status --short
+    Script->>GH: gh api user
+    Script->>GH: gh pr list
+    Script-->>User: status and menu
+    User->>Script: choose action
+    Script-->>User: explain commands and risk
+    User->>Script: type I UNDERSTAND
+    Script->>Git: run branch / add / commit / push commands
+    Script->>GH: create, approve, or merge PR if selected
+    GH->>GitHub: perform PR operation under repository rules
+    GitHub-->>GH: success or rule failure
+    Script-->>User: result and next step
+```
+
+## Command Reference
+Show status only:
+
+```bash
+python3 missions/_shared/tools/sprk_workflow.py status
+```
+
+Start a branch:
+
+```bash
+python3 missions/_shared/tools/sprk_workflow.py branch maya-space-invaders-fix
+```
+
+Submit current work:
+
+```bash
+python3 missions/_shared/tools/sprk_workflow.py submit "Update Space Invaders colors"
+```
+
+Review/approve a PR:
+
+```bash
+python3 missions/_shared/tools/sprk_workflow.py approve 12
+```
+
+## Important Notes
+- The helper cannot bypass GitHub branch protection or repository rules.
+- If the repo requires another person's approval, GitHub may reject self-approval.
+- The submit action uses `git add -A` after showing status. Stop if unrelated files appear.
+- The approve action is for maintainers, not general student use.

@@ -13,6 +13,7 @@ Key repo-wide learning guide:
 - [docs/SPRK_Language_Crosswalk.md](docs/SPRK_Language_Crosswalk.md): maps common programming ideas across Python, JavaScript, Java, Go, Lua, and related patterns used in the missions.
 - [docs/SPRK_Browser_Mission_Foundation_Guide.md](docs/SPRK_Browser_Mission_Foundation_Guide.md): explains the common browser-mission structure so mission guides only need to describe what is different.
 - [docs/SPRK_Browser_Testing_And_Network_Architecture.md](docs/SPRK_Browser_Testing_And_Network_Architecture.md): explains the validation harness, Cursor Cloud flow, and local network hosting model for phones, tablets, and facilitator laptops.
+- [docs/SPRK_Guided_Workflow_Helper.md](docs/SPRK_Guided_Workflow_Helper.md): explains the guided Git/GitHub helper that shows status, teaches branch/PR actions, and requires confirmation before doing work.
 
 ## Start Here
 1. ~~Ask for access through the public [SPRK-Welcome](https://github.com/Mr-PI-Bala/SPRK-Welcome) repository.~~<br>
