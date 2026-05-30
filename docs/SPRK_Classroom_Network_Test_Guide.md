@@ -16,6 +16,7 @@ Student devices open the app in a browser
 ## Table Of Contents
 - [Recommended Device Roles](#recommended-device-roles)
 - [Network Options](#network-options)
+- [Option D - Cursor Cloud Facilitator With Public Tunnel](#option-d---cursor-cloud-facilitator-with-public-tunnel)
 - [TCL LINKPORT IK511 Note](#tcl-linkport-ik511-note)
 - [Test Accounts](#test-accounts)
 - [Four Device Test](#four-device-test)
@@ -89,6 +90,22 @@ If networking fails, use one visible laptop/projector and assign active roles:
 - Scorekeeper: tracks scores or team results.
 
 No student should become passive because they lack a device.
+
+### Option D - Cursor Cloud Facilitator With Public Tunnel
+
+Use this when the backend runs in **Cursor Cloud** (or another remote Linux workspace) and students join from **any network** with phones, Chromebooks, or tablets.
+
+Students open one shared **HTTPS tunnel URL** (for example from Cloudflare Quick Tunnel), not a laptop LAN address.
+
+Full steps, Cloudflare vs LocalTunnel, bit.ly shortcuts, and troubleshooting:
+
+- [SPRK Cloud Facilitator Hosting Guide](SPRK_Cloud_Facilitator_Hosting_Guide.md)
+
+Quick summary for facilitators:
+
+1. Start `python3 server.py` in the mission folder and leave it running.
+2. Start a public tunnel to that port (Cloudflare recommended).
+3. Share the `https://....trycloudflare.com` link (or a bit.ly that points to it) with the class.
 
 ## TCL LINKPORT IK511 Note
 The TCL LINKPORT IK511 is a USB-C cellular internet device. Treat it as internet for one host device, not as a normal multi-device classroom hotspot by itself.
@@ -230,6 +247,9 @@ School Wi-Fi
   |
   v
 SPRK Laptop Network
+  |
+  v
+Cursor Cloud + public tunnel (any device, any network)
   |
   v
 Projector/shared laptop mode

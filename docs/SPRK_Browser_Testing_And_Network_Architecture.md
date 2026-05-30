@@ -16,6 +16,7 @@ Use this map when you want to jump to the diagram that answers your question.
 | How does browser state move through the backend? | [Runtime Data Lifecycle](#runtime-data-lifecycle) |
 | Why do phones not use `127.0.0.1`? | [Why `127.0.0.1` Does Not Reach The Laptop Next To You](#why-127001-does-not-reach-the-laptop-next-to-you) |
 | How do iPhone, iPad, Android, and other laptops connect to the facilitator laptop? | [Local Network Object Interaction](#local-network-object-interaction) |
+| Facilitator hosts in Cursor Cloud; students on phones/Chromebooks anywhere | [Cloud Facilitator Hosting](#cloud-facilitator-hosting) |
 
 ## Quick Vocabulary
 | Term | Meaning |
@@ -28,6 +29,7 @@ Use this map when you want to jump to the diagram that answers your question.
 | Chromium | The browser engine Playwright downloads and controls for tests. |
 | `127.0.0.1` / `localhost` | "This same device." It never means "the laptop next to me." |
 | LAN IP | The local Wi-Fi or Ethernet address of a machine, such as `192.168.1.42`. Other devices on the same network use this to connect to a facilitator laptop. |
+| Public tunnel URL | An `https://` link from a tunnel service (for example Cloudflare Quick Tunnel) that forwards browsers into a backend running in Cursor Cloud. Students use this when they are not on the facilitator's Wi-Fi. |
 
 ## Big Picture: Browser To Cursor Cloud To GitHub
 When you use Cursor in a browser from a Windows laptop, the code usually runs on a remote Cursor Cloud machine, not directly on the laptop in front of you.
@@ -370,6 +372,24 @@ Inside Cursor Cloud, that means the Cursor Cloud VM. To view it from your laptop
 
 Important: `127.0.0.1:8010` on your Windows laptop is your Windows laptop, not the Cursor Cloud VM.
 
+## Cloud Facilitator Hosting
+
+When the facilitator has no local laptop on the classroom network, or school Wi-Fi blocks device-to-device traffic, host the backend in Cursor Cloud and share a **public tunnel URL** with iPhones, Chromebooks, iPads, and other browsers.
+
+Recommended flow:
+
+1. Start `python3 server.py` in the mission folder inside the cloud VM.
+2. Start a Cloudflare Quick Tunnel to `http://127.0.0.1:<port>` (see helper script below).
+3. Share the printed `https://....trycloudflare.com` link with the class.
+
+Do not give students `localhost`, the cloud VM's public IP, or a LocalTunnel IP gate value unless you are deliberately using LocalTunnel and understand the IP step.
+
+| Topic | Guide |
+| --- | --- |
+| Full classroom steps, LocalTunnel alternative, bit.ly pattern | [SPRK Cloud Facilitator Hosting Guide](SPRK_Cloud_Facilitator_Hosting_Guide.md) |
+| Same-room laptop IP hosting | [SPRK Classroom Network Test Guide](SPRK_Classroom_Network_Test_Guide.md) |
+| Tunnel helper command | `bash missions/_shared/tools/sprk_public_tunnel.sh 8010` |
+
 ## Running The Game On A Facilitator Laptop
 Use this when one laptop in the room should host the mission for nearby phones, tablets, and laptops.
 
@@ -511,7 +531,7 @@ Replace `192.168.1.42` with the actual address from the facilitator laptop.
 ## Cursor Cloud Versus Facilitator Laptop
 | Scenario | Where backend runs | Best URL for the host | Best URL for phones/tablets |
 | --- | --- | --- | --- |
-| Cursor Cloud tryout | Remote Cursor VM | Cursor forwarded port URL | Cursor forwarded port URL, if accessible |
+| Cursor Cloud tryout | Remote Cursor VM | Cursor forwarded port URL (Desktop) or tunnel URL | Public tunnel URL, for example `https://....trycloudflare.com` |
 | Dell facilitator local play | Dell laptop | `http://127.0.0.1:8010` | `http://<Dell LAN IP>:8010` |
 | Student laptop local experiment | Student laptop | `http://127.0.0.1:8010` | Usually not needed unless that student hosts |
 

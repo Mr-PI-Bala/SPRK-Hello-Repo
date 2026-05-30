@@ -49,6 +49,8 @@ What each command does:
 
 Open the browser link shown in the terminal. This mission uses port `8010`.
 
+To host for students on iPhones or Chromebooks when the backend runs in **Cursor Cloud**, use a public tunnel URL — not `localhost` on their devices. See [SPRK Cloud Facilitator Hosting Guide](../../../docs/SPRK_Cloud_Facilitator_Hosting_Guide.md).
+
 ## Controls
 | Mode | Movement | Fire | Shift |
 | --- | --- | --- | --- |

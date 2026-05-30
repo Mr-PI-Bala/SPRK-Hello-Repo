@@ -13,6 +13,7 @@ Key repo-wide learning guide:
 - [docs/SPRK_Language_Crosswalk.md](docs/SPRK_Language_Crosswalk.md): maps common programming ideas across Python, JavaScript, Java, Go, Lua, and related patterns used in the missions.
 - [docs/SPRK_Browser_Mission_Foundation_Guide.md](docs/SPRK_Browser_Mission_Foundation_Guide.md): explains the common browser-mission structure so mission guides only need to describe what is different.
 - [docs/SPRK_Browser_Testing_And_Network_Architecture.md](docs/SPRK_Browser_Testing_And_Network_Architecture.md): explains the validation harness, Cursor Cloud flow, and local network hosting model for phones, tablets, and facilitator laptops.
+- [docs/SPRK_Cloud_Facilitator_Hosting_Guide.md](docs/SPRK_Cloud_Facilitator_Hosting_Guide.md): host a mission from Cursor Cloud with a public tunnel so iPhones, Chromebooks, and other devices can join without a facilitator laptop on the same Wi-Fi.
 - [docs/SPRK_Guided_Workflow_Helper.md](docs/SPRK_Guided_Workflow_Helper.md): explains the guided Git/GitHub helper that shows status, teaches branch/PR actions, and requires confirmation before doing work.
 - [docs/SPRK_Student_AgenticOps_Guide.md](docs/SPRK_Student_AgenticOps_Guide.md): adapts agentic development practices into student-safe SPRK habits for setup, validation, hygiene, and handoff.
 
