@@ -3,8 +3,8 @@
   "mode": "all",
   "runner": "Playwright",
   "baselinePolicy": "Playwright is the current baseline validation mechanism for browser-first SPRK missions. Additional or replacement baseline validators are allowed later.",
-  "generatedAt": "2026-05-30T01:33:36.288Z",
-  "generatedAtLabel": "May 30, 2026, 1:33:36 AM",
+  "generatedAt": "2026-05-30T02:29:35.821Z",
+  "generatedAtLabel": "May 30, 2026, 2:29:35 AM",
   "status": "passed",
   "passed": 9,
   "failed": 0,
@@ -87,49 +87,49 @@
     {
       "title": "reactionrace.spec.js > ReactionRace supports shared multiplayer scoreboard and x-ray events",
       "status": "passed",
-      "durationMs": 593,
+      "durationMs": 639,
       "file": "reactionrace.spec.js"
     },
     {
       "title": "reactionrace.spec.js > ReactionRace shows an offline message when the backend calls fail",
       "status": "passed",
-      "durationMs": 74,
+      "durationMs": 75,
       "file": "reactionrace.spec.js"
     },
     {
       "title": "snakegame.spec.js > SnakeGame supports shared scores and baseline status",
       "status": "passed",
-      "durationMs": 614,
+      "durationMs": 643,
       "file": "snakegame.spec.js"
     },
     {
       "title": "pingpong.spec.js > PingPong baseline works",
       "status": "passed",
-      "durationMs": 312,
+      "durationMs": 322,
       "file": "pingpong.spec.js"
     },
     {
       "title": "flashcards.spec.js > FlashCards baseline works",
       "status": "passed",
-      "durationMs": 354,
+      "durationMs": 413,
       "file": "flashcards.spec.js"
     },
     {
       "title": "quizroom.spec.js > QuizRoom baseline works",
       "status": "passed",
-      "durationMs": 4904,
+      "durationMs": 4923,
       "file": "quizroom.spec.js"
     },
     {
       "title": "foursquare.spec.js > FourSquare baseline works",
       "status": "passed",
-      "durationMs": 419,
+      "durationMs": 387,
       "file": "foursquare.spec.js"
     },
     {
       "title": "soccerscore.spec.js > SoccerScore baseline works",
       "status": "passed",
-      "durationMs": 329,
+      "durationMs": 356,
       "file": "soccerscore.spec.js"
     },
     {
