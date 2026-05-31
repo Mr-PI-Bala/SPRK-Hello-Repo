@@ -9,6 +9,7 @@ const canvas = document.querySelector("#invader-canvas");
 const ctx = canvas.getContext("2d");
 const playerNameInput = document.querySelector("#player-name");
 const soundSelect = document.querySelector("#sound-select");
+const lifeCountInput = document.querySelector("#life-count");
 const modeLabel = document.querySelector("#mode-label");
 const scoreLabel = document.querySelector("#score-label");
 const waveLabel = document.querySelector("#wave-label");
@@ -43,6 +44,8 @@ const TWO_D_BUNKER_Y = 500;
 const BUNKER_CELL_SIZE = 12;
 const BUNKER_ROWS = 4;
 const BUNKER_COLS = 7;
+const DEFAULT_LIVES = 3;
+const MAX_LIVES = 10;
 const RAIL_TILT_MAX_DEGREES = 70;
 const RAIL_TILT_DEGREES = 64;
 const OVERVIEW = {
@@ -120,6 +123,8 @@ const runtime = {
   playerShots: [],
   enemyShots: [],
   particles: [],
+  floatingTexts: [],
+  playerImpact: null,
   stars: Array.from({ length: 70 }, () => ({
     x: Math.random() * WIDTH,
     y: Math.random() * HEIGHT,
@@ -184,14 +189,20 @@ function createBunkers() {
   }));
 }
 
+function selectedLifeCount() {
+  return clamp(Number(lifeCountInput?.value || DEFAULT_LIVES), 1, MAX_LIVES);
+}
+
 function createDefaultState() {
+  const startingLives = selectedLifeCount();
   return {
-    mission: "Space Invaders: Dimensional Shift",
+    mission: "Space Invaders",
     status: "Ready",
     mode: "2d",
     score: 0,
     wave: 1,
-    lives: 3,
+    lives: startingLives,
+    maxLives: startingLives,
     aliensDestroyed: 0,
     player: {
       x: 0,
@@ -237,7 +248,9 @@ function normalizeState(rawState) {
   next.mode = ["2d", "lateral3d", "fps"].includes(next.mode) ? next.mode : "2d";
   next.score = Number(next.score || 0);
   next.wave = Number(next.wave || 1);
-  next.lives = Number(next.lives || 3);
+  next.maxLives = clamp(Number(next.maxLives || next.lives || DEFAULT_LIVES), 1, MAX_LIVES);
+  next.lives = clamp(Number(next.lives || next.maxLives), 0, next.maxLives);
+  if (lifeCountInput) lifeCountInput.value = String(next.maxLives);
   next.aliensDestroyed = Number(next.aliensDestroyed || 0);
   return next;
 }
@@ -285,6 +298,16 @@ function bunkerPercent() {
 function fleetIntervalSeconds() {
   const alive = Math.max(1, aliveAlienCount());
   return Math.max(0.12, 0.08 + 0.8 * (alive / TOTAL_ALIENS));
+}
+
+function scoreMultiplier() {
+  const pressureBonus = Math.floor((TOTAL_ALIENS - aliveAlienCount()) / 12) * 0.25;
+  const waveBonus = (gameState.wave - 1) * 0.15;
+  return 1 + pressureBonus + waveBonus;
+}
+
+function pointsFor(basePoints) {
+  return Math.round(basePoints * scoreMultiplier());
 }
 
 function clamp(value, min, max) {
@@ -378,12 +401,12 @@ function renderHud() {
   modeLabel.textContent = MODE_LABELS[gameState.mode];
   scoreLabel.textContent = `Score ${String(gameState.score).padStart(4, "0")}`;
   waveLabel.textContent = `Wave ${gameState.wave}`;
-  livesLabel.textContent = `Lives ${gameState.lives}`;
+  livesLabel.textContent = `Lives ${gameState.lives}/${gameState.maxLives || DEFAULT_LIVES}`;
   alienCountLabel.textContent = `${alive} alien${alive === 1 ? "" : "s"} remain`;
   fleetSpeedLabel.textContent = `Fleet beat ${fleetIntervalSeconds().toFixed(2)}s`;
   bunkerStatusLabel.textContent = `Bunkers ${bunkerPercent()}%`;
   missionStatus.textContent = gameState.status;
-  liveSummary.textContent = `${MODE_LABELS[gameState.mode]} | ${alive}/55 aliens | ${bunkerPercent()}% bunker cover | ${gameState.lastEvent}`;
+  liveSummary.textContent = `${MODE_LABELS[gameState.mode]} | ${alive}/55 aliens | Lives ${gameState.lives}/${gameState.maxLives || DEFAULT_LIVES} | ${bunkerPercent()}% bunker cover | ${gameState.lastEvent}`;
 }
 
 async function recordScore(detail) {
@@ -412,6 +435,22 @@ function addParticles(x, y, color, count = 10) {
       color,
     });
   }
+}
+
+function addFloatingText(x, y, text, color = "#facc15") {
+  runtime.floatingTexts.push({
+    x,
+    y,
+    text,
+    color,
+    life: 1.05,
+  });
+}
+
+function playerImpactPoint() {
+  if (gameState.mode === "fps") return { x: WIDTH / 2 + 72, y: HEIGHT - 84 };
+  if (gameState.mode === "lateral3d") return { x: WIDTH / 2, y: HEIGHT - 84 };
+  return { x: WIDTH / 2 + gameState.player.x, y: 612 };
 }
 
 function projectRail(x, z, y = 45) {
@@ -855,6 +894,50 @@ function drawParticles(dt) {
   });
 }
 
+function drawFloatingTexts(dt) {
+  runtime.floatingTexts = runtime.floatingTexts.filter((item) => {
+    item.life -= dt;
+    item.y -= 34 * dt;
+    if (item.life <= 0) return false;
+    ctx.save();
+    ctx.globalAlpha = clamp(item.life, 0, 1);
+    ctx.fillStyle = item.color;
+    ctx.font = "700 22px system-ui, sans-serif";
+    ctx.textAlign = "center";
+    ctx.shadowColor = "#000";
+    ctx.shadowBlur = 6;
+    ctx.fillText(item.text, item.x, item.y);
+    ctx.restore();
+    return true;
+  });
+}
+
+function drawPlayerImpact(dt) {
+  if (!runtime.playerImpact) return;
+  runtime.playerImpact.elapsed += dt;
+  const progress = clamp(runtime.playerImpact.elapsed / runtime.playerImpact.duration, 0, 1);
+  const { x, y, rebuilding } = runtime.playerImpact;
+  ctx.save();
+  ctx.globalAlpha = 1 - progress * 0.35;
+  ctx.strokeStyle = progress < 0.5 ? "#ff3b4f" : "#1df25b";
+  ctx.lineWidth = 4;
+  ctx.beginPath();
+  ctx.arc(x, y, 20 + progress * 58, 0, Math.PI * 2);
+  ctx.stroke();
+  if (rebuilding && progress > 0.35) {
+    const rebuildProgress = (progress - 0.35) / 0.65;
+    ctx.globalAlpha = clamp(rebuildProgress, 0, 1);
+    ctx.fillStyle = "#1df25b";
+    ctx.fillRect(x - 32, y + 26, 64 * clamp(rebuildProgress, 0, 1), 7);
+    ctx.fillStyle = "#d7ffe4";
+    ctx.font = "700 15px system-ui, sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText("REBUILDING CANNON", x, y + 50);
+  }
+  ctx.restore();
+  if (progress >= 1) runtime.playerImpact = null;
+}
+
 function drawScene(dt = 0) {
   const blend = currentViewBlend();
   if (runtime.transition && runtime.transition.from === "2d" && runtime.transition.to === "lateral3d") {
@@ -870,6 +953,8 @@ function drawScene(dt = 0) {
     drawFpsScene(1);
   }
   drawParticles(dt);
+  drawFloatingTexts(dt);
+  drawPlayerImpact(dt);
 }
 
 function damageBunkerCell(bunker, cellIndex, source) {
@@ -915,15 +1000,19 @@ function hitBunkerRail(x, z, source) {
 
 function applyAlienDestruction(alien, source) {
   alien.alive = false;
-  gameState.score += alien.points;
+  const points = pointsFor(alien.points);
+  gameState.score += points;
   gameState.aliensDestroyed += 1;
-  const message = `${ALIEN_TYPES[alien.type].label} destroyed for ${alien.points} points by ${source}.`;
+  const message = `${ALIEN_TYPES[alien.type].label} destroyed for ${points} points by ${source}.`;
   gameState.status = message;
   gameState.lastEvent = message;
   const point = gameState.mode === "2d"
     ? { x: WIDTH / 2 + alien.x, y: alien.y }
     : (gameState.mode === "fps" ? projectFps(alien.x, alien.z, 62) : projectRail(alien.x, alien.z, 62));
-  if (point) addParticles(point.x, point.y, ALIEN_TYPES[alien.type].color, 14);
+  if (point) {
+    addParticles(point.x, point.y, ALIEN_TYPES[alien.type].color, 14);
+    addFloatingText(point.x, point.y - 22, `+${points}`, "#facc15");
+  }
   if (aliveAlienCount() === 0) {
     startNextWave();
   }
@@ -952,16 +1041,20 @@ function startNextWave() {
 }
 
 function loseLife(reason) {
+  const impact = playerImpactPoint();
   gameState.lives = Math.max(0, gameState.lives - 1);
-  gameState.status = reason;
-  gameState.lastEvent = reason;
+  gameState.status = gameState.lives > 0 ? `${reason} Rebuilding cannon with ${gameState.lives} ${gameState.lives === 1 ? "life" : "lives"} left.` : reason;
+  gameState.lastEvent = gameState.status;
   runtime.enemyShots = [];
   runtime.playerShots = [];
+  runtime.playerImpact = { ...impact, elapsed: 0, duration: 1.25, rebuilding: gameState.lives > 0 };
+  addParticles(impact.x, impact.y, "#ff3b4f", 26);
   if (gameState.lives === 0) {
     runtime.running = false;
     gameState.status = "Earth overrun. Reset the wave to try again.";
     gameState.lastEvent = gameState.status;
   }
+  renderHud();
   queueSave();
   void logEvent(gameState.status, "state");
 }
@@ -1067,12 +1160,14 @@ function updatePlayerShots(dt) {
         return false;
       }
       if (gameState.mystery.active && Math.abs(gameState.mystery.x - shot.x) < 34 && shot.y < 75) {
-        const points = gameState.mystery.points;
+        const points = pointsFor(gameState.mystery.points);
+        const shipPoint = { x: WIDTH / 2 + shot.x, y: shot.y };
         gameState.mystery.active = false;
         gameState.score += points;
         gameState.status = `Mystery ship destroyed for ${points} bonus points.`;
         gameState.lastEvent = gameState.status;
-        addParticles(WIDTH / 2 + shot.x, shot.y, "#ff3b4f", 16);
+        addParticles(shipPoint.x, shipPoint.y, "#ff3b4f", 16);
+        addFloatingText(shipPoint.x, shipPoint.y - 18, `+${points}`, "#facc15");
         queueSave();
         void recordScore(`Wave ${gameState.wave}: UFO bonus`);
         void logEvent(gameState.status, "score");
@@ -1168,7 +1263,7 @@ function hitAlienByRay(source) {
 }
 
 function firePlayerShot() {
-  if (runtime.playerCooldown > 0 || gameState.lives <= 0) return;
+  if (!runtime.running || runtime.playerCooldown > 0 || gameState.lives <= 0) return;
   SPRK.unlockSound();
   SPRK.playSound(soundSelect.value);
 
@@ -1258,6 +1353,8 @@ async function resetGame() {
   runtime.playerShots = [];
   runtime.enemyShots = [];
   runtime.particles = [];
+  runtime.floatingTexts = [];
+  runtime.playerImpact = null;
   runtime.transition = null;
   gameState = createDefaultState();
   renderHud();
@@ -1272,6 +1369,23 @@ async function clearSharedBoard() {
   await SPRK.deleteJson("/api/scores");
   await logEvent(`${playerNameInput.value} cleared the invader score board.`, "scoreboard");
   await refreshScores();
+}
+
+function handleLifeCountChange() {
+  const lives = selectedLifeCount();
+  lifeCountInput.value = String(lives);
+  gameState.maxLives = lives;
+  if (!runtime.running) {
+    gameState.lives = lives;
+    renderHud();
+    queueSave();
+  }
+}
+
+function preventButtonSpaceActivation(event) {
+  if (event.key === " " || event.code === "Space") {
+    event.preventDefault();
+  }
 }
 
 function handleKeyDown(event) {
@@ -1312,6 +1426,11 @@ canvas.addEventListener("click", () => {
 document.addEventListener("keydown", handleKeyDown);
 document.addEventListener("keyup", handleKeyUp);
 document.addEventListener("mousemove", handleMouseMove);
+document.querySelectorAll("button").forEach((button) => {
+  button.addEventListener("keydown", preventButtonSpaceActivation);
+  button.addEventListener("keyup", preventButtonSpaceActivation);
+});
+lifeCountInput.addEventListener("change", handleLifeCountChange);
 startGameButton.addEventListener("click", startGame);
 dimensionShiftButton.addEventListener("click", () => {
   SPRK.unlockSound();
@@ -1338,7 +1457,11 @@ window.__sprkTest = {
       ...publicState(),
       aliveCount: aliveAlienCount(),
       bunkerCells: bunkerCellCount(),
+      running: runtime.running,
       fleetInterval: fleetIntervalSeconds(),
+      scoreMultiplier: scoreMultiplier(),
+      floatingTextCount: runtime.floatingTexts.length,
+      playerImpactActive: Boolean(runtime.playerImpact),
       railTiltDegrees: RAIL_TILT_DEGREES,
       railTiltMaxDegrees: RAIL_TILT_MAX_DEGREES,
       railRowGap: railRowGapForTest(),
@@ -1348,6 +1471,25 @@ window.__sprkTest = {
   },
   async resetGame() {
     await resetGame();
+    return this.getState();
+  },
+  async setLivesForTest(count) {
+    lifeCountInput.value = String(count);
+    handleLifeCountChange();
+    await resetGame();
+    return this.getState();
+  },
+  async pressSpaceOnStartForTest() {
+    startGameButton.focus();
+    startGameButton.dispatchEvent(new KeyboardEvent("keydown", { key: " ", code: "Space", bubbles: true, cancelable: true }));
+    startGameButton.dispatchEvent(new KeyboardEvent("keyup", { key: " ", code: "Space", bubbles: true, cancelable: true }));
+    await new Promise((resolve) => window.setTimeout(resolve, 50));
+    return this.getState();
+  },
+  async loseLifeForTest() {
+    runtime.running = true;
+    loseLife("Test alien impact.");
+    await saveState();
     return this.getState();
   },
   async destroyFirstAlienForTest() {

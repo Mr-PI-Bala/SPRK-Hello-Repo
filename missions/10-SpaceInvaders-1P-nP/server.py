@@ -1,4 +1,4 @@
-"""Mission 10 backend: Space Invaders dimensional shift."""
+"""Mission 10 backend: Space Invaders."""
 
 from pathlib import Path
 import sys
@@ -12,10 +12,10 @@ from sprk_backend import run_mission_server
 if __name__ == "__main__":
     run_mission_server(
         mission_folder=Path(__file__).resolve().parent,
-        title="Space Invaders: Dimensional Shift",
+        title="Space Invaders",
         port=8010,
         initial_state={
-            "mission": "Space Invaders: Dimensional Shift",
+            "mission": "Space Invaders",
             "status": "Ready",
             "mode": "2d",
             "score": 0,

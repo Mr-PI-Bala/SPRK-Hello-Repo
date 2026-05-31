@@ -12,11 +12,12 @@
     <section class="mission-band">
       <div>
         <p class="eyebrow">Mission 10</p>
-        <h1>Space Invaders: Dimensional Shift</h1>
-        <p class="lede">Defend the bunkers in classic 2D, shift into a capped 2.5D rail runway, then dive into first-person 3D cannon mode without losing the alien wave state.</p>
+        <h1>Space Invaders: In 2D, 2.5D, 3D and FPS</h1>
+        <p class="lede">Only 2D is enabled by default; tweak the code to turn on other modes and unlock an even more delightful experience.</p>
       </div>
       <div class="player-row invader-operator-row">
         <label>Operator <input id="player-name" value="Maya-SPRK"></label>
+        <label>Lives <input id="life-count" type="number" min="1" max="10" value="3"></label>
         <label>Sound <select id="sound-select">
           <option value="zap">Zap</option>
           <option value="laser">Laser</option>
@@ -32,7 +33,7 @@
           <span id="mode-label">2D Classic</span>
           <strong id="score-label">Score 0000</strong>
           <span id="wave-label">Wave 1</span>
-          <span id="lives-label">Lives 3</span>
+          <span id="lives-label">Lives 3/3</span>
         </div>
         <canvas id="invader-canvas" width="960" height="680" aria-label="Dimensional Space Invaders playfield"></canvas>
         <div class="status-row invader-readouts">
@@ -50,7 +51,7 @@
         <div class="control-grid">
           <article>
             <h2>Classic 2D</h2>
-            <p>Move with A/D or arrow keys. Fire one laser at a time with Space. Aliens drop when the fleet hits the wall.</p>
+            <p>Move with A/D or arrow keys. Fire one laser at a time with Space. Set 1-10 lives before resetting a wave.</p>
           </article>
           <article>
             <h2>2.5D Rail</h2>
