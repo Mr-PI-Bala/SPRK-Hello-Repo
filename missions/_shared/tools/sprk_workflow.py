@@ -12,8 +12,10 @@ import argparse
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
+from contextlib import contextmanager
 from dataclasses import dataclass, field
 
 
@@ -22,10 +24,23 @@ class Term:
 
     RESET = "\033[0m"
     BOLD = "\033[1m"
+    DIM = "\033[2m"
     RED = "\033[31m"
     GREEN = "\033[32m"
     YELLOW = "\033[33m"
     CYAN = "\033[36m"
+
+
+class Panel:
+    """Border colors for boxed workflow sections."""
+
+    STATUS = Term.CYAN
+    MENU = Term.CYAN
+    SHORTCUTS = Term.YELLOW
+    ACTION = Term.GREEN
+    TRIAGE = Term.YELLOW
+    CONFIRM = Term.YELLOW
+    RESULT = Term.GREEN
 
 
 def enable_windows_ansi() -> None:
@@ -57,6 +72,54 @@ def paint(text: str, *styles: str) -> str:
     if not use_color() or not styles:
         return text
     return "".join(styles) + text + Term.RESET
+
+
+def terminal_width() -> int:
+    try:
+        columns = shutil.get_terminal_size(fallback=(100, 24)).columns
+    except OSError:
+        columns = 100
+    return max(40, min(columns, 120))
+
+
+def panel_char() -> str:
+    encoding = getattr(sys.stdout, "encoding", None) or "utf-8"
+    if encoding.lower().replace("-", "") in {"utf8", "utf"}:
+        return "\u2500"
+    return "-"
+
+
+def panels_enabled() -> bool:
+    return os.environ.get("SPRK_WORKFLOW_NO_PANEL") is None
+
+
+def panel_rule(style: str = Term.CYAN) -> str:
+    return paint(panel_char() * terminal_width(), style)
+
+
+def begin_panel(style: str = Term.CYAN) -> None:
+    if panels_enabled():
+        print()
+        print(panel_rule(style))
+
+
+def end_panel(style: str = Term.CYAN) -> None:
+    if panels_enabled():
+        print(panel_rule(style))
+        print()
+
+
+@contextmanager
+def output_panel(style: str = Term.CYAN):
+    begin_panel(style)
+    try:
+        yield
+    finally:
+        end_panel(style)
+
+
+def print_prompt(text: str) -> None:
+    print(paint(text, Term.BOLD + Term.CYAN))
 
 
 def say_tag(tag: str, message: str, tag_style: str, message_style: str = "") -> None:
@@ -231,15 +294,15 @@ def parse_yes_no_answer(raw: str) -> str | None:
 
 def print_interactive_shortcuts_banner(context: str = "") -> None:
     """Remind users that y/n and ay/ya/an/na shortcuts exist before prompts appear."""
-    print()
-    print("=== Interactive answers (use whenever the helper asks yes/no) ===")
-    if context:
-        print(f"  Context: {context}")
-    print("  y or yes     — yes for this item only")
-    print("  n or no      — no for this item only")
-    print("  ay or ya     — all yes (this item and every remaining item in the list)")
-    print("  an or na     — all no (this item and every remaining item in the list)")
-    print("  MERIT.instructions → Interactive confirmation shortcuts (SPRK tools)")
+    with output_panel(Panel.SHORTCUTS):
+        print(paint("=== Interactive answers (use whenever the helper asks yes/no) ===", Term.BOLD))
+        if context:
+            print(f"  Context: {context}")
+        print("  y or yes     — yes for this item only")
+        print("  n or no      — no for this item only")
+        print("  ay or ya     — all yes (this item and every remaining item in the list)")
+        print("  an or na     — all no (this item and every remaining item in the list)")
+        print("  MERIT.instructions → Interactive confirmation shortcuts (SPRK tools)")
 
 
 def print_yes_no_help() -> None:
@@ -248,143 +311,142 @@ def print_yes_no_help() -> None:
 
 def print_main_menu() -> None:
     """Main workflow menu — each option explains what it does and does not do."""
-    print()
-    print_menu_banner("=== SPRK Guided Workflow — MAIN MENU (options 1–7) ===")
-    print("  Shortcuts when asked y/n: ay or ya = all yes | an or na = all no")
-    print("  (Full list: MERIT.instructions → Interactive confirmation shortcuts)")
-    print()
-    print_menu_option(
-        1,
-        "Show status again",
-        "READ ONLY. Re-prints your branch, changed files, GitHub user, and open PRs.",
-        "Does not commit, push, merge, close PRs, or change any files.",
-    )
-    print()
-    print_menu_option(
-        2,
-        "Start new work branch",
-        "USE WHEN: you want a fresh feature branch from latest GitHub main.",
-        "DOES: fetch origin → checkout main → pull (or reset) → create the branch you name.",
-        "IF local edits block pull: asks per file (y/n/ay/ya/an/na) whether to discard them.",
-        "DOES NOT: commit your work, open a PR, merge, or close PRs.",
-    )
-    print()
-    print_menu_option(
-        3,
-        "Save current work and open PR",
-        "USE WHEN: you are on a feature branch (not main) and have changes ready to share.",
-        "DOES: git add -A → commit → push branch → gh pr create (new pull request).",
-        "DOES NOT: merge into main. Teachers use option 4 to merge after review.",
-    )
-    print()
-    print_menu_option(
-        4,
-        "Review / approve / optionally merge a PR",
-        "USE WHEN: a PR is current, reviewed, and safe to land on main.",
-        "DOES: show PR summary → optional approve → optional merge into main.",
-        "DOES NOT: close stale PRs or fix old branches. For old drafts (#13, #14), use option 6 first.",
-        "WARNING: merging a STALE_UNSAFE PR can DELETE files that exist on main now.",
-        header_style=Term.BOLD + Term.YELLOW,
-    )
-    print()
-    print_menu_option(
-        5,
-        "Sync local main with GitHub",
-        "USE WHEN: your laptop main is behind origin/main, or pull is blocked by local edits.",
-        "DOES: fetch → checkout main → per-file discard prompts → pull or hard reset to origin/main.",
-        "DOES NOT: touch feature branches, open/close PRs, or merge PRs.",
-        "TIP: ay/ya on every file = match GitHub main exactly (local uncommitted edits on main are removed).",
-    )
-    print()
-    print_menu_option(
-        6,
-        "Triage open PRs (analyze, close without merge, or port commits)",
-        "USE WHEN: open PRs look old or you are unsure if merging is safe.",
-        "DOES: compare each open PR to GitHub main → print Verdict + Recommendation →",
-        "      then a SECOND sub-menu (triage actions 1–4 — not the same as this main menu).",
-        "Triage action 2 = close on GitHub without merge (good for superseded #13 / #14).",
-        "Triage action 3 = cherry-pick salvage commits onto a new branch from main.",
-        "DOES NOT: merge stale PRs into main. Use main menu option 4 only when triage says it is safe.",
-    )
-    print()
-    print_menu_option(7, "Exit", "Leave the helper. No git or GitHub commands run.")
+    with output_panel(Panel.MENU):
+        print_menu_banner("=== SPRK Guided Workflow — MAIN MENU (options 1–7) ===")
+        print("  Shortcuts when asked y/n: ay or ya = all yes | an or na = all no")
+        print("  (Full list: MERIT.instructions → Interactive confirmation shortcuts)")
+        print()
+        print_menu_option(
+            1,
+            "Show status again",
+            "READ ONLY. Re-prints your branch, changed files, GitHub user, and open PRs.",
+            "Does not commit, push, merge, close PRs, or change any files.",
+        )
+        print()
+        print_menu_option(
+            2,
+            "Start new work branch",
+            "USE WHEN: you want a fresh feature branch from latest GitHub main.",
+            "DOES: fetch origin → checkout main → pull (or reset) → create the branch you name.",
+            "IF local edits block pull: asks per file (y/n/ay/ya/an/na) whether to discard them.",
+            "DOES NOT: commit your work, open a PR, merge, or close PRs.",
+        )
+        print()
+        print_menu_option(
+            3,
+            "Save current work and open PR",
+            "USE WHEN: you are on a feature branch (not main) and have changes ready to share.",
+            "DOES: git add -A → commit → push branch → gh pr create (new pull request).",
+            "DOES NOT: merge into main. Teachers use option 4 to merge after review.",
+        )
+        print()
+        print_menu_option(
+            4,
+            "Review / approve / optionally merge a PR",
+            "USE WHEN: a PR is current, reviewed, and safe to land on main.",
+            "DOES: show PR summary → optional approve → optional merge into main.",
+            "DOES NOT: close stale PRs or fix old branches. For old drafts (#13, #14), use option 6 first.",
+            "WARNING: merging a STALE_UNSAFE PR can DELETE files that exist on main now.",
+            header_style=Term.BOLD + Term.YELLOW,
+        )
+        print()
+        print_menu_option(
+            5,
+            "Sync local main with GitHub",
+            "USE WHEN: your laptop main is behind origin/main, or pull is blocked by local edits.",
+            "DOES: fetch → checkout main → per-file discard prompts → pull or hard reset to origin/main.",
+            "DOES NOT: touch feature branches, open/close PRs, or merge PRs.",
+            "TIP: ay/ya on every file = match GitHub main exactly (local uncommitted edits on main are removed).",
+        )
+        print()
+        print_menu_option(
+            6,
+            "Triage open PRs (analyze, close without merge, or port commits)",
+            "USE WHEN: open PRs look old or you are unsure if merging is safe.",
+            "DOES: compare each open PR to GitHub main → print Verdict + Recommendation →",
+            "      then a SECOND sub-menu (triage actions 1–4 — not the same as this main menu).",
+            "Triage action 2 = close on GitHub without merge (good for superseded #13 / #14).",
+            "Triage action 3 = cherry-pick salvage commits onto a new branch from main.",
+            "DOES NOT: merge stale PRs into main. Use main menu option 4 only when triage says it is safe.",
+        )
+        print()
+        print_menu_option(7, "Exit", "Leave the helper. No git or GitHub commands run.")
 
 
 def print_triage_intro() -> None:
-    print()
-    print_menu_banner("=== Triage open pull requests (main menu option 6) ===")
-    print("This reads GitHub only — it does not merge anything into main.")
-    print()
-    print("For each open PR you will see:")
-    print("  • Verdict (colored) — e.g. STALE_UNSAFE means merging would harm current main")
-    print("  • Recommendation — what to do next")
-    print("  • Salvage commits — SHAs you may cherry-pick later (triage action 3)")
-    print("  • [WARN] list — files that would be DELETED from main if you merged this PR")
-    print()
-    print("Typical stale draft flow (#13 gameplay, #14 docs):")
-    print("  1. Read the report below.")
-    print("  2. Sub-menu action 2 — close PR(s) without merge (y per PR, or ay to close all).")
-    print("  3. Optional: sub-menu action 3 first — port one salvage commit, then action 2 to close.")
-    print("  4. Main menu option 5 — sync your laptop main with GitHub.")
-    print()
-    print("Do NOT use main menu option 4 to merge PRs marked STALE_UNSAFE.")
+    with output_panel(Panel.TRIAGE):
+        print_menu_banner("=== Triage open pull requests (main menu option 6) ===")
+        print("This reads GitHub only — it does not merge anything into main.")
+        print()
+        print("For each open PR you will see:")
+        print("  • Verdict (colored) — e.g. STALE_UNSAFE means merging would harm current main")
+        print("  • Recommendation — what to do next")
+        print("  • Salvage commits — SHAs you may cherry-pick later (triage action 3)")
+        print("  • [WARN] list — files that would be DELETED from main if you merged this PR")
+        print()
+        print("Typical stale draft flow (#13 gameplay, #14 docs):")
+        print("  1. Read the report below.")
+        print("  2. Sub-menu action 2 — close PR(s) without merge (y per PR, or ay to close all).")
+        print("  3. Optional: sub-menu action 3 first — port one salvage commit, then action 2 to close.")
+        print("  4. Main menu option 5 — sync your laptop main with GitHub.")
+        print()
+        print("Do NOT use main menu option 4 to merge PRs marked STALE_UNSAFE.")
 
 
 def print_triage_actions_menu() -> None:
     """Sub-menu shown after triage reports — numbers 1–4 are NOT main menu numbers."""
     triage_header = Term.BOLD + Term.GREEN
-    print()
-    print_menu_banner(
-        "=== Triage actions — SUB-MENU (options 1–4 only; not the same as main menu 1–7) ==="
-    )
-    print()
-    print_menu_option(
-        1,
-        "Report only — finished reading",
-        "No GitHub or git changes. Use when you only wanted the analysis printed above.",
-        header_style=triage_header,
-    )
-    print()
-    print_menu_option(
-        2,
-        "Close PR(s) on GitHub WITHOUT merging into main",
-        "USE WHEN: verdict is STALE_UNSAFE or LIKELY_SUPERSEDED and you want the draft gone.",
-        'DOES: gh pr close --comment "..." for each PR you answer yes to.',
-        "DOES NOT: merge into main; does not approve; does not run git merge.",
-        "DOES NOT: delete the remote feature branch (branch may still exist on GitHub).",
-        "DOES NOT: remove files from main — closing leaves main unchanged.",
-        "You will be asked per PR: Close PR #N (VERDICT) without merging? [y/n/ay/ya/an/na]",
-        "• y  = close this PR only",
-        "• ay or ya = close this PR and every remaining PR in the list",
-        "• n  = skip this PR (leave it open)",
-        header_style=triage_header,
-    )
-    print()
-    print_menu_option(
-        3,
-        "Port salvage commits to a new branch from latest main",
-        "USE WHEN: you still want specific commits from an old PR (e.g. 95109af from #13).",
-        "DOES: sync main → new branch → cherry-pick chosen commits → push branch.",
-        "DOES NOT: close the old PR (run sub-menu action 2 after porting if you want it closed).",
-        "AFTER: run tests, then main menu option 3 to open a new PR from the new branch.",
-        header_style=triage_header,
-    )
-    print()
-    print_menu_option(
-        4,
-        "Return to main menu",
-        "No further triage actions unless you pick main menu option 6 again.",
-        header_style=triage_header,
-    )
+    with output_panel(Panel.TRIAGE):
+        print_menu_banner(
+            "=== Triage actions — SUB-MENU (options 1–4 only; not the same as main menu 1–7) ==="
+        )
+        print()
+        print_menu_option(
+            1,
+            "Report only — finished reading",
+            "No GitHub or git changes. Use when you only wanted the analysis printed above.",
+            header_style=triage_header,
+        )
+        print()
+        print_menu_option(
+            2,
+            "Close PR(s) on GitHub WITHOUT merging into main",
+            "USE WHEN: verdict is STALE_UNSAFE or LIKELY_SUPERSEDED and you want the draft gone.",
+            'DOES: gh pr close --comment "..." for each PR you answer yes to.',
+            "DOES NOT: merge into main; does not approve; does not run git merge.",
+            "DOES NOT: delete the remote feature branch (branch may still exist on GitHub).",
+            "DOES NOT: remove files from main — closing leaves main unchanged.",
+            "You will be asked per PR: Close PR #N (VERDICT) without merging? [y/n/ay/ya/an/na]",
+            "• y  = close this PR only",
+            "• ay or ya = close this PR and every remaining PR in the list",
+            "• n  = skip this PR (leave it open)",
+            header_style=triage_header,
+        )
+        print()
+        print_menu_option(
+            3,
+            "Port salvage commits to a new branch from latest main",
+            "USE WHEN: you still want specific commits from an old PR (e.g. 95109af from #13).",
+            "DOES: sync main → new branch → cherry-pick chosen commits → push branch.",
+            "DOES NOT: close the old PR (run sub-menu action 2 after porting if you want it closed).",
+            "AFTER: run tests, then main menu option 3 to open a new PR from the new branch.",
+            header_style=triage_header,
+        )
+        print()
+        print_menu_option(
+            4,
+            "Return to main menu",
+            "No further triage actions unless you pick main menu option 6 again.",
+            header_style=triage_header,
+        )
 
 
 def explain_triage_close_start() -> None:
-    print()
-    print_menu_banner("=== Starting triage action 2: close without merge ===")
-    print("You chose to close one or more pull requests on GitHub.")
-    print("Each PR you confirm with y/ay will be CLOSED, not merged.")
-    print("Main branch on GitHub is not changed by closing.")
-    print()
+    with output_panel(Panel.ACTION):
+        print_menu_banner("=== Starting triage action 2: close without merge ===")
+        print("You chose to close one or more pull requests on GitHub.")
+        print("Each PR you confirm with y/ay will be CLOSED, not merged.")
+        print("Main branch on GitHub is not changed by closing.")
 
 
 def prompt_discard_file(path: str, status_xy: str) -> str | None:
@@ -405,12 +467,12 @@ def choose_files_to_discard(files: list[tuple[str, str]]) -> tuple[list[str], li
     if not files:
         return [], []
 
-    print()
-    print("=== Local files not checked in to GitHub ===")
-    for xy, path in files:
-        print(f"  {xy} {path}")
-    print()
-    print("For each file, choose whether to discard your local edits and match GitHub main:")
+    with output_panel(Panel.CONFIRM):
+        print(paint("=== Local files not checked in to GitHub ===", Term.BOLD))
+        for xy, path in files:
+            print(f"  {xy} {path}")
+        print()
+        print("For each file, choose whether to discard your local edits and match GitHub main:")
     print_yes_no_help()
     print()
 
@@ -460,13 +522,18 @@ def current_user() -> str | None:
 
 
 def confirm_or_stop(prompt: str, expected: str = CONFIRM_TEXT) -> bool:
-    print()
-    print(prompt)
-    answer = input(f'Type "{expected}" to continue: ').strip()
+    with output_panel(Panel.CONFIRM):
+        print(prompt)
+    answer = input(paint(f'Type "{expected}" to continue: ', Term.BOLD + Term.YELLOW)).strip()
     if answer != expected:
         say_stop("No changes were made.")
         return False
     return True
+
+
+def say_ok_in_panel(message: str) -> None:
+    with output_panel(Panel.RESULT):
+        say_ok(message)
 
 
 @dataclass
@@ -582,32 +649,32 @@ def classify_pr_report(report: PrTriageReport) -> None:
 
 def print_pr_triage_report(report: PrTriageReport) -> None:
     draft = "draft" if report.is_draft else "ready"
-    print()
-    print(f"--- PR #{report.number} [{draft}] {report.title} ---")
-    print(f"  URL: {report.url}")
-    print(f"  Branch: {report.head_ref} -> main")
-    verdict_style, recommendation_style = verdict_colors(report.verdict)
-    verdict_label = paint("Verdict:", Term.BOLD)
-    recommendation_label = paint("Recommendation:", Term.BOLD)
-    print(f"  {verdict_label} {paint(report.verdict, verdict_style)}")
-    print(f"  {recommendation_label} {paint(report.recommendation, recommendation_style)}")
-    print(f"  Behind main: {report.behind_count} commit(s) on main not in this PR")
-    if report.ahead_commits:
-        print("  Unique commits on this PR (salvage candidates):")
-        for sha, subject in report.ahead_commits:
-            print(f"    {sha} {subject}")
-    if report.changed_files:
-        print("  Files this PR changes vs main:")
-        for path in report.changed_files[:20]:
-            print(f"    {path}")
-        if len(report.changed_files) > 20:
-            print(f"    ... and {len(report.changed_files) - 20} more")
-    if report.deleted_if_merged:
-        say_warn("Merging now would DELETE these paths that exist on main:")
-        for path in report.deleted_if_merged[:15]:
-            print(f"    {path}")
-        if len(report.deleted_if_merged) > 15:
-            print(f"    ... and {len(report.deleted_if_merged) - 15} more")
+    with output_panel(Panel.TRIAGE):
+        print(paint(f"--- PR #{report.number} [{draft}] {report.title} ---", Term.BOLD))
+        print(f"  URL: {report.url}")
+        print(f"  Branch: {report.head_ref} -> main")
+        verdict_style, recommendation_style = verdict_colors(report.verdict)
+        verdict_label = paint("Verdict:", Term.BOLD)
+        recommendation_label = paint("Recommendation:", Term.BOLD)
+        print(f"  {verdict_label} {paint(report.verdict, verdict_style)}")
+        print(f"  {recommendation_label} {paint(report.recommendation, recommendation_style)}")
+        print(f"  Behind main: {report.behind_count} commit(s) on main not in this PR")
+        if report.ahead_commits:
+            print("  Unique commits on this PR (salvage candidates):")
+            for sha, subject in report.ahead_commits:
+                print(f"    {sha} {subject}")
+        if report.changed_files:
+            print("  Files this PR changes vs main:")
+            for path in report.changed_files[:20]:
+                print(f"    {path}")
+            if len(report.changed_files) > 20:
+                print(f"    ... and {len(report.changed_files) - 20} more")
+        if report.deleted_if_merged:
+            say_warn("Merging now would DELETE these paths that exist on main:")
+            for path in report.deleted_if_merged[:15]:
+                print(f"    {path}")
+            if len(report.deleted_if_merged) > 15:
+                print(f"    ... and {len(report.deleted_if_merged) - 15} more")
 
 
 def prompt_yes_no_item(prompt: str, batch: str | None) -> tuple[bool | None, str | None]:
@@ -768,51 +835,51 @@ def triage_open_prs() -> None:
 
 
 def print_status() -> None:
-    print()
-    print("=== SPRK Workflow Status ===")
-    print(f"Current branch: {current_branch()}")
+    with output_panel(Panel.STATUS):
+        print(paint("=== SPRK Workflow Status ===", Term.BOLD))
+        print(f"Current branch: {current_branch()}")
 
-    git_status = changed_files()
-    if git_status:
-        print()
-        print("Changed files:")
-        for line in git_status:
-            print(f"  {line}")
-    else:
-        print("Changed files: none")
-
-    user = current_user()
-    print(f"GitHub user: {user or 'not authenticated or gh unavailable'}")
-
-    prs = gh_json([
-        "pr",
-        "list",
-        "--state",
-        "open",
-        "--limit",
-        "8",
-        "--json",
-        "number,title,headRefName,baseRefName,isDraft,reviewDecision",
-    ])
-    if isinstance(prs, list):
-        print()
-        print(
-            "Open pull requests (MAIN MENU option 6 = triage; do not use option 4 to merge stale drafts):"
-        )
-        if not prs:
-            print("  none")
+        git_status = changed_files()
+        if git_status:
+            print()
+            print("Changed files:")
+            for line in git_status:
+                print(f"  {line}")
         else:
-            for pr in prs:
-                draft = "draft" if pr.get("isDraft") else "ready"
-                print(
-                    f"  #{pr.get('number')} [{draft}] {pr.get('title')} "
-                    f"({pr.get('headRefName')} -> {pr.get('baseRefName')})"
-                )
-            print("  Tip: main menu option 6 → triage sub-menu:")
-            print("        action 2 = close without merge | action 3 = port commits to new branch")
-    else:
-        print()
-        print("Open pull requests: unavailable because `gh` is not authenticated or failed.")
+            print("Changed files: none")
+
+        user = current_user()
+        print(f"GitHub user: {user or 'not authenticated or gh unavailable'}")
+
+        prs = gh_json([
+            "pr",
+            "list",
+            "--state",
+            "open",
+            "--limit",
+            "8",
+            "--json",
+            "number,title,headRefName,baseRefName,isDraft,reviewDecision",
+        ])
+        if isinstance(prs, list):
+            print()
+            print(
+                "Open pull requests (MAIN MENU option 6 = triage; do not use option 4 to merge stale drafts):"
+            )
+            if not prs:
+                print("  none")
+            else:
+                for pr in prs:
+                    draft = "draft" if pr.get("isDraft") else "ready"
+                    print(
+                        f"  #{pr.get('number')} [{draft}] {pr.get('title')} "
+                        f"({pr.get('headRefName')} -> {pr.get('baseRefName')})"
+                    )
+                print("  Tip: main menu option 6 → triage sub-menu:")
+                print("        action 2 = close without merge | action 3 = port commits to new branch")
+        else:
+            print()
+            print("Open pull requests: unavailable because `gh` is not authenticated or failed.")
 
     print_interactive_shortcuts_banner(
         "main menu 5 = sync main; main menu 6 → triage action 2 = close, action 3 = port"
@@ -820,18 +887,18 @@ def print_status() -> None:
 
 
 def explain_start_branch(branch_name: str) -> None:
-    print()
-    print("=== Start New Work: What Will Happen ===")
-    print("This creates a safe feature branch from the latest `main`.")
-    print("If you have uncommitted local files, the helper will ask file-by-file first (y/n/ay/ya/an/na).")
-    print("Commands that will run:")
-    print_command(["git", "fetch", "origin"])
-    print_command(["git", "checkout", "main"])
-    print("  $ git pull origin main")
-    print("    (or `git reset --hard origin/main` if you discard all local edits)")
-    print_command(["git", "checkout", "-b", branch_name])
-    print()
-    print("This does not commit, push, approve, or merge anything.")
+    with output_panel(Panel.ACTION):
+        print(paint("=== Start New Work: What Will Happen ===", Term.BOLD))
+        print("This creates a safe feature branch from the latest `main`.")
+        print("If you have uncommitted local files, the helper will ask file-by-file first (y/n/ay/ya/an/na).")
+        print("Commands that will run:")
+        print_command(["git", "fetch", "origin"])
+        print_command(["git", "checkout", "main"])
+        print("  $ git pull origin main")
+        print("    (or `git reset --hard origin/main` if you discard all local edits)")
+        print_command(["git", "checkout", "-b", branch_name])
+        print()
+        print("This does not commit, push, approve, or merge anything.")
 
 
 def validate_branch_name(branch_name: str) -> bool:
@@ -860,25 +927,25 @@ def start_branch(branch_name: str | None = None) -> None:
 
 
 def explain_sync_main(to_discard: list[str], to_keep: list[str], hard_reset: bool) -> None:
-    print()
-    print("=== Sync Main With GitHub: What Will Happen ===")
-    print("This updates your local `main` branch to match GitHub.")
-    print("Commands that will run:")
-    print_command(["git", "fetch", "origin"])
-    print_command(["git", "checkout", "main"])
-    for path in to_discard:
-        print_command(["git", "checkout", "origin/main", "--", path])
-    if hard_reset:
-        print_command(["git", "reset", "--hard", "origin/main"])
-    else:
-        print_command(["git", "pull", "origin", "main"])
-    if to_keep:
+    with output_panel(Panel.ACTION):
+        print(paint("=== Sync Main With GitHub: What Will Happen ===", Term.BOLD))
+        print("This updates your local `main` branch to match GitHub.")
+        print("Commands that will run:")
+        print_command(["git", "fetch", "origin"])
+        print_command(["git", "checkout", "main"])
+        for path in to_discard:
+            print_command(["git", "checkout", "origin/main", "--", path])
+        if hard_reset:
+            print_command(["git", "reset", "--hard", "origin/main"])
+        else:
+            print_command(["git", "pull", "origin", "main"])
+        if to_keep:
+            print()
+            print("Files that will keep your local edits:")
+            for path in to_keep:
+                print(f"  {path}")
         print()
-        print("Files that will keep your local edits:")
-        for path in to_keep:
-            print(f"  {path}")
-    print()
-    print("Learning note: discard = your uncommitted edits for that file are removed permanently.")
+        print("Learning note: discard = your uncommitted edits for that file are removed permanently.")
 
 
 def sync_main_with_github(skip_status: bool = False, from_start_branch: bool = False) -> bool:
@@ -912,12 +979,12 @@ def sync_main_with_github(skip_status: bool = False, from_start_branch: bool = F
         ):
             return False
     else:
-        print()
-        print("=== Sync Main With GitHub ===")
-        print("No uncommitted tracked files. Fetching and updating main only.")
-        print_command(["git", "fetch", "origin"])
-        print_command(["git", "checkout", "main"])
-        print_command(["git", "pull", "origin", "main"])
+        with output_panel(Panel.ACTION):
+            print(paint("=== Sync Main With GitHub ===", Term.BOLD))
+            print("No uncommitted tracked files. Fetching and updating main only.")
+            print_command(["git", "fetch", "origin"])
+            print_command(["git", "checkout", "main"])
+            print_command(["git", "pull", "origin", "main"])
         if not confirm_or_stop("Confirm you understand this will switch to main and pull from GitHub."):
             return False
 
@@ -964,17 +1031,17 @@ def sync_main_with_github(skip_status: bool = False, from_start_branch: bool = F
 
 
 def explain_submit_work(commit_message: str) -> None:
-    print()
-    print("=== Save And Open PR: What Will Happen ===")
-    print("This takes the current changed files, creates one commit, pushes the branch, and opens a PR.")
-    print("Commands that will run:")
-    print_command(["git", "add", "-A"])
-    print_command(["git", "commit", "-m", commit_message])
-    print_command(["git", "push", "-u", "origin", current_branch()])
-    print_command(["gh", "pr", "create", "--title", commit_message, "--body", "..."])
-    print()
-    print("Learning note: `git add -A` stages all current changes shown in status.")
-    print("If unrelated files are listed above, stop now and clean them up before submitting.")
+    with output_panel(Panel.ACTION):
+        print(paint("=== Save And Open PR: What Will Happen ===", Term.BOLD))
+        print("This takes the current changed files, creates one commit, pushes the branch, and opens a PR.")
+        print("Commands that will run:")
+        print_command(["git", "add", "-A"])
+        print_command(["git", "commit", "-m", commit_message])
+        print_command(["git", "push", "-u", "origin", current_branch()])
+        print_command(["gh", "pr", "create", "--title", commit_message, "--body", "..."])
+        print()
+        print("Learning note: `git add -A` stages all current changes shown in status.")
+        print("If unrelated files are listed above, stop now and clean them up before submitting.")
 
 
 def submit_work(commit_message: str | None = None) -> None:
@@ -1024,42 +1091,42 @@ def fetch_pr(pr_number: str) -> dict | None:
 
 
 def print_pr_summary(pr: dict) -> None:
-    print()
-    print("=== Pull Request Summary ===")
-    print(f"PR: #{pr.get('number')} {pr.get('title')}")
-    print(f"URL: {pr.get('url')}")
-    print(f"Author: {(pr.get('author') or {}).get('login')}")
-    print(f"Branch: {pr.get('headRefName')} -> {pr.get('baseRefName')}")
-    print(f"Draft: {pr.get('isDraft')}")
-    print(f"Mergeable: {pr.get('mergeable')}")
-    print(f"Review decision: {pr.get('reviewDecision')}")
-    print()
-    print("Files changed:")
-    for file_info in pr.get("files", []):
-        print(f"  {file_info.get('path')}")
+    with output_panel(Panel.ACTION):
+        print(paint("=== Pull Request Summary ===", Term.BOLD))
+        print(f"PR: #{pr.get('number')} {pr.get('title')}")
+        print(f"URL: {pr.get('url')}")
+        print(f"Author: {(pr.get('author') or {}).get('login')}")
+        print(f"Branch: {pr.get('headRefName')} -> {pr.get('baseRefName')}")
+        print(f"Draft: {pr.get('isDraft')}")
+        print(f"Mergeable: {pr.get('mergeable')}")
+        print(f"Review decision: {pr.get('reviewDecision')}")
+        print()
+        print("Files changed:")
+        for file_info in pr.get("files", []):
+            print(f"  {file_info.get('path')}")
 
 
 def explain_approve(pr_number: str, merge_after: bool, merge_method: str) -> None:
-    print()
-    print("=== Approve / Merge: What Will Happen ===")
-    print("This is intended for a teacher, admin, or repository maintainer.")
-    print("Commands that may run:")
-    print_command([
-        "gh",
-        "pr",
-        "review",
-        pr_number,
-        "--approve",
-        "-b",
-        "Approved via SPRK guided workflow helper after explicit confirmation.",
-    ])
-    if merge_after:
-        print_command(["gh", "pr", "merge", pr_number, f"--{merge_method}", "--delete-branch"])
-    else:
-        print("  (merge skipped unless you choose to merge)")
-    print()
-    print("Learning note: GitHub repository rules still apply. If required checks or reviews are missing,")
-    print("GitHub may reject the approval or merge and explain what is still needed.")
+    with output_panel(Panel.ACTION):
+        print(paint("=== Approve / Merge: What Will Happen ===", Term.BOLD))
+        print("This is intended for a teacher, admin, or repository maintainer.")
+        print("Commands that may run:")
+        print_command([
+            "gh",
+            "pr",
+            "review",
+            pr_number,
+            "--approve",
+            "-b",
+            "Approved via SPRK guided workflow helper after explicit confirmation.",
+        ])
+        if merge_after:
+            print_command(["gh", "pr", "merge", pr_number, f"--{merge_method}", "--delete-branch"])
+        else:
+            print("  (merge skipped unless you choose to merge)")
+        print()
+        print("Learning note: GitHub repository rules still apply. If required checks or reviews are missing,")
+        print("GitHub may reject the approval or merge and explain what is still needed.")
 
 
 def approve_pr(pr_number: str | None = None) -> None:
