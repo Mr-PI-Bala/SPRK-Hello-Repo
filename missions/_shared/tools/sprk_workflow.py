@@ -91,6 +91,18 @@ def say_tip(message: str) -> None:
     say_tag("[TIP]", message, Term.BOLD + Term.CYAN, Term.BOLD + Term.CYAN)
 
 
+def print_menu_banner(title: str) -> None:
+    print(paint(title, Term.BOLD))
+
+
+def print_menu_option(number: int | str, title: str, *details: str, header_style: str | None = None) -> None:
+    """Print one menu choice: colored/bold header line, plain indented detail lines."""
+    style = header_style or (Term.BOLD + Term.CYAN)
+    print(paint(f"{number}. {title}", style))
+    for line in details:
+        print(f"   {line}")
+
+
 def verdict_colors(verdict: str) -> tuple[str, str]:
     if verdict == "STALE_UNSAFE":
         return Term.BOLD + Term.RED, Term.BOLD + Term.RED
@@ -237,52 +249,70 @@ def print_yes_no_help() -> None:
 def print_main_menu() -> None:
     """Main workflow menu — each option explains what it does and does not do."""
     print()
-    print("=== SPRK Guided Workflow — MAIN MENU (options 1–7) ===")
+    print_menu_banner("=== SPRK Guided Workflow — MAIN MENU (options 1–7) ===")
     print("  Shortcuts when asked y/n: ay or ya = all yes | an or na = all no")
     print("  (Full list: MERIT.instructions → Interactive confirmation shortcuts)")
     print()
-    print("1. Show status again")
-    print("   READ ONLY. Re-prints your branch, changed files, GitHub user, and open PRs.")
-    print("   Does not commit, push, merge, close PRs, or change any files.")
+    print_menu_option(
+        1,
+        "Show status again",
+        "READ ONLY. Re-prints your branch, changed files, GitHub user, and open PRs.",
+        "Does not commit, push, merge, close PRs, or change any files.",
+    )
     print()
-    print("2. Start new work branch")
-    print("   USE WHEN: you want a fresh feature branch from latest GitHub main.")
-    print("   DOES: fetch origin → checkout main → pull (or reset) → create the branch you name.")
-    print("   IF local edits block pull: asks per file (y/n/ay/ya/an/na) whether to discard them.")
-    print("   DOES NOT: commit your work, open a PR, merge, or close PRs.")
+    print_menu_option(
+        2,
+        "Start new work branch",
+        "USE WHEN: you want a fresh feature branch from latest GitHub main.",
+        "DOES: fetch origin → checkout main → pull (or reset) → create the branch you name.",
+        "IF local edits block pull: asks per file (y/n/ay/ya/an/na) whether to discard them.",
+        "DOES NOT: commit your work, open a PR, merge, or close PRs.",
+    )
     print()
-    print("3. Save current work and open PR")
-    print("   USE WHEN: you are on a feature branch (not main) and have changes ready to share.")
-    print("   DOES: git add -A → commit → push branch → gh pr create (new pull request).")
-    print("   DOES NOT: merge into main. Teachers use option 4 to merge after review.")
+    print_menu_option(
+        3,
+        "Save current work and open PR",
+        "USE WHEN: you are on a feature branch (not main) and have changes ready to share.",
+        "DOES: git add -A → commit → push branch → gh pr create (new pull request).",
+        "DOES NOT: merge into main. Teachers use option 4 to merge after review.",
+    )
     print()
-    print("4. Review / approve / optionally merge a PR")
-    print("   USE WHEN: a PR is current, reviewed, and safe to land on main.")
-    print("   DOES: show PR summary → optional approve → optional merge into main.")
-    print("   DOES NOT: close stale PRs or fix old branches. For old drafts (#13, #14), use option 6 first.")
-    print("   WARNING: merging a STALE_UNSAFE PR can DELETE files that exist on main now.")
+    print_menu_option(
+        4,
+        "Review / approve / optionally merge a PR",
+        "USE WHEN: a PR is current, reviewed, and safe to land on main.",
+        "DOES: show PR summary → optional approve → optional merge into main.",
+        "DOES NOT: close stale PRs or fix old branches. For old drafts (#13, #14), use option 6 first.",
+        "WARNING: merging a STALE_UNSAFE PR can DELETE files that exist on main now.",
+        header_style=Term.BOLD + Term.YELLOW,
+    )
     print()
-    print("5. Sync local main with GitHub")
-    print("   USE WHEN: your laptop main is behind origin/main, or pull is blocked by local edits.")
-    print("   DOES: fetch → checkout main → per-file discard prompts → pull or hard reset to origin/main.")
-    print("   DOES NOT: touch feature branches, open/close PRs, or merge PRs.")
-    print("   TIP: ay/ya on every file = match GitHub main exactly (local uncommitted edits on main are removed).")
+    print_menu_option(
+        5,
+        "Sync local main with GitHub",
+        "USE WHEN: your laptop main is behind origin/main, or pull is blocked by local edits.",
+        "DOES: fetch → checkout main → per-file discard prompts → pull or hard reset to origin/main.",
+        "DOES NOT: touch feature branches, open/close PRs, or merge PRs.",
+        "TIP: ay/ya on every file = match GitHub main exactly (local uncommitted edits on main are removed).",
+    )
     print()
-    print("6. Triage open PRs (analyze, close without merge, or port commits)")
-    print("   USE WHEN: open PRs look old or you are unsure if merging is safe.")
-    print("   DOES: compare each open PR to GitHub main → print Verdict + Recommendation →")
-    print("         then a SECOND sub-menu (triage actions 1–4 — not the same as this main menu).")
-    print("   Triage action 2 = close on GitHub without merge (good for superseded #13 / #14).")
-    print("   Triage action 3 = cherry-pick salvage commits onto a new branch from main.")
-    print("   DOES NOT: merge stale PRs into main. Use main menu option 4 only when triage says it is safe.")
+    print_menu_option(
+        6,
+        "Triage open PRs (analyze, close without merge, or port commits)",
+        "USE WHEN: open PRs look old or you are unsure if merging is safe.",
+        "DOES: compare each open PR to GitHub main → print Verdict + Recommendation →",
+        "      then a SECOND sub-menu (triage actions 1–4 — not the same as this main menu).",
+        "Triage action 2 = close on GitHub without merge (good for superseded #13 / #14).",
+        "Triage action 3 = cherry-pick salvage commits onto a new branch from main.",
+        "DOES NOT: merge stale PRs into main. Use main menu option 4 only when triage says it is safe.",
+    )
     print()
-    print("7. Exit")
-    print("   Leave the helper. No git or GitHub commands run.")
+    print_menu_option(7, "Exit", "Leave the helper. No git or GitHub commands run.")
 
 
 def print_triage_intro() -> None:
     print()
-    print("=== Triage open pull requests (main menu option 6) ===")
+    print_menu_banner("=== Triage open pull requests (main menu option 6) ===")
     print("This reads GitHub only — it does not merge anything into main.")
     print()
     print("For each open PR you will see:")
@@ -302,36 +332,55 @@ def print_triage_intro() -> None:
 
 def print_triage_actions_menu() -> None:
     """Sub-menu shown after triage reports — numbers 1–4 are NOT main menu numbers."""
+    triage_header = Term.BOLD + Term.GREEN
     print()
-    print("=== Triage actions — SUB-MENU (options 1–4 only; not the same as main menu 1–7) ===")
+    print_menu_banner(
+        "=== Triage actions — SUB-MENU (options 1–4 only; not the same as main menu 1–7) ==="
+    )
     print()
-    print("1. Report only — finished reading")
-    print("   No GitHub or git changes. Use when you only wanted the analysis printed above.")
+    print_menu_option(
+        1,
+        "Report only — finished reading",
+        "No GitHub or git changes. Use when you only wanted the analysis printed above.",
+        header_style=triage_header,
+    )
     print()
-    print("2. Close PR(s) on GitHub WITHOUT merging into main")
-    print("   USE WHEN: verdict is STALE_UNSAFE or LIKELY_SUPERSEDED and you want the draft gone.")
-    print("   DOES: gh pr close --comment \"...\" for each PR you answer yes to.")
-    print("   DOES NOT: merge into main; does not approve; does not run git merge.")
-    print("   DOES NOT: delete the remote feature branch (branch may still exist on GitHub).")
-    print("   DOES NOT: remove files from main — closing leaves main unchanged.")
-    print("   You will be asked per PR: Close PR #N (VERDICT) without merging? [y/n/ay/ya/an/na]")
-    print("   • y  = close this PR only")
-    print("   • ay or ya = close this PR and every remaining PR in the list")
-    print("   • n  = skip this PR (leave it open)")
+    print_menu_option(
+        2,
+        "Close PR(s) on GitHub WITHOUT merging into main",
+        "USE WHEN: verdict is STALE_UNSAFE or LIKELY_SUPERSEDED and you want the draft gone.",
+        'DOES: gh pr close --comment "..." for each PR you answer yes to.',
+        "DOES NOT: merge into main; does not approve; does not run git merge.",
+        "DOES NOT: delete the remote feature branch (branch may still exist on GitHub).",
+        "DOES NOT: remove files from main — closing leaves main unchanged.",
+        "You will be asked per PR: Close PR #N (VERDICT) without merging? [y/n/ay/ya/an/na]",
+        "• y  = close this PR only",
+        "• ay or ya = close this PR and every remaining PR in the list",
+        "• n  = skip this PR (leave it open)",
+        header_style=triage_header,
+    )
     print()
-    print("3. Port salvage commits to a new branch from latest main")
-    print("   USE WHEN: you still want specific commits from an old PR (e.g. 95109af from #13).")
-    print("   DOES: sync main → new branch → cherry-pick chosen commits → push branch.")
-    print("   DOES NOT: close the old PR (run sub-menu action 2 after porting if you want it closed).")
-    print("   AFTER: run tests, then main menu option 3 to open a new PR from the new branch.")
+    print_menu_option(
+        3,
+        "Port salvage commits to a new branch from latest main",
+        "USE WHEN: you still want specific commits from an old PR (e.g. 95109af from #13).",
+        "DOES: sync main → new branch → cherry-pick chosen commits → push branch.",
+        "DOES NOT: close the old PR (run sub-menu action 2 after porting if you want it closed).",
+        "AFTER: run tests, then main menu option 3 to open a new PR from the new branch.",
+        header_style=triage_header,
+    )
     print()
-    print("4. Return to main menu")
-    print("   No further triage actions unless you pick main menu option 6 again.")
+    print_menu_option(
+        4,
+        "Return to main menu",
+        "No further triage actions unless you pick main menu option 6 again.",
+        header_style=triage_header,
+    )
 
 
 def explain_triage_close_start() -> None:
     print()
-    print("=== Starting triage action 2: close without merge ===")
+    print_menu_banner("=== Starting triage action 2: close without merge ===")
     print("You chose to close one or more pull requests on GitHub.")
     print("Each PR you confirm with y/ay will be CLOSED, not merged.")
     print("Main branch on GitHub is not changed by closing.")
