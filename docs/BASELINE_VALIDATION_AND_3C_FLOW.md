@@ -19,6 +19,16 @@ flowchart TD
     J --> L["Mission UI tab<br/>Baseline Status"]
 ```
 
+
+## Table of contents
+
+- [Baseline Validation Flow](#baseline-validation-flow) [[#Baseline Validation Flow]] (obsidian)
+- [Runtime UI Flow](#runtime-ui-flow) [[#Runtime UI Flow]] (obsidian)
+- [Clean Folder Rule](#clean-folder-rule) [[#Clean Folder Rule]] (obsidian)
+- [3C PRD Integration](#3c-prd-integration) [[#3C PRD Integration]] (obsidian)
+- [What To Open](#what-to-open) [[#What To Open]] (obsidian)
+- [Carry Forward Rule](#carry-forward-rule) [[#Carry Forward Rule]] (obsidian)
+
 ## Runtime UI Flow
 The right-side mission panel should follow one stable three-tab model:
 

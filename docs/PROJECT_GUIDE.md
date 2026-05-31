@@ -4,6 +4,13 @@ This is the **working-repository** project guide for `SPRK-Hello-Repo`. Full mai
 
 Students and agents should start from [docs/README.md](README.md) instead of this file unless they are capturing formative insights or repo operations lessons.
 
+
+## Table of contents
+
+- [Documentation hub](#documentation-hub) [[#Documentation hub]] (obsidian)
+- [Formative Insights](#formative-insights) [[#Formative Insights]] (obsidian)
+- [What belongs in this repo vs SPRK-Welcome](#what-belongs-in-this-repo-vs-sprk-welcome) [[#What belongs in this repo vs SPRK-Welcome]] (obsidian)
+
 ## Documentation hub
 
 - [docs/README.md](README.md) — master index for all guides in this repo.

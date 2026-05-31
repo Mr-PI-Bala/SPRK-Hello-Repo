@@ -33,10 +33,10 @@ Student-safe AgenticOps and coding-agent entry points (public repo only; no priv
 ## Start Here
 1. ~~Ask for access through the public [SPRK-Welcome](https://github.com/Mr-PI-Bala/SPRK-Welcome) repository.~~<br>
    **Victory:** if you can see this private repository, your access request worked.
-2. [Create your own branch before changing code](#create-your-branch-before-changing-code).
-3. [Pick one mission from the Mission Menu](#pick-one-mission).
-4. [Play the mission first](#play-the-mission-first).
-5. [Make one small change in your own branch](#make-one-small-change-in-your-own-branch).
+2. [Create your own branch before changing code](#create-your-branch-before-changing-code) [[#Create Your Branch Before Changing Code]] (obsidian).
+3. [Pick one mission from the Mission Menu](#pick-one-mission) [[#Pick One Mission]] (obsidian).
+4. [Play the mission first](#play-the-mission-first) [[#Play The Mission First]] (obsidian).
+5. [Make one small change in your own branch](#make-one-small-change-in-your-own-branch) [[#Make One Small Change In Your Own Branch]] (obsidian).
 
 ## Create Your Branch Before Changing Code
 Do this before editing files.
@@ -51,9 +51,9 @@ maya-sprk
 
 Quick summary: use the branch path that matches where you are working.
 
-- [Create A Branch From The GitHub Page](#create-a-branch-from-the-github-page): use this when you are only on the GitHub website and want GitHub to make the branch first.
-- [Create A Branch In Codespaces Browser](#create-a-branch-in-codespaces-browser): use this when you are editing inside Codespaces in the browser or on iPad.
-- [Create A Branch In VS Code Desktop](#create-a-branch-in-vs-code-desktop): use this when the repo is cloned onto your laptop and open in local VS Code.
+- [Create A Branch From The GitHub Page](#create-a-branch-from-the-github-page) [[#Create A Branch From The GitHub Page]] (obsidian): use this when you are only on the GitHub website and want GitHub to make the branch first.
+- [Create A Branch In Codespaces Browser](#create-a-branch-in-codespaces-browser) [[#Create A Branch In Codespaces Browser]] (obsidian): use this when you are editing inside Codespaces in the browser or on iPad.
+- [Create A Branch In VS Code Desktop](#create-a-branch-in-vs-code-desktop) [[#Create A Branch In VS Code Desktop]] (obsidian): use this when the repo is cloned onto your laptop and open in local VS Code.
 
 ```mermaid
 sequenceDiagram
@@ -172,7 +172,7 @@ If the result still says `main`, stop and ask for help before changing files.
 
 Detailed guides:
 
-- [SPRK Git Repository User Guide: Create Your Branch](docs/SPRK_Git_Repository_UserGuide.md#create-your-branch)
+- [SPRK Git Repository User Guide: Create Your Branch](docs/SPRK_Git_Repository_UserGuide.md#create-your-branch) [[docs/SPRK_Git_Repository_UserGuide#Create Your Branch]] (obsidian)
 - [SPRK CodeSpaces User Guide](docs/SPRK_CodeSpaces_UserGuide.md)
 - [SPRK VS Code User Guide](docs/SPRK_VSCode_UserGuide.md), including Markdown preview and iPad troubleshooting.
 
@@ -191,7 +191,7 @@ What each command does:
 Then close and reopen the Markdown preview.
 
 ## Pick One Mission
-Start in the [Mission Menu](#mission-menu).
+Start in the [Mission Menu](#mission-menu) [[#Mission Menu]] (obsidian).
 
 Quick summary:
 
@@ -210,7 +210,7 @@ Why this matters:
 - you can tell whether your later edit actually changed something
 - you understand the difference between the `RealTime`, `X-Ray Vision`, and `Baseline Status` tabs before you start modifying code
 
-Open the mission from the [Mission Menu](#mission-menu), try the default behavior, and read that mission's `MISSION_GUIDE.md` if anything is unclear.
+Open the mission from the [Mission Menu](#mission-menu) [[#Mission Menu]] (obsidian), try the default behavior, and read that mission's `MISSION_GUIDE.md` if anything is unclear.
 
 ## Make One Small Change In Your Own Branch
 After playing the mission, make one small visible change in your branch.

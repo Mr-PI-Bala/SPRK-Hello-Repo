@@ -11,9 +11,9 @@ Use this mission as the baseline when creating the next browser-first SPRK proje
 ## Mission Navigation
 | Need | Go Here |
 | --- | --- |
-| I want to run the template | [How To Run](#how-to-run) |
-| I want to know where the app starts | [Entry Point](#entry-point) |
-| I want the file map | [Code Files](#code-files) |
+| I want to run the template | [How To Run](#how-to-run) [[#How To Run]] (obsidian) |
+| I want to know where the app starts | [Entry Point](#entry-point) [[#Entry Point]] (obsidian) |
+| I want the file map | [Code Files](#code-files) [[#Code Files]] (obsidian) |
 | I want the deeper architecture view | [CODE_WALKTHROUGH.md](CODE_WALKTHROUGH.md) |
 | I need the shared Git workflow | [SPRK Git Repository User Guide](../../../docs/SPRK_Git_Repository_UserGuide.md) |
 | I want the common browser mission pattern | [../../../docs/SPRK_Browser_Mission_Foundation_Guide.md](../../../docs/SPRK_Browser_Mission_Foundation_Guide.md) |

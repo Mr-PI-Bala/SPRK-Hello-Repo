@@ -4,6 +4,8 @@ This guide defines how to write hyperlinks in SPRK **student documentation** (`d
 
 Repo-wide index: [docs/README.md](README.md).
 
+Maintenance scripts (for maintainers): `ops/tools/apply-obsidian-section-links.py`, `ops/tools/add-doc-toc-and-mission-nav.py`.
+
 ## Table of contents
 
 - [Portable link (everywhere)](#portable-link-everywhere) [[#Portable link (everywhere)]] (obsidian)

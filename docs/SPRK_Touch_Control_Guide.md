@@ -9,6 +9,21 @@ Shared implementation:
 
 Facilitators hosting a class should also read [SPRK Facilitator Guide](SPRK_Facilitator_Guide.md).
 
+
+## Table of contents
+
+- [One-Page Touch Cheat Sheet](#one-page-touch-cheat-sheet) [[#One-Page Touch Cheat Sheet]] (obsidian)
+- [How Touch Maps To Keyboard](#how-touch-maps-to-keyboard) [[#How Touch Maps To Keyboard]] (obsidian)
+- [Generic Mission Integration](#generic-mission-integration) [[#Generic Mission Integration]] (obsidian)
+- [Mission Support Matrix](#mission-support-matrix) [[#Mission Support Matrix]] (obsidian)
+- [Keyboard Actions Not Yet On Touch](#keyboard-actions-not-yet-on-touch) [[#Keyboard Actions Not Yet On Touch]] (obsidian)
+- [Two-Player Keyboard On One Touchscreen](#two-player-keyboard-on-one-touchscreen) [[#Two-Player Keyboard On One Touchscreen]] (obsidian)
+- [Two-Player Across Devices (Recommended)](#two-player-across-devices-recommended) [[#Two-Player Across Devices (Recommended)]] (obsidian)
+- [Fullscreen On iPhone](#fullscreen-on-iphone) [[#Fullscreen On iPhone]] (obsidian)
+- [Facilitator Checklist (Touch Classes)](#facilitator-checklist-touch-classes) [[#Facilitator Checklist (Touch Classes)]] (obsidian)
+- [Troubleshooting](#troubleshooting) [[#Troubleshooting]] (obsidian)
+- [Related Guides](#related-guides) [[#Related Guides]] (obsidian)
+
 ## One-Page Touch Cheat Sheet
 
 | Gesture | Game effect (when enabled) |

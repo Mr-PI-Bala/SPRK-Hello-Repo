@@ -11,13 +11,16 @@ Build and play a Space Invaders mission that begins as a classic 2D defense game
 ## Mission Navigation
 | Need | Go Here |
 | --- | --- |
-| I want to run the mission | [How To Run](#how-to-run) |
-| I want the controls | [Controls](#controls) |
-| I want the file map | [Code Files](#code-files) |
+| I want to run the mission | [How To Run](#how-to-run) [[#How To Run]] (obsidian) |
+| I want math wave celebrations | [Math Wave Celebrations](#math-wave-celebrations) [[#Math Wave Celebrations]] (obsidian) |
+| I want the controls | [Controls](#controls) [[#Controls]] (obsidian) |
+| I want the file map | [Code Files](#code-files) [[#Code Files]] (obsidian) |
+| I want how rules map to the PRD | [How The Game Rules Map To The PRD](#how-the-game-rules-map-to-the-prd) [[#How The Game Rules Map To The PRD]] (obsidian) |
+| I want to change the game | [Try Changing One Thing](#try-changing-one-thing) [[#Try Changing One Thing]] (obsidian) |
 | I want the original product requirement | [PRD.md](PRD.md) |
 | I want the deeper architecture view | [CODE_WALKTHROUGH.md](CODE_WALKTHROUGH.md) |
-| I need the shared Git workflow | [SPRK Git Repository User Guide](../../../docs/SPRK_Git_Repository_UserGuide.md) |
-| I want the common browser mission pattern | [../../../docs/SPRK_Browser_Mission_Foundation_Guide.md](../../../docs/SPRK_Browser_Mission_Foundation_Guide.md) |
+| I need the shared Git workflow | [SPRK Git Repository User Guide](../../../docs/SPRK_Git_Repository_UserGuide.md#create-your-branch) [[docs/SPRK_Git_Repository_UserGuide#Create Your Branch]] (obsidian) |
+| I want the common browser mission pattern | [SPRK Browser Mission Foundation Guide](../../../docs/SPRK_Browser_Mission_Foundation_Guide.md) |
 
 ## What This Mission Gives You
 - A 55-alien Space Invaders fleet with Squid, Crab, and Octopus rows.

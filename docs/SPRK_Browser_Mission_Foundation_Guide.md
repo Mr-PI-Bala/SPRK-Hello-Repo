@@ -3,6 +3,22 @@ Use this guide for the parts that should stay common across browser-first SPRK m
 
 Mission-specific guides should link here for the baseline pattern, then only explain what is different about that mission.
 
+
+## Table of contents
+
+- [What Stays Common](#what-stays-common) [[#What Stays Common]] (obsidian)
+- [Mission Folder Naming](#mission-folder-naming) [[#Mission Folder Naming]] (obsidian)
+- [Common Run Pattern](#common-run-pattern) [[#Common Run Pattern]] (obsidian)
+- [Common File Roles](#common-file-roles) [[#Common File Roles]] (obsidian)
+- [Common Frontend And Backend Pattern](#common-frontend-and-backend-pattern) [[#Common Frontend And Backend Pattern]] (obsidian)
+- [Common Shared APIs](#common-shared-apis) [[#Common Shared APIs]] (obsidian)
+- [Common Touch Pattern](#common-touch-pattern) [[#Common Touch Pattern]] (obsidian)
+- [Common Right-Side Panel Pattern](#common-right-side-panel-pattern) [[#Common Right-Side Panel Pattern]] (obsidian)
+- [Common Change Loop](#common-change-loop) [[#Common Change Loop]] (obsidian)
+- [Common Branch Rule](#common-branch-rule) [[#Common Branch Rule]] (obsidian)
+- [Common Language Crosswalk Rule](#common-language-crosswalk-rule) [[#Common Language Crosswalk Rule]] (obsidian)
+- [What Should Stay Mission-Specific](#what-should-stay-mission-specific) [[#What Should Stay Mission-Specific]] (obsidian)
+
 ## What Stays Common
 Most browser-first SPRK missions share the same foundation:
 

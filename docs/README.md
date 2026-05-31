@@ -42,7 +42,7 @@ Do not paste private MERIT vault paths or operator-only `obsidian://` URIs into 
 | Guide | Purpose |
 | --- | --- |
 | [MERIT.instructions](../MERIT.instructions) | Agent governance: mission naming, branch/PR rules, validation |
-| [SPRK_Documentation_Links_Guide.md](SPRK_Documentation_Links_Guide.md) | Portable and Obsidian link rules for student docs |
+| [SPRK_Documentation_Links_Guide.md](SPRK_Documentation_Links_Guide.md) | Portable and Obsidian link rules for student docs (canonical spec) |
 | [AgentDraven.instructions](../AgentDraven.instructions) | Classroom mentor tone and handoff format |
 | [AGENTS.md](../AGENTS.md) | Agent read order and closeout checklist |
 | [SPRK_Student_AgenticOps_Guide.md](SPRK_Student_AgenticOps_Guide.md) | MERIT enterprise vs SPRK student mapping |

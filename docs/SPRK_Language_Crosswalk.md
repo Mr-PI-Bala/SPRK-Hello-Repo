@@ -8,16 +8,16 @@ Use this guide in two ways:
 - the `XX-Template-nP` mission should act as the all-inclusive baseline that new missions extend
 
 ## Table of Contents
-- [Concept 1: The Sliding Window (FIFO Buffer)](#concept-1-the-sliding-window-fifo-buffer)
-- [Concept 2: Iterating Over Collections (The Foreach Loop)](#concept-2-iterating-over-collections-the-foreach-loop)
-- [Concept 3: Key-Value Data Structures (Dictionaries / Maps)](#concept-3-key-value-data-structures-dictionaries--maps)
-- [Concept 4: String Interpolation](#concept-4-string-interpolation)
-- [Concept 5: Error Handling](#concept-5-error-handling)
-- [Concept 6: Functions as Variables (Callbacks / Lambdas)](#concept-6-functions-as-variables-callbacks--lambdas)
-- [Concept 7: Objects and Methods](#concept-7-objects-and-methods)
-- [Concept 8: Multiple Return Values](#concept-8-multiple-return-values)
-- [Concept 9: Null Defaults / Coalescing](#concept-9-null-defaults--coalescing)
-- [Concept 10: Variable Scope (Avoiding Global Leaks)](#concept-10-variable-scope-avoiding-global-leaks)
+- [Concept 1: The Sliding Window (FIFO Buffer)](#concept-1-the-sliding-window-fifo-buffer) [[#Concept 1: The Sliding Window (FIFO Buffer)]] (obsidian)
+- [Concept 2: Iterating Over Collections (The Foreach Loop)](#concept-2-iterating-over-collections-the-foreach-loop) [[#Concept 2: Iterating Over Collections (The Foreach Loop)]] (obsidian)
+- [Concept 3: Key-Value Data Structures (Dictionaries / Maps)](#concept-3-key-value-data-structures-dictionaries--maps) [[#Concept 3: Key-Value Data Structures (Dictionaries / Maps)]] (obsidian)
+- [Concept 4: String Interpolation](#concept-4-string-interpolation) [[#Concept 4: String Interpolation]] (obsidian)
+- [Concept 5: Error Handling](#concept-5-error-handling) [[#Concept 5: Error Handling]] (obsidian)
+- [Concept 6: Functions as Variables (Callbacks / Lambdas)](#concept-6-functions-as-variables-callbacks--lambdas) [[#Concept 6: Functions as Variables (Callbacks / Lambdas)]] (obsidian)
+- [Concept 7: Objects and Methods](#concept-7-objects-and-methods) [[#Concept 7: Objects and Methods]] (obsidian)
+- [Concept 8: Multiple Return Values](#concept-8-multiple-return-values) [[#Concept 8: Multiple Return Values]] (obsidian)
+- [Concept 9: Null Defaults / Coalescing](#concept-9-null-defaults--coalescing) [[#Concept 9: Null Defaults / Coalescing]] (obsidian)
+- [Concept 10: Variable Scope (Avoiding Global Leaks)](#concept-10-variable-scope-avoiding-global-leaks) [[#Concept 10: Variable Scope (Avoiding Global Leaks)]] (obsidian)
 
 ## Concept 1: The Sliding Window (FIFO Buffer)
 **The Goal:** Keep a list of exactly the last 80 items. When a new item is added, the oldest item is dropped.

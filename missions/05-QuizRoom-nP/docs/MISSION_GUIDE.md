@@ -13,6 +13,17 @@ Shared browser-mission foundation:
 3. Everyone answers the current question.
 4. The facilitator clicks `Next` to move the room forward.
 
+
+## Mission Navigation
+| Need | Go Here |
+| --- | --- |
+| I want to run it | [How To Run](#how-to-run) [[#How To Run]] (obsidian) |
+| I want to know where the app starts | [Entry Point](#entry-point) [[#Entry Point]] (obsidian) |
+| I want to play it | [Play It](#play-it) [[#Play It]] (obsidian) |
+| I want language crosswalk in this mission | [Language Crosswalk In This Mission](#language-crosswalk-in-this-mission) [[#Language Crosswalk In This Mission]] (obsidian) |
+| I want try changing one thing | [Try Changing One Thing](#try-changing-one-thing) [[#Try Changing One Thing]] (obsidian) |
+| I want mission-specific variation | [Mission-Specific Variation](#mission-specific-variation) [[#Mission-Specific Variation]] (obsidian) |
+
 ## How To Run
 ```bash
 cd missions/05-QuizRoom-nP

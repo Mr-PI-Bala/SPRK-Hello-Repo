@@ -6,6 +6,24 @@ This guide is for **teachers, mentors, and lab hosts** who run a SPRK browser mi
 
 You do **not** need every student to have GitHub access to **play**. GitHub is for students who later edit code, branch, and open pull requests.
 
+
+## Table of contents
+
+- [Start Here — Pick Your Hosting Path](#start-here-pick-your-hosting-path) [[#Start Here — Pick Your Hosting Path]] (obsidian)
+- [One-Page Facilitator Cheat Sheet](#one-page-facilitator-cheat-sheet) [[#One-Page Facilitator Cheat Sheet]] (obsidian)
+- [What A Facilitator Does](#what-a-facilitator-does) [[#What A Facilitator Does]] (obsidian)
+- [Mission Port Table](#mission-port-table) [[#Mission Port Table]] (obsidian)
+- [Path A — Facilitator Laptop On Classroom Wi-Fi](#path-a-facilitator-laptop-on-classroom-wi-fi) [[#Path A — Facilitator Laptop On Classroom Wi-Fi]] (obsidian)
+- [Path B — Facilitator In Cursor Cloud + Public Tunnel](#path-b-facilitator-in-cursor-cloud-public-tunnel) [[#Path B — Facilitator In Cursor Cloud + Public Tunnel]] (obsidian)
+- [Friendly Class Link (bit.ly Or Similar)](#friendly-class-link-bit-ly-or-similar) [[#Friendly Class Link (bit.ly Or Similar)]] (obsidian)
+- [What To Tell The Class (30-Second Script)](#what-to-tell-the-class-30-second-script) [[#What To Tell The Class (30-Second Script)]] (obsidian)
+- [Facilitator Checklist (Full)](#facilitator-checklist-full) [[#Facilitator Checklist (Full)]] (obsidian)
+- [Classroom Fallbacks](#classroom-fallbacks) [[#Classroom Fallbacks]] (obsidian)
+- [Cursor-Specific Notes For Facilitators](#cursor-specific-notes-for-facilitators) [[#Cursor-Specific Notes For Facilitators]] (obsidian)
+- [Touch Devices (iPhone, iPad, Chromebook)](#touch-devices-iphone-ipad-chromebook) [[#Touch Devices (iPhone, iPad, Chromebook)]] (obsidian)
+- [Related Guides](#related-guides) [[#Related Guides]] (obsidian)
+- [Quick Command Reference](#quick-command-reference) [[#Quick Command Reference]] (obsidian)
+
 ## Start Here — Pick Your Hosting Path
 
 ```mermaid
@@ -33,7 +51,7 @@ Print or keep this open during class.
 
 | Step | Path A — Laptop LAN | Path B — Cursor Cloud + tunnel |
 | --- | --- | --- |
-| 1. Choose mission | Note folder and port (see [mission ports](#mission-port-table)) | Same |
+| 1. Choose mission | Note folder and port (see [mission ports](#mission-port-table) [[#Mission Port Table]] (obsidian)) | Same |
 | 2. Start backend | `cd missions/<mission>` then `python3 server.py` | Same, in Cursor Cloud terminal |
 | 3. Publish link | `ipconfig` → share `http://<IPv4>:<port>` | `bash missions/_shared/tools/sprk_public_tunnel.sh <port>` → share `https://....trycloudflare.com` |
 | 4. Stable short link (optional) | bit.ly → destination = laptop URL | bit.ly → destination = tunnel URL (update each session) |
@@ -257,10 +275,10 @@ For Quiz Room, add:
 
 ### One week before
 
-- [ ] Pick the mission from the [README mission menu](../README.md#mission-menu)
+- [ ] Pick the mission from the [README mission menu](../README.md#mission-menu) [[README#Mission Menu]] (obsidian)
 - [ ] Read that mission’s `docs/MISSION_GUIDE.md`
 - [ ] Decide Path A or Path B
-- [ ] Run a four-device test (see [Classroom Network Test Guide](SPRK_Classroom_Network_Test_Guide.md#four-device-test))
+- [ ] Run a four-device test (see [Classroom Network Test Guide](SPRK_Classroom_Network_Test_Guide.md#four-device-test) [[docs/SPRK_Classroom_Network_Test_Guide#Four Device Test]] (obsidian))
 
 ### One day before
 
@@ -345,7 +363,7 @@ Full matrix, two-player limits, and unsupported keys: [SPRK Touch Control Guide]
 | [SPRK Cloud Facilitator Hosting Guide](SPRK_Cloud_Facilitator_Hosting_Guide.md) | Tunnel commands, Cloudflare vs LocalTunnel, link permanence |
 | [SPRK Classroom Network Test Guide](SPRK_Classroom_Network_Test_Guide.md) | Wi-Fi, hotspot, four-device test, LINKPORT notes |
 | [SPRK Browser Testing And Network Architecture](SPRK_Browser_Testing_And_Network_Architecture.md) | Why `127.0.0.1` fails, validation, diagrams |
-| [README mission menu](../README.md#mission-menu) | Choose a mission |
+| [README mission menu](../README.md#mission-menu) [[README#Mission Menu]] (obsidian) | Choose a mission |
 | [AgentDraven.instructions](../AgentDraven.instructions) | Mentor tone for agent-assisted classes |
 
 ---

@@ -4,23 +4,23 @@ ReactionRace is the first recommended classroom mission because everyone can joi
 ## Start Here
 If you are new, follow these in order:
 
-1. [Run the app](#how-to-run).
-2. [Play one solo round](#play-it).
-3. [Understand the entry point](#entry-point).
-4. [Open the code files](#code-files).
-5. [Make one small change](#change-it).
+1. [Run the app](#how-to-run) [[#How To Run]] (obsidian).
+2. [Play one solo round](#play-it) [[#Play It]] (obsidian).
+3. [Understand the entry point](#entry-point) [[#Entry Point]] (obsidian).
+4. [Open the code files](#code-files) [[#Code Files]] (obsidian).
+5. [Make one small change](#change-it) [[#Change It]] (obsidian).
 6. [Read the deeper walkthrough](CODE_WALKTHROUGH.md) when you want the full code explanation.
 
 ## Mission Navigation
 | Need | Go Here |
 | --- | --- |
-| I want to run it | [How To Run](#how-to-run) |
-| I want to play it | [Play It](#play-it) |
-| I want to know where the app starts | [Entry Point](#entry-point) |
-| I want to know which file to open | [Code Files](#code-files) |
+| I want to run it | [How To Run](#how-to-run) [[#How To Run]] (obsidian) |
+| I want to play it | [Play It](#play-it) [[#Play It]] (obsidian) |
+| I want to know where the app starts | [Entry Point](#entry-point) [[#Entry Point]] (obsidian) |
+| I want to know which file to open | [Code Files](#code-files) [[#Code Files]] (obsidian) |
 | I want diagrams and function details | [CODE_WALKTHROUGH.md](CODE_WALKTHROUGH.md) |
-| I want to understand sounds and animations | [Sounds Animations And X-Ray Vision](#sounds-animations-and-x-ray-vision) |
-| I need to create my branch first | [SPRK Git Repository User Guide](../../../docs/SPRK_Git_Repository_UserGuide.md#create-your-branch) |
+| I want to understand sounds and animations | [Sounds Animations And X-Ray Vision](#sounds-animations-and-x-ray-vision) [[#Sounds Animations And X-Ray Vision]] (obsidian) |
+| I need to create my branch first | [SPRK Git Repository User Guide](../../../docs/SPRK_Git_Repository_UserGuide.md#create-your-branch) [[docs/SPRK_Git_Repository_UserGuide#Create Your Branch]] (obsidian) |
 
 ## Standard SPRK Guidance
 This working repository carries local copies of the shared SPRK guides in `../../../docs/`.
@@ -43,7 +43,7 @@ Build a whole-class reaction game where students join from phones, tablets, Chro
 ## Open The App
 The recommended classroom version uses `server.py`.
 
-Open the app through the browser link created in [How To Run](#how-to-run).
+Open the app through the browser link created in [How To Run](#how-to-run) [[#How To Run]] (obsidian).
 
 Code starting point:
 
@@ -518,4 +518,4 @@ Add player names, teams, score history, or a new round type.
 ## Branch Reminder
 Create your branch before editing files.
 
-Guide: [SPRK Git Repository User Guide](../../../docs/SPRK_Git_Repository_UserGuide.md#create-your-branch)
+Guide: [SPRK Git Repository User Guide](../../../docs/SPRK_Git_Repository_UserGuide.md#create-your-branch) [[docs/SPRK_Git_Repository_UserGuide#Create Your Branch]] (obsidian)

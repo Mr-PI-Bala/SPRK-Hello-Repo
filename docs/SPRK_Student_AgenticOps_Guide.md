@@ -4,6 +4,15 @@ This guide translates MERIT AgenticOps practices into a classroom-friendly shape
 
 The full enterprise MERIT instruction set remains in the private MERIT vault. This public/student repo carries the safe operating principles that help students and agents learn: clear structure, one source of truth, validation, branch discipline, secrets hygiene, readable docs, and clean handoff.
 
+
+## Table of contents
+
+- [Compare and contrast](#compare-and-contrast) [[#Compare and contrast]] (obsidian)
+- [Mission folder naming (required)](#mission-folder-naming-required) [[#Mission folder naming (required)]] (obsidian)
+- [What to bring into student work](#what-to-bring-into-student-work) [[#What to bring into student work]] (obsidian)
+- [What not to import](#what-not-to-import) [[#What not to import]] (obsidian)
+- [Recommended student handoff](#recommended-student-handoff) [[#Recommended student handoff]] (obsidian)
+
 ## Compare and contrast
 
 | Area | MERIT enterprise pattern | SPRK student adaptation |

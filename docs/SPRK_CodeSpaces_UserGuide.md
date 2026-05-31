@@ -2,13 +2,13 @@
 This guide explains when to use GitHub Codespaces, what to do after opening it, and where troubleshooting fits.
 
 ## Table Of Contents
-- [What Codespaces Is](#what-codespaces-is)
-- [Codespaces Flow](#codespaces-flow)
-- [Open Codespaces](#open-codespaces)
-- [Run The Project Check](#run-the-project-check)
-- [Runtime Levels](#runtime-levels)
-- [Multiplayer Project Prerequisite](#multiplayer-project-prerequisite)
-- [Troubleshooting](#troubleshooting)
+- [What Codespaces Is](#what-codespaces-is) [[#What Codespaces Is]] (obsidian)
+- [Codespaces Flow](#codespaces-flow) [[#Codespaces Flow]] (obsidian)
+- [Open Codespaces](#open-codespaces) [[#Open Codespaces]] (obsidian)
+- [Run The Project Check](#run-the-project-check) [[#Run The Project Check]] (obsidian)
+- [Runtime Levels](#runtime-levels) [[#Runtime Levels]] (obsidian)
+- [Multiplayer Project Prerequisite](#multiplayer-project-prerequisite) [[#Multiplayer Project Prerequisite]] (obsidian)
+- [Troubleshooting](#troubleshooting) [[#Troubleshooting]] (obsidian)
 
 ## What Codespaces Is
 Codespaces is a cloud computer in your browser. It lets you read code, edit files, run checks, commit, push, and open Pull Requests without setting up a personal laptop.
@@ -122,8 +122,8 @@ docs/SPRK_Classroom_Network_Test_Guide.md
 
 ## Troubleshooting
 ### Troubleshooting Table Of Contents
-- [Copilot Chat Took Too Long](#copilot-chat-took-too-long)
-- [Desktop Or 3D App Will Not Open](#desktop-or-3d-app-will-not-open)
+- [Copilot Chat Took Too Long](#copilot-chat-took-too-long) [[#Copilot Chat Took Too Long]] (obsidian)
+- [Desktop Or 3D App Will Not Open](#desktop-or-3d-app-will-not-open) [[#Desktop Or 3D App Will Not Open]] (obsidian)
 
 ### Copilot Chat Took Too Long
 Symptom:
