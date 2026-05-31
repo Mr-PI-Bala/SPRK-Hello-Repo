@@ -190,3 +190,5 @@ Or from the menu: `npm run workflow` → **5** sync main, **6** triage PRs.
 - If the repo requires another person's approval, GitHub may reject self-approval.
 - The submit action uses `git add -A` after showing status. Stop if unrelated files appear.
 - The approve action is for maintainers, not general student use.
+- **Sync main** permanently removes local edits for any file you answer `y` or `ay`/`ya` to.
+- **Triage PRs** does not merge old drafts into `main` — it reports verdicts and helps close or port commits forward.
