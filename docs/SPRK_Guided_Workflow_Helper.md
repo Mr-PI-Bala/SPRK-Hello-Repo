@@ -33,6 +33,16 @@ or:
 python missions/_shared/tools/sprk_workflow.py
 ```
 
+
+## Table of contents
+
+- [Default Behavior](#default-behavior) [[#Default Behavior]] (obsidian)
+- [Menu Options](#menu-options) [[#Menu Options]] (obsidian)
+- [Why This Is Safer Than The Old Experiment](#why-this-is-safer-than-the-old-experiment) [[#Why This Is Safer Than The Old Experiment]] (obsidian)
+- [Object Interaction Diagram](#object-interaction-diagram) [[#Object Interaction Diagram]] (obsidian)
+- [Command Reference](#command-reference) [[#Command Reference]] (obsidian)
+- [Important Notes](#important-notes) [[#Important Notes]] (obsidian)
+
 ## Default Behavior
 By default, the helper shows status and then opens a menu.
 

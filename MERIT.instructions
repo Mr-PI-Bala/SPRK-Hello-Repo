@@ -2,6 +2,8 @@
 
 This file is the public, student-safe adaptation of enterprise MERIT AgenticOps for `SPRK-Hello-Repo`. It does not copy private vault text, operator secrets, or machine-specific paths from the enterprise MERIT instruction set.
 
+Coding agents: read `AGENTS.md` first for read order and closeout. Use this file for repository governance rules.
+
 ## Purpose
 
 - Give students and coding agents one canonical rules file for how this repository is organized.
@@ -99,11 +101,16 @@ A mission change is not ready until the relevant Playwright baseline passes and 
 4. No hard-coded machine paths — use repo-relative paths and helpers.
 5. Recovery over mystery — errors and docs should say what to try next.
 
+When editing files under `docs/` or mission guides, follow [docs/SPRK_Documentation_Links_Guide.md](docs/SPRK_Documentation_Links_Guide.md) for hyperlink rules.
+
 ## Related student files
 
 - [AGENTS.md](AGENTS.md) — agent read order and closeout checklist
 - [AgentDraven.instructions](AgentDraven.instructions) — classroom mentor tone
+- [docs/README.md](docs/README.md) — documentation index for repo-wide guides
+- [docs/SPRK_Documentation_Links_Guide.md](docs/SPRK_Documentation_Links_Guide.md) — portable and Obsidian link rules for student docs
 - [docs/SPRK_Student_AgenticOps_Guide.md](docs/SPRK_Student_AgenticOps_Guide.md) — MERIT enterprise vs SPRK student compare/contrast
+- [docs/PROJECT_GUIDE.md](docs/PROJECT_GUIDE.md) — local formative insights and maintainer pointers
 - [ops/README.md](ops/README.md) — hygiene and handoff format
 
 ## What not to import from enterprise MERIT

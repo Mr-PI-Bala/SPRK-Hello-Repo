@@ -1,5 +1,17 @@
 # Mission 08: SoccerMatch
 
+
+## Mission Navigation
+| Need | Go Here |
+| --- | --- |
+| I want what this mission is | [What This Mission Is](#what-this-mission-is) [[#What This Mission Is]] (obsidian) |
+| I want classroom flow | [Classroom Flow](#classroom-flow) [[#Classroom Flow]] (obsidian) |
+| I want run it | [Run It](#run-it) [[#Run It]] (obsidian) |
+| I want the controls | [Controls](#controls) [[#Controls]] (obsidian) |
+| I want what it teaches | [What It Teaches](#what-it-teaches) [[#What It Teaches]] (obsidian) |
+| I want shared pattern | [Shared Pattern](#shared-pattern) [[#Shared Pattern]] (obsidian) |
+| I want why mission 08 exists | [Why Mission 08 Exists](#why-mission-08-exists) [[#Why Mission 08 Exists]] (obsidian) |
+
 ## What This Mission Is
 `SoccerMatch` is the first live shared field mission in this repo. Instead of only reporting goals after the fact, multiple devices join the same running soccer match and see the same ball, players, score, and field.
 

@@ -1,4 +1,6 @@
 ﻿# SPRK Classroom Network Test Guide
+
+Repo-wide doc index: [docs/README.md](README.md). Link rules: [SPRK_Documentation_Links_Guide.md](SPRK_Documentation_Links_Guide.md). Facilitator quick path: [SPRK_Facilitator_Guide.md](SPRK_Facilitator_Guide.md).
 This guide explains how to test a classroom setup where one laptop hosts a backend and students join from Chromebooks, iPads, iPhones, Android phones, or other laptops.
 
 **Facilitators:** for the full hosting playbook (laptop Wi‑Fi **and** Cursor Cloud tunnels), one-page cheat sheet, and bit.ly pattern, read the [SPRK Facilitator Guide](SPRK_Facilitator_Guide.md) first.
@@ -17,16 +19,16 @@ Student devices open the app in a browser
 
 ## Table Of Contents
 - [SPRK Facilitator Guide](SPRK_Facilitator_Guide.md) (main playbook — read first)
-- [Recommended Device Roles](#recommended-device-roles)
-- [Network Options](#network-options)
-- [Option D - Cursor Cloud Facilitator With Public Tunnel](#option-d---cursor-cloud-facilitator-with-public-tunnel)
-- [TCL LINKPORT IK511 Note](#tcl-linkport-ik511-note)
-- [Test Accounts](#test-accounts)
-- [Four Device Test](#four-device-test)
-- [Backend Host Requirements](#backend-host-requirements)
-- [Student Device Requirements](#student-device-requirements)
-- [Classroom Fallbacks](#classroom-fallbacks)
-- [Alpha Student Validation](#alpha-student-validation)
+- [Recommended Device Roles](#recommended-device-roles) [[#Recommended Device Roles]] (obsidian)
+- [Network Options](#network-options) [[#Network Options]] (obsidian)
+- [Option D - Cursor Cloud Facilitator With Public Tunnel](#option-d---cursor-cloud-facilitator-with-public-tunnel) [[#Option D - Cursor Cloud Facilitator With Public Tunnel]] (obsidian)
+- [TCL LINKPORT IK511 Note](#tcl-linkport-ik511-note) [[#TCL LINKPORT IK511 Note]] (obsidian)
+- [Test Accounts](#test-accounts) [[#Test Accounts]] (obsidian)
+- [Four Device Test](#four-device-test) [[#Four Device Test]] (obsidian)
+- [Backend Host Requirements](#backend-host-requirements) [[#Backend Host Requirements]] (obsidian)
+- [Student Device Requirements](#student-device-requirements) [[#Student Device Requirements]] (obsidian)
+- [Classroom Fallbacks](#classroom-fallbacks) [[#Classroom Fallbacks]] (obsidian)
+- [Alpha Student Validation](#alpha-student-validation) [[#Alpha Student Validation]] (obsidian)
 
 ## Recommended Device Roles
 Use a real laptop as the backend host.

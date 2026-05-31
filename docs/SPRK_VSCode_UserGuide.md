@@ -2,14 +2,14 @@
 This is the master SPRK guide for VS Code, Codespaces editor behavior, Markdown preview, and Mermaid diagrams.
 
 ## Table Of Contents
-- [Markdown Opens In Preview](#markdown-opens-in-preview)
-- [Edit A Markdown File](#edit-a-markdown-file)
-- [Save Your Work](#save-your-work)
-- [Preview Shortcuts](#preview-shortcuts)
-- [Mermaid Diagrams](#mermaid-diagrams)
-- [Markdown Preview Theme](#markdown-preview-theme)
-- [iPad Preview Troubleshooting](#ipad-preview-troubleshooting)
-- [Recommended Extensions](#recommended-extensions)
+- [Markdown Opens In Preview](#markdown-opens-in-preview) [[#Markdown Opens In Preview]] (obsidian)
+- [Edit A Markdown File](#edit-a-markdown-file) [[#Edit A Markdown File]] (obsidian)
+- [Save Your Work](#save-your-work) [[#Save Your Work]] (obsidian)
+- [Preview Shortcuts](#preview-shortcuts) [[#Preview Shortcuts]] (obsidian)
+- [Mermaid Diagrams](#mermaid-diagrams) [[#Mermaid Diagrams]] (obsidian)
+- [Markdown Preview Theme](#markdown-preview-theme) [[#Markdown Preview Theme]] (obsidian)
+- [iPad Preview Troubleshooting](#ipad-preview-troubleshooting) [[#iPad Preview Troubleshooting]] (obsidian)
+- [Recommended Extensions](#recommended-extensions) [[#Recommended Extensions]] (obsidian)
 
 ## Markdown Opens In Preview
 SPRK repositories can include this setting:

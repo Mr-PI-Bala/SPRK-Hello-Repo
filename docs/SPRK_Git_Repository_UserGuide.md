@@ -2,16 +2,16 @@
 This is the master SPRK guide for GitHub accounts, repository access, branches, commits, pushes, and pull requests.
 
 ## Table Of Contents
-- [SPRK GitHub Account Pattern](#sprk-github-account-pattern)
-- [Find A Repository](#find-a-repository)
-- [Request Access To A Working Repository](#request-access-to-a-working-repository)
-- [Access Request Interaction Flow](#access-request-interaction-flow)
-- [Accept A Pending Invitation](#accept-a-pending-invitation)
-- [Create Your Branch](#create-your-branch)
-- [Commit And Push](#commit-and-push)
-- [Open A Pull Request](#open-a-pull-request)
-- [Personal Repository Permissions](#personal-repository-permissions)
-- [Organization Repository Permissions](#organization-repository-permissions)
+- [SPRK GitHub Account Pattern](#sprk-github-account-pattern) [[#SPRK GitHub Account Pattern]] (obsidian)
+- [Find A Repository](#find-a-repository) [[#Find A Repository]] (obsidian)
+- [Request Access To A Working Repository](#request-access-to-a-working-repository) [[#Request Access To A Working Repository]] (obsidian)
+- [Access Request Interaction Flow](#access-request-interaction-flow) [[#Access Request Interaction Flow]] (obsidian)
+- [Accept A Pending Invitation](#accept-a-pending-invitation) [[#Accept A Pending Invitation]] (obsidian)
+- [Create Your Branch](#create-your-branch) [[#Create Your Branch]] (obsidian)
+- [Commit And Push](#commit-and-push) [[#Commit And Push]] (obsidian)
+- [Open A Pull Request](#open-a-pull-request) [[#Open A Pull Request]] (obsidian)
+- [Personal Repository Permissions](#personal-repository-permissions) [[#Personal Repository Permissions]] (obsidian)
+- [Organization Repository Permissions](#organization-repository-permissions) [[#Organization Repository Permissions]] (obsidian)
 
 ## SPRK GitHub Account Pattern
 SPRK member accounts use a consistent clan-style identity.

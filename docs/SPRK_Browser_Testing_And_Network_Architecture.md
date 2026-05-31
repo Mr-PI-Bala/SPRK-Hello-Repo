@@ -3,20 +3,43 @@ This guide explains how SPRK browser missions run, how automated validation work
 
 Mission 10, `10-SpaceInvaders-1P-nP`, is the example throughout this document.
 
+
+## Table of contents
+
+- [Visual Map](#visual-map) [[#Visual Map]] (obsidian)
+- [Quick Vocabulary](#quick-vocabulary) [[#Quick Vocabulary]] (obsidian)
+- [Big Picture: Browser To Cursor Cloud To GitHub](#big-picture-browser-to-cursor-cloud-to-github) [[#Big Picture: Browser To Cursor Cloud To GitHub]] (obsidian)
+- [What The Setup Commands Do](#what-the-setup-commands-do) [[#What The Setup Commands Do]] (obsidian)
+- [Command Dependency Graph](#command-dependency-graph) [[#Command Dependency Graph]] (obsidian)
+- [Automated Validation Harness](#automated-validation-harness) [[#Automated Validation Harness]] (obsidian)
+- [Runtime Architecture For A Browser Mission](#runtime-architecture-for-a-browser-mission) [[#Runtime Architecture For A Browser Mission]] (obsidian)
+- [Mission 10 Object Model](#mission-10-object-model) [[#Mission 10 Object Model]] (obsidian)
+- [Runtime Data Lifecycle](#runtime-data-lifecycle) [[#Runtime Data Lifecycle]] (obsidian)
+- [Mission 10 Dimension Flow](#mission-10-dimension-flow) [[#Mission 10 Dimension Flow]] (obsidian)
+- [Running The Game In Cursor Cloud](#running-the-game-in-cursor-cloud) [[#Running The Game In Cursor Cloud]] (obsidian)
+- [Cloud Facilitator Hosting](#cloud-facilitator-hosting) [[#Cloud Facilitator Hosting]] (obsidian)
+- [Running The Game On A Facilitator Laptop](#running-the-game-on-a-facilitator-laptop) [[#Running The Game On A Facilitator Laptop]] (obsidian)
+- [Why `127.0.0.1` Does Not Reach The Laptop Next To You](#why-127-0-0-1-does-not-reach-the-laptop-next-to-you) [[#Why `127.0.0.1` Does Not Reach The Laptop Next To You]] (obsidian)
+- [Local Network Object Interaction](#local-network-object-interaction) [[#Local Network Object Interaction]] (obsidian)
+- [Finding The Facilitator Laptop IP On Windows](#finding-the-facilitator-laptop-ip-on-windows) [[#Finding The Facilitator Laptop IP On Windows]] (obsidian)
+- [Cursor Cloud Versus Facilitator Laptop](#cursor-cloud-versus-facilitator-laptop) [[#Cursor Cloud Versus Facilitator Laptop]] (obsidian)
+- [Troubleshooting Checklist](#troubleshooting-checklist) [[#Troubleshooting Checklist]] (obsidian)
+- [Command Reference](#command-reference) [[#Command Reference]] (obsidian)
+
 ## Visual Map
 Use this map when you want to jump to the diagram that answers your question.
 
 | Question | Best Visual |
 | --- | --- |
-| Where is the code running when I use Cursor in a browser? | [Big Picture: Browser To Cursor Cloud To GitHub](#big-picture-browser-to-cursor-cloud-to-github) |
-| Which command installs which thing? | [Command Dependency Graph](#command-dependency-graph) |
-| What exactly happens during `npm run test:spaceinvaders`? | [Automated Validation Harness](#automated-validation-harness) |
-| What objects exist in a browser mission? | [Runtime Architecture For A Browser Mission](#runtime-architecture-for-a-browser-mission) |
-| How does Mission 10 keep state across 2D, 3D, and FPS? | [Mission 10 Object Model](#mission-10-object-model) |
-| How does browser state move through the backend? | [Runtime Data Lifecycle](#runtime-data-lifecycle) |
-| Why do phones not use `127.0.0.1`? | [Why `127.0.0.1` Does Not Reach The Laptop Next To You](#why-127001-does-not-reach-the-laptop-next-to-you) |
-| How do iPhone, iPad, Android, and other laptops connect to the facilitator laptop? | [Local Network Object Interaction](#local-network-object-interaction) |
-| Facilitator hosts in Cursor Cloud; students on phones/Chromebooks anywhere | [Cloud Facilitator Hosting](#cloud-facilitator-hosting) |
+| Where is the code running when I use Cursor in a browser? | [Big Picture: Browser To Cursor Cloud To GitHub](#big-picture-browser-to-cursor-cloud-to-github) [[#Big Picture: Browser To Cursor Cloud To GitHub]] (obsidian) |
+| Which command installs which thing? | [Command Dependency Graph](#command-dependency-graph) [[#Command Dependency Graph]] (obsidian) |
+| What exactly happens during `npm run test:spaceinvaders`? | [Automated Validation Harness](#automated-validation-harness) [[#Automated Validation Harness]] (obsidian) |
+| What objects exist in a browser mission? | [Runtime Architecture For A Browser Mission](#runtime-architecture-for-a-browser-mission) [[#Runtime Architecture For A Browser Mission]] (obsidian) |
+| How does Mission 10 keep state across 2D, 3D, and FPS? | [Mission 10 Object Model](#mission-10-object-model) [[#Mission 10 Object Model]] (obsidian) |
+| How does browser state move through the backend? | [Runtime Data Lifecycle](#runtime-data-lifecycle) [[#Runtime Data Lifecycle]] (obsidian) |
+| Why do phones not use `127.0.0.1`? | [Why `127.0.0.1` Does Not Reach The Laptop Next To You](#why-127001-does-not-reach-the-laptop-next-to-you) [[#Why `127.0.0.1` Does Not Reach The Laptop Next To You]] (obsidian) |
+| How do iPhone, iPad, Android, and other laptops connect to the facilitator laptop? | [Local Network Object Interaction](#local-network-object-interaction) [[#Local Network Object Interaction]] (obsidian) |
+| Facilitator hosts in Cursor Cloud; students on phones/Chromebooks anywhere | [Cloud Facilitator Hosting](#cloud-facilitator-hosting) [[#Cloud Facilitator Hosting]] (obsidian) |
 
 ## Quick Vocabulary
 | Term | Meaning |

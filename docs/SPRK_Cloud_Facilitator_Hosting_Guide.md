@@ -6,6 +6,22 @@ Use this guide when a **facilitator hosts the game backend in Cursor Cloud** (or
 
 This is different from the [SPRK Classroom Network Test Guide](SPRK_Classroom_Network_Test_Guide.md) **local network** model, where students open `http://<facilitator-laptop-ip>:<port>`.
 
+
+## Table of contents
+
+- [When To Use This Guide](#when-to-use-this-guide) [[#When To Use This Guide]] (obsidian)
+- [Big Picture](#big-picture) [[#Big Picture]] (obsidian)
+- [Mission Port Reference](#mission-port-reference) [[#Mission Port Reference]] (obsidian)
+- [Step 1 — Start The Backend](#step-1-start-the-backend) [[#Step 1 — Start The Backend]] (obsidian)
+- [Step 2 — Open A Public Tunnel (Recommended: Cloudflare)](#step-2-open-a-public-tunnel-recommended-cloudflare) [[#Step 2 — Open A Public Tunnel (Recommended: Cloudflare)]] (obsidian)
+- [Step 2 — Alternative: LocalTunnel](#step-2-alternative-localtunnel) [[#Step 2 — Alternative: LocalTunnel]] (obsidian)
+- [Compare The Two Tunnel Options](#compare-the-two-tunnel-options) [[#Compare The Two Tunnel Options]] (obsidian)
+- [What Does Not Work For Students](#what-does-not-work-for-students) [[#What Does Not Work For Students]] (obsidian)
+- [Friendly And Semi-Permanent Links](#friendly-and-semi-permanent-links) [[#Friendly And Semi-Permanent Links]] (obsidian)
+- [Facilitator Checklist](#facilitator-checklist) [[#Facilitator Checklist]] (obsidian)
+- [Troubleshooting](#troubleshooting) [[#Troubleshooting]] (obsidian)
+- [Related Guides](#related-guides) [[#Related Guides]] (obsidian)
+
 ## When To Use This Guide
 
 | Situation | Use this cloud tunnel guide | Use local LAN guide instead |
@@ -111,7 +127,7 @@ Copy the `https://....trycloudflare.com` URL from the output. Share **only that 
 | `python3 server.py` | Yes — this is the game backend |
 | `cloudflared tunnel ...` | Yes — this is the public link |
 
-If either terminal stops, students lose access until you restart it and share a **new** URL (see [Friendly And Semi-Permanent Links](#friendly-and-semi-permanent-links)).
+If either terminal stops, students lose access until you restart it and share a **new** URL (see [Friendly And Semi-Permanent Links](#friendly-and-semi-permanent-links) [[#Friendly And Semi-Permanent Links]] (obsidian)).
 
 ## Step 2 — Alternative: LocalTunnel
 
@@ -152,7 +168,7 @@ Prefer Cloudflare when you want to avoid this step.
 | `http://34.x.x.x:8010` (cloud public IP) | Cloud VMs usually do not expose mission ports on the public internet |
 | Cursor Desktop **plug icon** forward to `localhost` | Forwards to a **laptop running Cursor Desktop**, not to a phone-only workflow |
 
-See also [SPRK Browser Testing And Network Architecture](SPRK_Browser_Testing_And_Network_Architecture.md#why-127001-does-not-reach-the-laptop-next-to-you).
+See also [SPRK Browser Testing And Network Architecture](SPRK_Browser_Testing_And_Network_Architecture.md#why-127001-does-not-reach-the-laptop-next-to-you) [[docs/SPRK_Browser_Testing_And_Network_Architecture#Why `127.0.0.1` Does Not Reach The Laptop Next To You]] (obsidian).
 
 ## Friendly And Semi-Permanent Links
 
@@ -194,7 +210,7 @@ That setup is beyond this quick classroom guide. Use quick tunnels + bit.ly for 
 
 ## Facilitator Checklist
 
-Use the full before/during/after lists in the [SPRK Facilitator Guide](SPRK_Facilitator_Guide.md#facilitator-checklist-full). Path B minimum:
+Use the full before/during/after lists in the [SPRK Facilitator Guide](SPRK_Facilitator_Guide.md#facilitator-checklist-full) [[docs/SPRK_Facilitator_Guide#Facilitator Checklist (Full)]] (obsidian). Path B minimum:
 
 - [ ] `python3 server.py` running in the mission folder
 - [ ] Tunnel running; `https://....trycloudflare.com` copied
