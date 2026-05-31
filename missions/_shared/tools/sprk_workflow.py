@@ -10,10 +10,97 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import subprocess
 import sys
 from dataclasses import dataclass, field
+
+
+class Term:
+    """ANSI styles for terminal output (disabled when not a TTY or NO_COLOR is set)."""
+
+    RESET = "\033[0m"
+    BOLD = "\033[1m"
+    RED = "\033[31m"
+    GREEN = "\033[32m"
+    YELLOW = "\033[33m"
+    CYAN = "\033[36m"
+
+
+def enable_windows_ansi() -> None:
+    """Enable ANSI colors in classic Windows consoles when possible."""
+    if sys.platform != "win32":
+        return
+    try:
+        import ctypes
+
+        kernel32 = ctypes.windll.kernel32  # type: ignore[attr-defined]
+        handle = kernel32.GetStdHandle(-11)
+        mode = ctypes.c_ulong()
+        if kernel32.GetConsoleMode(handle, ctypes.byref(mode)):
+            enable_virtual_terminal_processing = 0x0004
+            kernel32.SetConsoleMode(handle, mode.value | enable_virtual_terminal_processing)
+    except (AttributeError, OSError):
+        return
+
+
+def use_color() -> bool:
+    if os.environ.get("NO_COLOR") is not None:
+        return False
+    if os.environ.get("FORCE_COLOR") or os.environ.get("SPRK_WORKFLOW_COLOR"):
+        return True
+    return sys.stdout.isatty()
+
+
+def paint(text: str, *styles: str) -> str:
+    if not use_color() or not styles:
+        return text
+    return "".join(styles) + text + Term.RESET
+
+
+def say_tag(tag: str, message: str, tag_style: str, message_style: str = "") -> None:
+    if use_color():
+        body = paint(message, message_style) if message_style else message
+        print(f"{paint(tag, tag_style)} {body}")
+    else:
+        print(f"{tag} {message}")
+
+
+def say_warn(message: str) -> None:
+    say_tag("[WARN]", message, Term.BOLD + Term.YELLOW, Term.BOLD + Term.YELLOW)
+
+
+def say_fail(message: str) -> None:
+    say_tag("[FAIL]", message, Term.BOLD + Term.RED, Term.BOLD + Term.RED)
+
+
+def say_ok(message: str) -> None:
+    say_tag("[OK]", message, Term.BOLD + Term.GREEN, Term.BOLD + Term.GREEN)
+
+
+def say_stop(message: str) -> None:
+    say_tag("[STOP]", message, Term.BOLD + Term.RED, Term.BOLD + Term.RED)
+
+
+def say_info(message: str) -> None:
+    say_tag("[INFO]", message, Term.BOLD + Term.CYAN)
+
+
+def say_tip(message: str) -> None:
+    say_tag("[TIP]", message, Term.BOLD + Term.CYAN, Term.BOLD + Term.CYAN)
+
+
+def verdict_colors(verdict: str) -> tuple[str, str]:
+    if verdict == "STALE_UNSAFE":
+        return Term.BOLD + Term.RED, Term.BOLD + Term.RED
+    if verdict in {"LIKELY_SUPERSEDED", "NO_UNIQUE_COMMITS"}:
+        return Term.BOLD + Term.YELLOW, Term.BOLD + Term.YELLOW
+    if verdict == "PORT_TO_NEW_BRANCH":
+        return Term.BOLD + Term.GREEN, Term.BOLD + Term.GREEN
+    if verdict == "REVIEW_MANUALLY":
+        return Term.BOLD + Term.YELLOW, Term.BOLD + Term.YELLOW
+    return Term.BOLD, Term.BOLD + Term.YELLOW
 
 
 CONFIRM_TEXT = "I UNDERSTAND"
@@ -50,7 +137,7 @@ def print_command(args: list[str]) -> None:
 
 def print_command_failure(args: list[str], result: CommandResult) -> None:
     print()
-    print("[FAIL] Command did not complete:")
+    say_fail("Command did not complete:")
     print_command(args)
     if result.stdout:
         print(result.stdout)
@@ -62,7 +149,7 @@ def require_tool(tool: str) -> bool:
     result = run_cmd([tool, "--version"])
     if result.returncode == 0:
         return True
-    print(f"[WARN] `{tool}` is not available or is not on PATH.")
+    say_warn(f"`{tool}` is not available or is not on PATH.")
     return False
 
 
@@ -154,7 +241,7 @@ def prompt_discard_file(path: str, status_xy: str) -> str | None:
         parsed = parse_yes_no_answer(answer)
         if parsed:
             return parsed
-        print("[WARN] Enter y, n, ay, ya, an, or na.")
+        say_warn("Enter y, n, ay, ya, an, or na.")
 
 
 def choose_files_to_discard(files: list[tuple[str, str]]) -> tuple[list[str], list[str]] | None:
@@ -200,7 +287,7 @@ def choose_files_to_discard(files: list[tuple[str, str]]) -> tuple[list[str], li
 
     if to_keep and not to_discard:
         print()
-        print("[STOP] You chose to keep every local file. Nothing was synced.")
+        say_stop("You chose to keep every local file. Nothing was synced.")
         print("If you want GitHub main on this laptop, run again and answer y or ay for the files to replace.")
         print("If you want to save local edits, use menu option 2 to create a branch and option 3 to open a PR.")
         return None
@@ -224,7 +311,7 @@ def confirm_or_stop(prompt: str, expected: str = CONFIRM_TEXT) -> bool:
     print(prompt)
     answer = input(f'Type "{expected}" to continue: ').strip()
     if answer != expected:
-        print("[STOP] No changes were made.")
+        say_stop("No changes were made.")
         return False
     return True
 
@@ -345,8 +432,11 @@ def print_pr_triage_report(report: PrTriageReport) -> None:
     print(f"--- PR #{report.number} [{draft}] {report.title} ---")
     print(f"  URL: {report.url}")
     print(f"  Branch: {report.head_ref} -> main")
-    print(f"  Verdict: {report.verdict}")
-    print(f"  Recommendation: {report.recommendation}")
+    verdict_style, recommendation_style = verdict_colors(report.verdict)
+    verdict_label = paint("Verdict:", Term.BOLD)
+    recommendation_label = paint("Recommendation:", Term.BOLD)
+    print(f"  {verdict_label} {paint(report.verdict, verdict_style)}")
+    print(f"  {recommendation_label} {paint(report.recommendation, recommendation_style)}")
     print(f"  Behind main: {report.behind_count} commit(s) on main not in this PR")
     if report.ahead_commits:
         print("  Unique commits on this PR (salvage candidates):")
@@ -359,7 +449,7 @@ def print_pr_triage_report(report: PrTriageReport) -> None:
         if len(report.changed_files) > 20:
             print(f"    ... and {len(report.changed_files) - 20} more")
     if report.deleted_if_merged:
-        print("  [WARN] Merging now would DELETE these paths that exist on main:")
+        say_warn("Merging now would DELETE these paths that exist on main:")
         for path in report.deleted_if_merged[:15]:
             print(f"    {path}")
         if len(report.deleted_if_merged) > 15:
@@ -383,7 +473,7 @@ def prompt_yes_no_item(prompt: str, batch: str | None) -> tuple[bool | None, str
             return True, "yes"
         if parsed == "all_no":
             return False, "no"
-        print("[WARN] Enter y, n, ay, ya, an, or na.")
+        say_warn("Enter y, n, ay, ya, an, or na.")
 
 
 def close_pr_with_comment(pr_number: int, comment: str) -> bool:
@@ -391,13 +481,13 @@ def close_pr_with_comment(pr_number: int, comment: str) -> bool:
     if result.returncode != 0:
         print_command_failure(["gh", "pr", "close", str(pr_number), "--comment", comment], result)
         return False
-    print(f"[OK] Closed PR #{pr_number}.")
+    say_ok(f"Closed PR #{pr_number}.")
     return True
 
 
 def port_commits_to_new_branch(commits: list[tuple[str, str]], pr_number: int) -> None:
     if not commits:
-        print("[STOP] No commits to port.")
+        say_stop("No commits to port.")
         return
 
     print()
@@ -416,7 +506,7 @@ def port_commits_to_new_branch(commits: list[tuple[str, str]], pr_number: int) -
             selected.append(sha)
 
     if not selected:
-        print("[STOP] No commits selected. Nothing was ported.")
+        say_stop("No commits selected. Nothing was ported.")
         return
 
     branch_name = input("\nNew branch name (from latest main): ").strip()
@@ -446,13 +536,13 @@ def port_commits_to_new_branch(commits: list[tuple[str, str]], pr_number: int) -
         pick = run_cmd(["git", "cherry-pick", sha])
         if pick.returncode != 0:
             print_command_failure(["git", "cherry-pick", sha], pick)
-            print("[FAIL] Fix conflicts, then `git cherry-pick --continue` or `git cherry-pick --abort`.")
+            say_fail("Fix conflicts, then `git cherry-pick --continue` or `git cherry-pick --abort`.")
             return
     push = run_cmd(["git", "push", "-u", "origin", branch_name])
     if push.returncode != 0:
         print_command_failure(["git", "push", "-u", "origin", branch_name], push)
         return
-    print(f"[OK] Ported {len(selected)} commit(s) onto `{branch_name}`. Use menu 3 to open a new PR.")
+    say_ok(f"Ported {len(selected)} commit(s) onto `{branch_name}`. Use menu 3 to open a new PR.")
 
 
 def triage_open_prs() -> None:
@@ -460,7 +550,7 @@ def triage_open_prs() -> None:
     prs = list_open_prs()
     if not prs:
         print()
-        print("[INFO] No open pull requests.")
+        say_info("No open pull requests.")
         return
 
     print()
@@ -502,7 +592,7 @@ def triage_open_prs() -> None:
     elif action == "3":
         pr_pick = input("PR number to port commits from: ").strip().lstrip("#")
         if not pr_pick.isdigit():
-            print("[STOP] PR number must be numeric.")
+            say_stop("PR number must be numeric.")
             return
         target = next((r for r in reports if r.number == int(pr_pick)), None)
         if not target:
@@ -510,14 +600,14 @@ def triage_open_prs() -> None:
             if refreshed:
                 target = analyze_open_pr(refreshed)
         if not target or not target.ahead_commits:
-            print("[STOP] Could not find salvage commits for that PR.")
+            say_stop("Could not find salvage commits for that PR.")
             return
         port_commits_to_new_branch(target.ahead_commits, target.number)
     elif action == "4":
         return
     else:
         print()
-        print("[INFO] No GitHub changes made. Use menu 4 only when triage says merge is safe.")
+        say_info("No GitHub changes made. Use menu 4 only when triage says merge is safe.")
 
 
 def print_status() -> None:
@@ -549,7 +639,7 @@ def print_status() -> None:
     ])
     if isinstance(prs, list):
         print()
-        print("Open pull requests (run menu 7 to triage — do not merge stale PRs blindly):")
+        print("Open pull requests (run menu 6 to triage — do not merge stale PRs blindly):")
         if not prs:
             print("  none")
         else:
@@ -559,13 +649,13 @@ def print_status() -> None:
                     f"  #{pr.get('number')} [{draft}] {pr.get('title')} "
                     f"({pr.get('headRefName')} -> {pr.get('baseRefName')})"
                 )
-            print("  Tip: menu 7 analyzes each PR vs main, can close superseded drafts, and can")
+            print("  Tip: menu 6 analyzes each PR vs main, can close superseded drafts, and can")
             print("  cherry-pick salvage commits onto a new branch for your next PR.")
     else:
         print()
         print("Open pull requests: unavailable because `gh` is not authenticated or failed.")
 
-    print_interactive_shortcuts_banner("menu 5 sync-main file prompts; menu 7 triage/close/port")
+    print_interactive_shortcuts_banner("menu 5 sync-main; menu 6 triage/close/port")
 
 
 def explain_start_branch(branch_name: str) -> None:
@@ -585,11 +675,11 @@ def explain_start_branch(branch_name: str) -> None:
 
 def validate_branch_name(branch_name: str) -> bool:
     if not BRANCH_RE.match(branch_name):
-        print("[STOP] Branch names should be lowercase letters, numbers, dots, dashes, underscores, or slashes.")
+        say_stop("Branch names should be lowercase letters, numbers, dots, dashes, underscores, or slashes.")
         print("Example: maya-space-invaders-fix")
         return False
     if branch_name in {"main", "master"}:
-        print("[STOP] Do not create work directly on main/master.")
+        say_stop("Do not create work directly on main/master.")
         return False
     return True
 
@@ -605,7 +695,7 @@ def start_branch(branch_name: str | None = None) -> None:
     if not sync_main_with_github(skip_status=True, from_start_branch=True):
         return
     run_cmd(["git", "checkout", "-b", branch_name], check=True)
-    print(f"[OK] You are now on branch `{branch_name}`.")
+    say_ok(f"You are now on branch `{branch_name}`.")
 
 
 def explain_sync_main(to_discard: list[str], to_keep: list[str], hard_reset: bool) -> None:
@@ -649,7 +739,7 @@ def sync_main_with_github(skip_status: bool = False, from_start_branch: bool = F
         to_discard, to_keep = choice
         if to_keep:
             print()
-            print("[INFO] Keeping local edits for:")
+            say_info("Keeping local edits for:")
             for path in to_keep:
                 print(f"  {path}")
 
@@ -678,7 +768,7 @@ def sync_main_with_github(skip_status: bool = False, from_start_branch: bool = F
     checkout = run_cmd(["git", "checkout", "main"])
     if checkout.returncode != 0:
         print_command_failure(["git", "checkout", "main"], checkout)
-        print("[FAIL] Could not switch to main. Resolve the files above, then run sync again.")
+        say_fail("Could not switch to main. Resolve the files above, then run sync again.")
         return False
 
     for path in to_discard:
@@ -696,7 +786,7 @@ def sync_main_with_github(skip_status: bool = False, from_start_branch: bool = F
         pull = run_cmd(["git", "pull", "origin", "main"])
         if pull.returncode != 0:
             print()
-            print("[FAIL] `git pull` is still blocked.")
+            say_fail("`git pull` is still blocked.")
             print("Files you kept local may conflict with GitHub. Run sync again and choose y or ay for them,")
             print("or save them on a feature branch (menu option 2, then 3).")
             if pull.stdout:
@@ -706,9 +796,9 @@ def sync_main_with_github(skip_status: bool = False, from_start_branch: bool = F
             return False
 
     if from_start_branch:
-        print("[OK] Local `main` matches GitHub. Creating your work branch next.")
+        say_ok("Local `main` matches GitHub. Creating your work branch next.")
     else:
-        print("[OK] Local `main` is synced with GitHub (`origin/main`).")
+        say_ok("Local `main` is synced with GitHub (`origin/main`).")
     return True
 
 
@@ -730,15 +820,15 @@ def submit_work(commit_message: str | None = None) -> None:
     print_status()
     branch = current_branch()
     if branch in {"main", "master"}:
-        print("[STOP] You are on main/master. Create a feature branch first.")
+        say_stop("You are on main/master. Create a feature branch first.")
         return
     changes = changed_files()
     if not changes:
-        print("[STOP] There are no changed files to commit.")
+        say_stop("There are no changed files to commit.")
         return
     commit_message = commit_message or input("\nCommit / PR title: ").strip()
     if not commit_message:
-        print("[STOP] Commit message cannot be empty.")
+        say_stop("Commit message cannot be empty.")
         return
     explain_submit_work(commit_message)
     if not confirm_or_stop("Confirm you understand this will commit, push, and create a pull request."):
@@ -758,7 +848,7 @@ def submit_work(commit_message: str | None = None) -> None:
         print_command_failure(["gh", "pr", "create", "--title", commit_message, "--body", pr_body], result)
         return
     print(result.stdout)
-    print("[OK] Pull request created.")
+    say_ok("Pull request created.")
 
 
 def fetch_pr(pr_number: str) -> dict | None:
@@ -815,12 +905,12 @@ def approve_pr(pr_number: str | None = None) -> None:
     print_status()
     pr_number = pr_number or input("\nPR number to review: ").strip().lstrip("#")
     if not pr_number.isdigit():
-        print("[STOP] PR number must be numeric.")
+        say_stop("PR number must be numeric.")
         return
 
     pr = fetch_pr(pr_number)
     if not pr:
-        print(f"[STOP] Could not load PR #{pr_number}.")
+        say_stop(f"Could not load PR #{pr_number}.")
         return
     print_pr_summary(pr)
 
@@ -828,7 +918,7 @@ def approve_pr(pr_number: str | None = None) -> None:
     author = (pr.get("author") or {}).get("login")
     if user and author and user.lower() == author.lower():
         print()
-        print("[WARN] You are the PR author.")
+        say_warn("You are the PR author.")
         print("GitHub rules may prevent approving your own PR. If this is a solo-maintainer repo,")
         print("you may still continue, but GitHub can reject the approval or merge.")
         if not confirm_or_stop(
@@ -863,14 +953,14 @@ def approve_pr(pr_number: str | None = None) -> None:
     if review.returncode != 0:
         print_command_failure(["gh", "pr", "review", pr_number, "--approve"], review)
         return
-    print("[OK] PR approved.")
+    say_ok("PR approved.")
 
     if merge_after:
         merge = run_cmd(["gh", "pr", "merge", pr_number, f"--{merge_method}", "--delete-branch"])
         if merge.returncode != 0:
             print_command_failure(["gh", "pr", "merge", pr_number, f"--{merge_method}", "--delete-branch"], merge)
             return
-        print("[OK] PR merged.")
+        say_ok("PR merged.")
 
 
 def print_menu() -> None:
@@ -899,7 +989,7 @@ def menu() -> None:
             submit_work()
         elif choice == "4":
             print()
-            print("[TIP] If open PRs may be stale, run option 6 first. Option 4 merges into main.")
+            say_tip("If open PRs may be stale, run option 6 first. Option 4 merges into main.")
             approve_pr()
         elif choice == "5":
             sync_main_with_github()
@@ -913,6 +1003,7 @@ def menu() -> None:
 
 
 def main() -> None:
+    enable_windows_ansi()
     parser = argparse.ArgumentParser(description="SPRK guided GitHub workflow helper")
     subparsers = parser.add_subparsers(dest="command")
 
@@ -937,7 +1028,7 @@ def main() -> None:
     if not require_tool("git"):
         sys.exit(1)
     if args.command in {None, "status", "submit", "approve"} and not require_tool("gh"):
-        print("[WARN] GitHub PR actions require the GitHub CLI. Status can still show local git state.")
+        say_warn("GitHub PR actions require the GitHub CLI. Status can still show local git state.")
 
     if args.command == "status":
         print_status()
