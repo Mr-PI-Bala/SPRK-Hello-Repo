@@ -2,21 +2,12 @@
 
 This file is the public, student-safe adaptation of enterprise MERIT AgenticOps for `SPRK-Hello-Repo`. It does not copy private vault text, operator secrets, or machine-specific paths from the enterprise MERIT instruction set.
 
+Coding agents: read `AGENTS.md` first for read order and closeout. Use this file for repository governance rules.
+
 ## Purpose
 
 - Give students and coding agents one canonical rules file for how this repository is organized.
 - Keep classroom missions consistent, testable, and easy to navigate.
-
-## Table of contents
-
-- [Mission folder naming](#mission-folder-naming-required) [[#Mission folder naming (required)]] (obsidian)
-- [Mode labels](#mode-labels) [[#Mode labels]] (obsidian)
-- [Branch and PR governance](#branch-and-pr-governance-required) [[#Branch and PR governance (required)]] (obsidian)
-- [Repository shape](#repository-shape) [[#Repository shape]] (obsidian)
-- [Documentation links](#documentation-links-required) [[#Documentation links (required)]] (obsidian)
-- [Validation before confidence](#validation-before-confidence) [[#Validation before confidence]] (obsidian)
-- [Student-safe MERIT principles](#student-safe-merit-principles) [[#Student-safe MERIT principles]] (obsidian)
-- [Related student files](#related-student-files) [[#Related student files]] (obsidian)
 
 ## Mission folder naming (required)
 
@@ -85,59 +76,6 @@ This rule prevents duplicate mission folders, split validation evidence, and bra
 
 Do not rename `docs/` to a MERIT `{Name} docs/` folder in this student repo; curriculum links depend on `docs/`.
 
-## Documentation links (required)
-
-SPRK docs must read correctly in **GitHub**, **Codespaces**, **VS Code Markdown preview**, and optional **Obsidian**. Use two link forms when pointing at a **section** inside a document.
-
-### Portable link (everywhere)
-
-Use standard Markdown relative paths and GitHub-style heading anchors. This is the link students click in the browser and in the editor preview.
-
-```markdown
-[Visible label](path/to/doc.md#heading-anchor)
-```
-
-Rules:
-
-- Paths are **relative to the file you are editing** (for example `../MERIT.instructions` from `docs/`, or `docs/SPRK_Facilitator_Guide.md` from the repo root).
-- Heading anchors use lowercase words separated by hyphens (GitHub slug rules).
-- Use portable links in tables, mission guides, issues, and agent handoffs.
-
-### Obsidian link (section references)
-
-When the target is a **section** (not just a whole file), add an Obsidian wikilink immediately after the portable link and label it **`(obsidian)`**:
-
-```markdown
-[Validation before confidence](MERIT.instructions#validation-before-confidence) [[MERIT.instructions#Validation before confidence]] (obsidian)
-```
-
-Rules:
-
-- `NoteName` is the Markdown filename **without** `.md`.
-- `Exact Heading Text` matches the target heading line (Obsidian uses the heading text after `#`).
-- Same-file section jump: `[Mission naming](#mission-folder-naming-required) [[#Mission folder naming (required)]] (obsidian)`
-- Whole-file targets need only the portable link; Obsidian wikilink is optional.
-- Do **not** use `(obsidian)` for external URLs. Do **not** paste private MERIT vault `obsidian://` URIs into this repo.
-
-### When to use each
-
-| Target | Portable link | `[[wikilink]] (obsidian)` |
-| --- | --- | --- |
-| Section in this file | Required | Required |
-| Section in another file | Required | Required |
-| Whole file | Required | Optional |
-| External site (GitHub.com, obsidian.md) | Required | Do not add |
-
-### Obsidian vault setup (optional)
-
-Open the **repository root** (the folder that contains `README.md`, `MERIT.instructions`, and `docs/`) as the vault so wikilinks like `[[docs/SPRK_Facilitator_Guide#Start Here]]` resolve. Obsidian is optional; the portable link is always enough for classroom work.
-
-Enterprise MERIT L1/L2/L3 instructions remain in the **private MERIT Obsidian vault** (separate from this repo).
-
-### Documentation index
-
-- [docs/README.md](docs/README.md) — master table of contents for repo-wide guides.
-
 ## Validation before confidence
 
 From the repository root:
@@ -163,11 +101,14 @@ A mission change is not ready until the relevant Playwright baseline passes and 
 4. No hard-coded machine paths — use repo-relative paths and helpers.
 5. Recovery over mystery — errors and docs should say what to try next.
 
+When editing files under `docs/` or mission guides, follow [docs/SPRK_Documentation_Links_Guide.md](docs/SPRK_Documentation_Links_Guide.md) for hyperlink rules.
+
 ## Related student files
 
-- [docs/README.md](docs/README.md) — documentation hub (portable links + section wikilinks per [Documentation links](#documentation-links-required))
 - [AGENTS.md](AGENTS.md) — agent read order and closeout checklist
 - [AgentDraven.instructions](AgentDraven.instructions) — classroom mentor tone
+- [docs/README.md](docs/README.md) — documentation index for repo-wide guides
+- [docs/SPRK_Documentation_Links_Guide.md](docs/SPRK_Documentation_Links_Guide.md) — portable and Obsidian link rules for student docs
 - [docs/SPRK_Student_AgenticOps_Guide.md](docs/SPRK_Student_AgenticOps_Guide.md) — MERIT enterprise vs SPRK student compare/contrast
 - [docs/PROJECT_GUIDE.md](docs/PROJECT_GUIDE.md) — local formative insights and maintainer pointers
 - [ops/README.md](ops/README.md) — hygiene and handoff format

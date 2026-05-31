@@ -66,4 +66,4 @@ See [ops/README.md](ops/README.md) for hygiene checks before commit.
 
 Full enterprise `MERIT.instructions` and `AgentDraven.instructions` remain in the private MERIT Obsidian vault. This repository intentionally carries only the student-safe subset above so learners can study AgenticOps without private secrets or operator-only paths.
 
-For every guide in this repo, use [docs/README.md](docs/README.md). When linking to a **section**, follow [MERIT.instructions — Documentation links](MERIT.instructions#documentation-links-required) [[MERIT.instructions#Documentation links (required)]] (obsidian): portable Markdown link plus `[[Note#Heading]] (obsidian)`.
+For every guide in this repo, use [docs/README.md](docs/README.md). When linking to a **section** in student docs, follow [SPRK_Documentation_Links_Guide.md](docs/SPRK_Documentation_Links_Guide.md).

@@ -7,7 +7,8 @@ Students and agents should start from [docs/README.md](README.md) instead of thi
 ## Documentation hub
 
 - [docs/README.md](README.md) — master index for all guides in this repo.
-- [MERIT.instructions](../MERIT.instructions) — mission naming, link rules ([Documentation links](../MERIT.instructions#documentation-links-required) [[MERIT.instructions#Documentation links (required)]] (obsidian)), and student-safe MERIT rules.
+- [MERIT.instructions](../MERIT.instructions) — agent governance (naming, branches, validation).
+- [SPRK_Documentation_Links_Guide.md](SPRK_Documentation_Links_Guide.md) — portable and Obsidian link rules for student docs.
 
 ## Formative Insights
 

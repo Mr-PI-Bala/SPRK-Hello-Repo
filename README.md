@@ -8,7 +8,7 @@ Shared SPRK onboarding and governance starts in the public [SPRK-Welcome](https:
 
 This repository keeps local copies of the shared guides in [docs](docs/) so students can keep working inside `SPRK-Hello-Repo` after access is approved.
 
-Documentation hub (all guides in one index; link rules in [MERIT.instructions — Documentation links](MERIT.instructions#documentation-links-required)):
+Documentation hub (all guides in one index; link rules in [docs/SPRK_Documentation_Links_Guide.md](docs/SPRK_Documentation_Links_Guide.md)):
 
 - [docs/README.md](docs/README.md)
 

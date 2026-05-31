@@ -3,7 +3,7 @@
 ## Unreleased
 - Added [docs/README.md](README.md) as the documentation hub with links to all repo guides.
 - Added [docs/PROJECT_GUIDE.md](PROJECT_GUIDE.md) for local formative insights; full maintainer guide remains in SPRK-Welcome.
-- Added [MERIT.instructions](../MERIT.instructions#documentation-links-required) **Documentation links** rules: portable Markdown hyperlinks for every reader, plus `[[Note#Heading]] (obsidian)` for section references in Obsidian.
+- Added [SPRK_Documentation_Links_Guide.md](SPRK_Documentation_Links_Guide.md): portable Markdown hyperlinks for every reader, plus `[[Note#Heading]] (obsidian)` for section references in Obsidian (not in `MERIT.instructions`, which stays agent governance only).
 - Updated `AGENTS.md`, `AgentDraven.instructions`, and `SPRK_Student_AgenticOps_Guide.md` with the hub, facilitator guides, and dual-link rules.
 - Renamed Mission 10 folder to `missions/10-SpaceInvaders-1P-nP` so the directory matches the `NN-GameName-<mode-label>` convention.
 - Added student-safe `MERIT.instructions`, `AgentDraven.instructions`, `AGENTS.md`, `docs/SPRK_Student_AgenticOps_Guide.md`, and `ops/README.md`.

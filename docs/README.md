@@ -2,7 +2,7 @@
 
 This folder is the **single source of truth** for repo-wide SPRK guides. Curriculum links, agents, and mission docs point here instead of duplicating long explanations.
 
-Link rules (portable hyperlinks + section wikilinks): [MERIT.instructions — Documentation links](../MERIT.instructions#documentation-links-required) [[MERIT.instructions#Documentation links (required)]] (obsidian)
+Link rules (portable hyperlinks + section wikilinks): [SPRK_Documentation_Links_Guide.md](SPRK_Documentation_Links_Guide.md) [[SPRK_Documentation_Links_Guide#Portable link (everywhere)]] (obsidian)
 
 Enterprise MERIT AgenticOps instructions (L1/L2/L3) live in the **private MERIT Obsidian vault**. This public student repository carries only the safe subset in `MERIT.instructions`, `AgentDraven.instructions`, `AGENTS.md`, and the guides below.
 
@@ -41,7 +41,8 @@ Do not paste private MERIT vault paths or operator-only `obsidian://` URIs into 
 
 | Guide | Purpose |
 | --- | --- |
-| [MERIT.instructions](../MERIT.instructions) | Mission naming, branch/PR rules, documentation link rules |
+| [MERIT.instructions](../MERIT.instructions) | Agent governance: mission naming, branch/PR rules, validation |
+| [SPRK_Documentation_Links_Guide.md](SPRK_Documentation_Links_Guide.md) | Portable and Obsidian link rules for student docs |
 | [AgentDraven.instructions](../AgentDraven.instructions) | Classroom mentor tone and handoff format |
 | [AGENTS.md](../AGENTS.md) | Agent read order and closeout checklist |
 | [SPRK_Student_AgenticOps_Guide.md](SPRK_Student_AgenticOps_Guide.md) | MERIT enterprise vs SPRK student mapping |
