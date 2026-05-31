@@ -112,7 +112,10 @@ When `npm run workflow` (or `missions/_shared/tools/sprk_workflow.py`) asks yes/
 | `ay` or `ya` | **All yes** — yes for this file and every remaining file in the list |
 | `an` or `na` | **All no** — no for this file and every remaining file in the list |
 
-Use these shortcuts during **Sync main with GitHub** when local edits would block `git pull` and the student must choose whether to discard local copies per file.
+Use these shortcuts whenever the guided workflow asks yes/no (including **Sync main with GitHub** per-file prompts and **Triage open PRs** close/port prompts):
+
+- Menu option **5** — sync local `main` when `git pull` is blocked by uncommitted files.
+- Menu option **6** — analyze stale open PRs, close without merge, or cherry-pick salvage commits onto a new branch.
 
 When editing files under `docs/` or mission guides, follow [docs/SPRK_Documentation_Links_Guide.md](docs/SPRK_Documentation_Links_Guide.md) for hyperlink rules.
 
