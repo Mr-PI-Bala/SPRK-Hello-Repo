@@ -55,30 +55,58 @@ flowchart TD
     Menu --> Submit["3. Save current work and open PR"]
     Menu --> Approve["4. Review / approve / optionally merge a PR"]
     Menu --> SyncMain["5. Sync local main with GitHub"]
-    Menu --> Exit["6. Exit"]
+    Menu --> Triage["6. Triage open PRs"]
+    Menu --> Exit["7. Exit"]
 ```
+
+Every menu screen reminds you: **`ay` / `ya` = all yes**, **`an` / `na` = all no** (see MERIT.instructions).
 
 ## Menu Options
 | Option | Who Should Use It | What It Does | Confirmation Required |
 | --- | --- | --- | --- |
-| Show status | Everyone | Prints branch, changed files, GitHub user, and open PRs. | No |
+| Show status | Everyone | Prints branch, changed files, GitHub user, and open PRs (points to option 6 for stale drafts). | No |
 | Start new work branch | Student or agent | Syncs `main` from GitHub (with per-file prompts if needed), then creates a new branch. | Yes |
 | Save current work and open PR | Student or agent | Shows changed files, stages all current changes, commits, pushes, and opens a PR. | Yes |
-| Review / approve / optionally merge PR | Teacher/admin/maintainer | Shows PR details, approves it, and optionally merges it. | Yes, with extra warning for self-approval |
+| Review / approve / optionally merge PR | Teacher/admin/maintainer | Shows PR details, approves it, and optionally merges it. Use **after option 6** when triage says merge is safe. | Yes, with extra warning for self-approval |
 | Sync local main with GitHub | Student or facilitator | Lists uncommitted files, asks **per file** whether to discard local edits (`y`/`n`/`ay`/`ya`/`an`/`na`), then updates `main`. | Yes |
+| Triage open PRs | Maintainer / facilitator | Compares each open PR to `main`, prints verdict (superseded, stale, portable), can **close without merge**, or **cherry-pick** commits onto a new branch. | Yes for close/port |
 
-### Per-file answers when pull is blocked
+### Interactive shortcuts (`y` / `n` / `ay` / `ya` / `an` / `na`)
 
-When local edits would be overwritten by `git pull`, the helper asks about each file. Shortcuts are defined in [MERIT.instructions](../MERIT.instructions) (**Interactive confirmation shortcuts**):
+The helper prints this block at startup and before file-by-file or PR-by-PR questions:
 
 | You type | Meaning |
 | --- | --- |
-| `y` or `yes` | Discard local edits for **this file** and match GitHub `main` |
-| `n` or `no` | **Keep** local edits for this file |
-| `ay` or `ya` | **All yes** — discard local for this file and every file after it |
-| `an` or `na` | **All no** — keep local for this file and every file after it |
+| `y` or `yes` | Yes for **this item only** |
+| `n` or `no` | No for **this item only** |
+| `ay` or `ya` | **All yes** for this item and every remaining item |
+| `an` or `na` | **All no** for this item and every remaining item |
+
+Canonical rules: [MERIT.instructions](../MERIT.instructions) (**Interactive confirmation shortcuts**).
+
+### Per-file answers when pull is blocked (option 5)
+
+When local edits would be overwritten by `git pull`, option **5** asks about each file using the shortcuts above.
 
 If you choose `ay`/`ya` for every dirty file, the helper runs `git reset --hard origin/main` after fetching (same outcome as a full overwrite of local `main`).
+
+### Triage stale open PRs (option 6) — example #13 and #14
+
+Open drafts listed at startup are **not** safe to merge just because they exist.
+
+| Verdict | Meaning | Typical action |
+| --- | --- | --- |
+| `LIKELY_SUPERSEDED` | Docs-only PR; `main` already has newer guides | Close PR (option 6 → close) |
+| `STALE_UNSAFE` | Far behind `main`; merge would delete current files | Close PR, port salvage commits to new branch |
+| `PORT_TO_NEW_BRANCH` | Good ideas, wrong base branch | Cherry-pick commits, then option 3 for new PR |
+
+Example flow for **#13** (Space Invaders rail fix on an old branch):
+
+1. `npm run workflow` → **6** Triage open PRs  
+2. Read report for #13 (`STALE_UNSAFE`, lists salvage commit `95109af…`)  
+3. Action **3** — port commits → new branch `cursor/space-invaders-rail-2abe`  
+4. Action **2** — close #13 with default comment  
+5. Test, then menu **3** — open a new PR from the fresh branch
 
 ## Why This Is Safer Than The Old Experiment
 The earlier brancher/approver experiment was removed because it ran shell strings directly. This helper avoids that pattern.
@@ -149,7 +177,13 @@ Sync local `main` with GitHub (fixes “would be overwritten by merge” pull er
 python3 missions/_shared/tools/sprk_workflow.py sync-main
 ```
 
-Or from the menu: `npm run workflow` → option **5**.
+Triage open PRs (analyze, close, or port commits):
+
+```bash
+python3 missions/_shared/tools/sprk_workflow.py triage-prs
+```
+
+Or from the menu: `npm run workflow` → **5** sync main, **6** triage PRs.
 
 ## Important Notes
 - The helper cannot bypass GitHub branch protection or repository rules.
