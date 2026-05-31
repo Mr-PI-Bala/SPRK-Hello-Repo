@@ -35,7 +35,8 @@ Rules are canonical in [MERIT.instructions](../MERIT.instructions). Do not add a
 
 Use one canonical place for each topic:
 
-- Documentation hub (all repo guides; optional Obsidian vault = `docs/`): `docs/README.md`
+- Documentation hub (all repo guides): `docs/README.md`
+- Documentation link rules (portable + section wikilinks): `MERIT.instructions` → [Documentation links](../MERIT.instructions#documentation-links-required) [[MERIT.instructions#Documentation links (required)]] (obsidian)
 - Student start path: `README.md`
 - Mission naming and branch/PR governance: `MERIT.instructions`
 - Mentor tone: `AgentDraven.instructions`
@@ -51,7 +52,7 @@ Use one canonical place for each topic:
 - Language concepts: `docs/SPRK_Language_Crosswalk.md`
 - Mission-specific play/build steps: `missions/<NN-GameName-mode>/docs/MISSION_GUIDE.md`
 
-Enterprise MERIT instructions stay in the private Obsidian vault. Link to [Obsidian](https://obsidian.md/) only as an optional reader for this repo's `docs/` folder — never copy private vault paths into commits or chats.
+Enterprise MERIT instructions stay in the private Obsidian vault. In this repo, use portable Markdown links everywhere; add `[[Note#Heading]] (obsidian)` only for **section** references (see MERIT.instructions). Never copy private vault paths or `obsidian://` URIs into commits or chats.
 
 When adding a new explanation, link to the existing guide if it already exists. Do not create duplicate status or verification docs for the same mission.
 

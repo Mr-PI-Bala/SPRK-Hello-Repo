@@ -9,7 +9,7 @@ Students, classroom facilitators, and coding agents helping in `SPRK-Hello-Repo`
 ## Read order
 
 1. [README.md](README.md) — pick a mission and create your branch first.
-2. [docs/README.md](docs/README.md) — documentation hub; open `docs/` in [Obsidian](https://obsidian.md/) optionally.
+2. [docs/README.md](docs/README.md) — documentation hub.
 3. [MERIT.instructions](MERIT.instructions) — mission folder naming and repo rules.
 4. [docs/SPRK_Student_AgenticOps_Guide.md](docs/SPRK_Student_AgenticOps_Guide.md) — how enterprise MERIT maps to this classroom repo.
 5. [AGENTS.md](AGENTS.md) — validation commands and agent closeout.
@@ -66,4 +66,4 @@ See [ops/README.md](ops/README.md) for hygiene checks before commit.
 
 Full enterprise `MERIT.instructions` and `AgentDraven.instructions` remain in the private MERIT Obsidian vault. This repository intentionally carries only the student-safe subset above so learners can study AgenticOps without private secrets or operator-only paths.
 
-For every guide in this repo, use [docs/README.md](docs/README.md). To read offline with graph view, open the `docs/` folder as an [Obsidian](https://obsidian.md/) vault — see [MERIT.instructions](MERIT.instructions#documentation-hub-obsidian-friendly).
+For every guide in this repo, use [docs/README.md](docs/README.md). When linking to a **section**, follow [MERIT.instructions — Documentation links](MERIT.instructions#documentation-links-required) [[MERIT.instructions#Documentation links (required)]] (obsidian): portable Markdown link plus `[[Note#Heading]] (obsidian)`.

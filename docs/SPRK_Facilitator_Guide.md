@@ -1,6 +1,6 @@
 # SPRK Facilitator Guide
 
-Documentation hub: [docs/README.md](README.md).
+Documentation hub: [docs/README.md](README.md). Section links: [MERIT.instructions — Documentation links](../MERIT.instructions#documentation-links-required) [[MERIT.instructions#Documentation links (required)]] (obsidian).
 
 This guide is for **teachers, mentors, and lab hosts** who run a SPRK browser mission for a class. Students on **iPhone, iPad, Chromebook, Android, or laptop** open one shared link and play against the **same** backend (scores, multiplayer state, quiz room, and so on).
 

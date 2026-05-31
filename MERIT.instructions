@@ -7,6 +7,17 @@ This file is the public, student-safe adaptation of enterprise MERIT AgenticOps 
 - Give students and coding agents one canonical rules file for how this repository is organized.
 - Keep classroom missions consistent, testable, and easy to navigate.
 
+## Table of contents
+
+- [Mission folder naming](#mission-folder-naming-required) [[#Mission folder naming (required)]] (obsidian)
+- [Mode labels](#mode-labels) [[#Mode labels]] (obsidian)
+- [Branch and PR governance](#branch-and-pr-governance-required) [[#Branch and PR governance (required)]] (obsidian)
+- [Repository shape](#repository-shape) [[#Repository shape]] (obsidian)
+- [Documentation links](#documentation-links-required) [[#Documentation links (required)]] (obsidian)
+- [Validation before confidence](#validation-before-confidence) [[#Validation before confidence]] (obsidian)
+- [Student-safe MERIT principles](#student-safe-merit-principles) [[#Student-safe MERIT principles]] (obsidian)
+- [Related student files](#related-student-files) [[#Related student files]] (obsidian)
+
 ## Mission folder naming (required)
 
 Every playable mission under `missions/` must use exactly one folder with this shape:
@@ -74,11 +85,58 @@ This rule prevents duplicate mission folders, split validation evidence, and bra
 
 Do not rename `docs/` to a MERIT `{Name} docs/` folder in this student repo; curriculum links depend on `docs/`.
 
-## Documentation hub (Obsidian-friendly)
+## Documentation links (required)
 
-- **Student and agent index:** [docs/README.md](docs/README.md) — master table of contents for every guide in this repository.
-- **Optional Obsidian:** install [Obsidian](https://obsidian.md/), then **Open folder as vault** and select this repo's `docs/` folder. Obsidian is optional; GitHub, Codespaces, and VS Code render the same Markdown.
-- **Enterprise MERIT instructions:** L1/L2/L3 AgenticOps files remain in the private MERIT Obsidian vault. Do not copy vault paths, `obsidian://` URIs, or private instruction bodies into this student repo.
+SPRK docs must read correctly in **GitHub**, **Codespaces**, **VS Code Markdown preview**, and optional **Obsidian**. Use two link forms when pointing at a **section** inside a document.
+
+### Portable link (everywhere)
+
+Use standard Markdown relative paths and GitHub-style heading anchors. This is the link students click in the browser and in the editor preview.
+
+```markdown
+[Visible label](path/to/doc.md#heading-anchor)
+```
+
+Rules:
+
+- Paths are **relative to the file you are editing** (for example `../MERIT.instructions` from `docs/`, or `docs/SPRK_Facilitator_Guide.md` from the repo root).
+- Heading anchors use lowercase words separated by hyphens (GitHub slug rules).
+- Use portable links in tables, mission guides, issues, and agent handoffs.
+
+### Obsidian link (section references)
+
+When the target is a **section** (not just a whole file), add an Obsidian wikilink immediately after the portable link and label it **`(obsidian)`**:
+
+```markdown
+[Validation before confidence](MERIT.instructions#validation-before-confidence) [[MERIT.instructions#Validation before confidence]] (obsidian)
+```
+
+Rules:
+
+- `NoteName` is the Markdown filename **without** `.md`.
+- `Exact Heading Text` matches the target heading line (Obsidian uses the heading text after `#`).
+- Same-file section jump: `[Mission naming](#mission-folder-naming-required) [[#Mission folder naming (required)]] (obsidian)`
+- Whole-file targets need only the portable link; Obsidian wikilink is optional.
+- Do **not** use `(obsidian)` for external URLs. Do **not** paste private MERIT vault `obsidian://` URIs into this repo.
+
+### When to use each
+
+| Target | Portable link | `[[wikilink]] (obsidian)` |
+| --- | --- | --- |
+| Section in this file | Required | Required |
+| Section in another file | Required | Required |
+| Whole file | Required | Optional |
+| External site (GitHub.com, obsidian.md) | Required | Do not add |
+
+### Obsidian vault setup (optional)
+
+Open the **repository root** (the folder that contains `README.md`, `MERIT.instructions`, and `docs/`) as the vault so wikilinks like `[[docs/SPRK_Facilitator_Guide#Start Here]]` resolve. Obsidian is optional; the portable link is always enough for classroom work.
+
+Enterprise MERIT L1/L2/L3 instructions remain in the **private MERIT Obsidian vault** (separate from this repo).
+
+### Documentation index
+
+- [docs/README.md](docs/README.md) — master table of contents for repo-wide guides.
 
 ## Validation before confidence
 
@@ -107,7 +165,7 @@ A mission change is not ready until the relevant Playwright baseline passes and 
 
 ## Related student files
 
-- [docs/README.md](docs/README.md) — documentation hub and Obsidian vault entry (`docs/` folder)
+- [docs/README.md](docs/README.md) — documentation hub (portable links + section wikilinks per [Documentation links](#documentation-links-required))
 - [AGENTS.md](AGENTS.md) — agent read order and closeout checklist
 - [AgentDraven.instructions](AgentDraven.instructions) — classroom mentor tone
 - [docs/SPRK_Student_AgenticOps_Guide.md](docs/SPRK_Student_AgenticOps_Guide.md) — MERIT enterprise vs SPRK student compare/contrast

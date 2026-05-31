@@ -2,19 +2,31 @@
 
 This folder is the **single source of truth** for repo-wide SPRK guides. Curriculum links, agents, and mission docs point here instead of duplicating long explanations.
 
+Link rules (portable hyperlinks + section wikilinks): [MERIT.instructions — Documentation links](../MERIT.instructions#documentation-links-required) [[MERIT.instructions#Documentation links (required)]] (obsidian)
+
 Enterprise MERIT AgenticOps instructions (L1/L2/L3) live in the **private MERIT Obsidian vault**. This public student repository carries only the safe subset in `MERIT.instructions`, `AgentDraven.instructions`, `AGENTS.md`, and the guides below.
+
+## Table of contents
+
+- [Start here](#start-here) [[#Start here]] (obsidian)
+- [AgenticOps and governance](#agenticops-and-governance) [[#AgenticOps and governance]] (obsidian)
+- [Toolchain](#toolchain) [[#Toolchain]] (obsidian)
+- [Missions, testing, and classroom hosting](#missions-testing-and-classroom-hosting) [[#Missions, testing, and classroom hosting]] (obsidian)
+- [Public doorway](#public-doorway) [[#Public doorway]] (obsidian)
+- [History](#history) [[#History]] (obsidian)
+- [Read in Obsidian (optional)](#read-in-obsidian-optional) [[#Read in Obsidian (optional)]] (obsidian)
 
 ## Read in Obsidian (optional)
 
 Obsidian is **not required**. The same files render in GitHub, Codespaces, and VS Code Markdown preview.
 
-To use graph view, backlinks, or offline reading:
+To use graph view, backlinks, or section wikilinks labeled `(obsidian)` in these docs:
 
 1. Install [Obsidian](https://obsidian.md/).
 2. Choose **Open folder as vault**.
-3. Select this repository's **`docs/`** folder (the folder that contains this `README.md`).
+3. Select this repository **root** (the folder that contains `README.md` and `docs/`), not only `docs/`.
 
-Do not paste private MERIT vault paths or operator-only URIs into issues, chats, or commits. If you have enterprise vault access, open that vault separately from your maintainer workspace.
+Do not paste private MERIT vault paths or operator-only `obsidian://` URIs into issues, chats, or commits.
 
 ## Start here
 
@@ -23,13 +35,13 @@ Do not paste private MERIT vault paths or operator-only URIs into issues, chats,
 | Student | [Repository README](../README.md) → your mission's `MISSION_GUIDE.md` |
 | Facilitator / teacher | [SPRK_Facilitator_Guide.md](SPRK_Facilitator_Guide.md) |
 | Coding agent | [AGENTS.md](../AGENTS.md) → [MERIT.instructions](../MERIT.instructions) |
-| Maintainer | [PROJECT_GUIDE.md](PROJECT_GUIDE.md) (local) and [SPRK-Welcome PROJECT_GUIDE](https://github.com/Mr-PI-Bala/SPRK-Welcome/blob/main/docs/PROJECT_GUIDE.md) |
+| Maintainer | [PROJECT_GUIDE.md](PROJECT_GUIDE.md) (local) and SPRK-Welcome `docs/PROJECT_GUIDE.md` on GitHub |
 
 ## AgenticOps and governance
 
 | Guide | Purpose |
 | --- | --- |
-| [MERIT.instructions](../MERIT.instructions) | Mission naming, branch/PR rules, validation |
+| [MERIT.instructions](../MERIT.instructions) | Mission naming, branch/PR rules, documentation link rules |
 | [AgentDraven.instructions](../AgentDraven.instructions) | Classroom mentor tone and handoff format |
 | [AGENTS.md](../AGENTS.md) | Agent read order and closeout checklist |
 | [SPRK_Student_AgenticOps_Guide.md](SPRK_Student_AgenticOps_Guide.md) | MERIT enterprise vs SPRK student mapping |
@@ -59,9 +71,11 @@ Do not paste private MERIT vault paths or operator-only URIs into issues, chats,
 
 Mission-specific steps: `missions/<NN-GameName-mode>/docs/MISSION_GUIDE.md`.
 
+Facilitator quick path: [SPRK_Facilitator_Guide — Start Here](SPRK_Facilitator_Guide.md#start-here--pick-your-hosting-path) [[SPRK_Facilitator_Guide#Start Here — Pick Your Hosting Path]] (obsidian)
+
 ## Public doorway
 
-Shared onboarding also lives in [SPRK-Welcome](https://github.com/Mr-PI-Bala/SPRK-Welcome). This repo keeps local copies so students can keep working here after access is approved.
+Shared onboarding also lives in the public SPRK-Welcome repository (`Mr-PI-Bala/SPRK-Welcome` on GitHub). This repo keeps local copies so students can keep working here after access is approved.
 
 ## History
 

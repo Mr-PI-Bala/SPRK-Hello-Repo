@@ -5,8 +5,8 @@ This repo uses a student-safe subset of MERIT AgenticOps practices. The private 
 ## Read order
 
 1. `README.md` for the student workflow and mission menu.
-2. `docs/README.md` for the documentation hub (all repo guides; optional Obsidian vault = `docs/` folder).
-3. `MERIT.instructions` for canonical mission folder naming, branch/PR governance, and Obsidian vs student-doc rules.
+2. `docs/README.md` for the documentation hub (all repo guides).
+3. `MERIT.instructions` for mission naming, branch/PR governance, and **documentation links** (portable Markdown + `[[wikilink]] (obsidian)` for section references).
 4. `docs/SPRK_Student_AgenticOps_Guide.md` for the MERIT-to-SPRK practice mapping.
 5. `AgentDraven.instructions` for classroom mentor tone and handoff format.
 6. `docs/SPRK_Browser_Mission_Foundation_Guide.md` for the shared mission architecture.
