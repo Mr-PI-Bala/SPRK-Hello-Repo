@@ -74,6 +74,12 @@ This rule prevents duplicate mission folders, split validation evidence, and bra
 
 Do not rename `docs/` to a MERIT `{Name} docs/` folder in this student repo; curriculum links depend on `docs/`.
 
+## Documentation hub (Obsidian-friendly)
+
+- **Student and agent index:** [docs/README.md](docs/README.md) — master table of contents for every guide in this repository.
+- **Optional Obsidian:** install [Obsidian](https://obsidian.md/), then **Open folder as vault** and select this repo's `docs/` folder. Obsidian is optional; GitHub, Codespaces, and VS Code render the same Markdown.
+- **Enterprise MERIT instructions:** L1/L2/L3 AgenticOps files remain in the private MERIT Obsidian vault. Do not copy vault paths, `obsidian://` URIs, or private instruction bodies into this student repo.
+
 ## Validation before confidence
 
 From the repository root:
@@ -101,9 +107,11 @@ A mission change is not ready until the relevant Playwright baseline passes and 
 
 ## Related student files
 
+- [docs/README.md](docs/README.md) — documentation hub and Obsidian vault entry (`docs/` folder)
 - [AGENTS.md](AGENTS.md) — agent read order and closeout checklist
 - [AgentDraven.instructions](AgentDraven.instructions) — classroom mentor tone
 - [docs/SPRK_Student_AgenticOps_Guide.md](docs/SPRK_Student_AgenticOps_Guide.md) — MERIT enterprise vs SPRK student compare/contrast
+- [docs/PROJECT_GUIDE.md](docs/PROJECT_GUIDE.md) — local formative insights and maintainer pointers
 - [ops/README.md](ops/README.md) — hygiene and handoff format
 
 ## What not to import from enterprise MERIT

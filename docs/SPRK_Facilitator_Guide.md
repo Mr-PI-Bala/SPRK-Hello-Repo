@@ -1,5 +1,7 @@
 # SPRK Facilitator Guide
 
+Documentation hub: [docs/README.md](README.md).
+
 This guide is for **teachers, mentors, and lab hosts** who run a SPRK browser mission for a class. Students on **iPhone, iPad, Chromebook, Android, or laptop** open one shared link and play against the **same** backend (scores, multiplayer state, quiz room, and so on).
 
 You do **not** need every student to have GitHub access to **play**. GitHub is for students who later edit code, branch, and open pull requests.

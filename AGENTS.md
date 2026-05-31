@@ -5,12 +5,14 @@ This repo uses a student-safe subset of MERIT AgenticOps practices. The private 
 ## Read order
 
 1. `README.md` for the student workflow and mission menu.
-2. `MERIT.instructions` for canonical mission folder naming and branch/PR governance.
-3. `docs/SPRK_Student_AgenticOps_Guide.md` for the MERIT-to-SPRK practice mapping.
-4. `AgentDraven.instructions` for classroom mentor tone and handoff format.
-5. `docs/SPRK_Browser_Mission_Foundation_Guide.md` for the shared mission architecture.
-6. The selected mission guide under `missions/<NN-GameName-mode>/docs/MISSION_GUIDE.md`.
-7. `docs/BASELINE_VALIDATION_AND_3C_FLOW.md` for validation status flow.
+2. `docs/README.md` for the documentation hub (all repo guides; optional Obsidian vault = `docs/` folder).
+3. `MERIT.instructions` for canonical mission folder naming, branch/PR governance, and Obsidian vs student-doc rules.
+4. `docs/SPRK_Student_AgenticOps_Guide.md` for the MERIT-to-SPRK practice mapping.
+5. `AgentDraven.instructions` for classroom mentor tone and handoff format.
+6. `docs/SPRK_Browser_Mission_Foundation_Guide.md` for the shared mission architecture.
+7. Facilitator hosting when needed: `docs/SPRK_Facilitator_Guide.md`, `docs/SPRK_Cloud_Facilitator_Hosting_Guide.md`, `docs/SPRK_Touch_Control_Guide.md`.
+8. The selected mission guide under `missions/<NN-GameName-mode>/docs/MISSION_GUIDE.md`.
+9. `docs/BASELINE_VALIDATION_AND_3C_FLOW.md` for validation status flow.
 
 ## Branch and PR governance
 

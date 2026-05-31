@@ -1,4 +1,6 @@
 ﻿# SPRK Classroom Network Test Guide
+
+Repo-wide doc index: [docs/README.md](README.md). Facilitator quick path: [SPRK_Facilitator_Guide.md](SPRK_Facilitator_Guide.md).
 This guide explains how to test a classroom setup where one laptop hosts a backend and students join from Chromebooks, iPads, iPhones, Android phones, or other laptops.
 
 **Facilitators:** for the full hosting playbook (laptop Wi‑Fi **and** Cursor Cloud tunnels), one-page cheat sheet, and bit.ly pattern, read the [SPRK Facilitator Guide](SPRK_Facilitator_Guide.md) first.

@@ -8,6 +8,10 @@ Shared SPRK onboarding and governance starts in the public [SPRK-Welcome](https:
 
 This repository keeps local copies of the shared guides in [docs](docs/) so students can keep working inside `SPRK-Hello-Repo` after access is approved.
 
+Documentation hub (all guides in one index; optional [Obsidian](https://obsidian.md/) vault = open the `docs/` folder):
+
+- [docs/README.md](docs/README.md)
+
 Key repo-wide learning guide:
 
 - [docs/SPRK_Language_Crosswalk.md](docs/SPRK_Language_Crosswalk.md): maps common programming ideas across Python, JavaScript, Java, Go, Lua, and related patterns used in the missions.

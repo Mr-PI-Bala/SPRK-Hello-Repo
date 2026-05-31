@@ -1,6 +1,9 @@
 # Changelog
 
 ## Unreleased
+- Added [docs/README.md](README.md) as the documentation hub with Obsidian vault instructions and links to all repo guides.
+- Added [docs/PROJECT_GUIDE.md](PROJECT_GUIDE.md) for local formative insights; full maintainer guide remains in SPRK-Welcome.
+- Updated `MERIT.instructions`, `AGENTS.md`, `AgentDraven.instructions`, and `SPRK_Student_AgenticOps_Guide.md` with the hub, facilitator guides, and enterprise Obsidian vs student-doc rules.
 - Renamed Mission 10 folder to `missions/10-SpaceInvaders-1P-nP` so the directory matches the `NN-GameName-<mode-label>` convention.
 - Added student-safe `MERIT.instructions`, `AgentDraven.instructions`, `AGENTS.md`, `docs/SPRK_Student_AgenticOps_Guide.md`, and `ops/README.md`.
 - Documented mission folder naming in `README.md`, `MERIT.instructions`, and `docs/SPRK_Browser_Mission_Foundation_Guide.md`.
