@@ -101,6 +101,19 @@ A mission change is not ready until the relevant Playwright baseline passes and 
 4. No hard-coded machine paths — use repo-relative paths and helpers.
 5. Recovery over mystery — errors and docs should say what to try next.
 
+## Interactive confirmation shortcuts (SPRK tools)
+
+When `npm run workflow` (or `missions/_shared/tools/sprk_workflow.py`) asks yes/no questions **file by file**, students may answer:
+
+| Input | Meaning |
+| --- | --- |
+| `y` or `yes` | Yes for **this file only** |
+| `n` or `no` | No for **this file only** |
+| `ay` or `ya` | **All yes** — yes for this file and every remaining file in the list |
+| `an` or `na` | **All no** — no for this file and every remaining file in the list |
+
+Use these shortcuts during **Sync main with GitHub** when local edits would block `git pull` and the student must choose whether to discard local copies per file.
+
 When editing files under `docs/` or mission guides, follow [docs/SPRK_Documentation_Links_Guide.md](docs/SPRK_Documentation_Links_Guide.md) for hyperlink rules.
 
 ## Related student files
