@@ -17,6 +17,8 @@ test("Space Invaders dimensional shift baseline works", async ({ browser }) => {
   expect(initial.lives).toBe(3);
   expect(initial.maxLives).toBe(3);
   expect(initial.bunkerCells).toBeGreaterThan(0);
+  expect(initial.alienFleetSpeedScale).toBe(0.5);
+  expect(initial.fleetInterval).toBeCloseTo(1.76, 2);
 
   await pageA.getByRole("button", { name: "Start / Resume" }).focus();
   await pageA.keyboard.press("Space");
