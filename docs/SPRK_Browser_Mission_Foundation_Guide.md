@@ -11,6 +11,7 @@ Most browser-first SPRK missions share the same foundation:
 - `src/styles.css`: mission-specific visuals
 - `server.py`: mission backend startup
 - `missions/_shared/sprk_app.js`: shared frontend helpers
+- `missions/_shared/sprk_touch.js`: shared touch, pointer, and fullscreen helpers for canvas missions
 - `missions/_shared/sprk_backend.py`: shared backend behavior
 
 ## Mission Folder Naming
@@ -77,6 +78,15 @@ These routes are the standard shared classroom pattern:
 - `/api/scores`: shared scoreboard data
 - `/api/events`: X-Ray Vision event stream
 - `/_shared/generated/baseline-status.json`: latest generated baseline summary
+
+## Common Touch Pattern
+Canvas missions should use the shared touch layer instead of inventing per-mission gestures:
+
+- Link `missions/_shared/sprk_touch.css` and `missions/_shared/sprk_touch.js`.
+- Call `SPRK_TOUCH.attach({ target: canvas, keys, ... })` with the same `keys` set the keyboard uses.
+- Document mission-specific gaps (FPS mouse-look, Soccer Match 2P, and so on) in the mission guide.
+
+Student and facilitator reference: [SPRK_Touch_Control_Guide.md](SPRK_Touch_Control_Guide.md).
 
 ## Common Right-Side Panel Pattern
 Browser-first missions should keep the stable three-tab model:

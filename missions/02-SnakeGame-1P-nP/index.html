@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>SPRK SnakeGame</title>
     <link rel="stylesheet" href="../_shared/sprk_mission.css">
+    <link rel="stylesheet" href="../_shared/sprk_touch.css">
     <link rel="stylesheet" href="src/styles.css">
   </head>
   <body>
@@ -38,7 +39,7 @@
       </header>
 
       <section class="game-board">
-        <section class="play-card" aria-live="polite">
+        <section class="play-card sprk-play-surface" aria-live="polite">
           <div class="status-row">
             <span id="gameStatus">Ready</span>
             <span id="scoreNow">Score: 0</span>
@@ -48,7 +49,8 @@
             <button id="startButton" type="button">Start</button>
             <button id="submitButton" class="small-button" type="button">Submit Score</button>
           </div>
-          <p id="roundMessage" class="round-message">Use arrow keys or WASD. On touch screens, use the direction buttons.</p>
+          <p id="roundMessage" class="round-message">Use arrow keys, WASD, drag on the board, or the direction buttons.</p>
+          <p class="sprk-touch-hint">Touch: drag toward the direction you want the snake to turn. Triple-tap the board for fullscreen.</p>
           <div class="direction-pad" aria-label="Touch controls">
             <button data-direction="up" type="button">Up</button>
             <button data-direction="left" type="button">Left</button>
@@ -112,6 +114,7 @@
     </main>
 
     <script src="../_shared/sprk_app.js"></script>
+    <script src="../_shared/sprk_touch.js"></script>
     <script src="src/app.js"></script>
   </body>
 </html>

@@ -159,6 +159,17 @@ resetButton.addEventListener("click", resetRound);
 window.addEventListener("keydown", (event) => keys.add(event.key.toLowerCase()));
 window.addEventListener("keyup", (event) => keys.delete(event.key.toLowerCase()));
 
+SPRK_TOUCH.attach({
+  target: canvas,
+  keys,
+  unlockSound: () => SPRK.unlockSound(),
+  fullscreenElement: document.querySelector(".ping-card"),
+  splitZones: [
+    { movement: { up: ["w"], down: ["s"], left: [], right: [] } },
+    { movement: { up: ["arrowup"], down: ["arrowdown"], left: [], right: [] } },
+  ],
+});
+
 SPRK.setupTabs({
   tabs: [
     { button: document.querySelector("#scoreboardTab"), panel: document.querySelector("#scorePanel") },

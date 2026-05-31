@@ -25,6 +25,12 @@
   font-weight: 800;
 }
 
+.invader-canvas-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 960px;
+}
+
 #invader-canvas {
   width: 100%;
   max-width: 960px;
@@ -35,10 +41,93 @@
   cursor: crosshair;
 }
 
+.wave-celebration {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(2, 6, 12, 0.88);
+  border: 2px solid #67e8f9;
+  box-shadow: inset 0 0 40px rgba(103, 232, 249, 0.15);
+  z-index: 5;
+}
+
+.wave-celebration.hidden {
+  display: none;
+}
+
+.wave-celebration-card {
+  max-width: 34rem;
+  padding: 1.1rem 1.25rem;
+  border: 1px solid rgba(124, 255, 113, 0.35);
+  background: linear-gradient(160deg, rgba(12, 24, 38, 0.98), rgba(5, 10, 18, 0.98));
+  text-align: center;
+}
+
+.wave-celebration-eyebrow {
+  margin: 0 0 0.35rem;
+  color: #67e8f9;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.wave-celebration-card h2 {
+  margin: 0 0 0.5rem;
+  color: #7cff71;
+  font-size: clamp(1.5rem, 5vw, 2.2rem);
+}
+
+.wave-celebration-badge {
+  display: inline-block;
+  margin: 0 0 0.75rem;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(31, 182, 255, 0.18);
+  color: #f2f7fb;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.wave-celebration-insight {
+  margin: 0 0 0.65rem;
+  color: var(--muted);
+  line-height: 1.55;
+  text-align: left;
+}
+
+.wave-celebration-extra {
+  margin: 0 0 0.85rem;
+  color: #a9bac8;
+  font-size: 0.88rem;
+  font-style: italic;
+  text-align: left;
+}
+
+.wave-celebration-extra.hidden {
+  display: none;
+}
+
+#celebration-continue {
+  width: 100%;
+  padding: 0.65rem 1rem;
+  border: 1px solid #7cff71;
+  background: linear-gradient(90deg, #0d3b2c, #145a3d);
+  color: #f2f7fb;
+  font-weight: 800;
+  cursor: pointer;
+}
+
 .invader-actions {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 10px;
+}
+
+.invader-actions [hidden] {
+  display: none !important;
 }
 
 .control-grid {

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SPRK Mission 03 - PingPong</title>
   <link rel="stylesheet" href="../_shared/sprk_mission.css">
+  <link rel="stylesheet" href="../_shared/sprk_touch.css">
   <link rel="stylesheet" href="src/styles.css">
 </head>
 <body>
@@ -28,14 +29,15 @@
     </section>
 
     <section class="game-board">
-      <div class="play-card ping-card">
+      <div class="play-card ping-card sprk-play-surface">
         <div class="game-toolbar">
           <span id="scoreline">0 : 0</span>
           <button id="start-button">Start Round</button>
           <button id="reset-button">Reset</button>
         </div>
         <canvas id="game-canvas" width="720" height="420" aria-label="PingPong game board"></canvas>
-        <p class="mini-help">Left paddle: W/S. Right paddle: Up/Down. First to 5 wins the round.</p>
+        <p class="mini-help">Keyboard: left paddle W/S, right paddle Up/Down. Touch: drag on the left or right half of the court. Triple-tap for fullscreen.</p>
+        <p class="sprk-touch-hint">One phone can drive both paddles (left/right halves). For a true two-keyboard feel, use two devices on the same class link.</p>
       </div>
 
       <aside class="shared-panel">
@@ -68,6 +70,7 @@
   </main>
 
   <script src="../_shared/sprk_app.js"></script>
+  <script src="../_shared/sprk_touch.js"></script>
   <script src="src/app.js"></script>
 </body>
 </html>
