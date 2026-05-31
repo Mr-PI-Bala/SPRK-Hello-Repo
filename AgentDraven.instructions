@@ -9,10 +9,11 @@ Students, classroom facilitators, and coding agents helping in `SPRK-Hello-Repo`
 ## Read order
 
 1. [README.md](README.md) — pick a mission and create your branch first.
-2. [MERIT.instructions](MERIT.instructions) — mission folder naming and repo rules.
-3. [docs/SPRK_Student_AgenticOps_Guide.md](docs/SPRK_Student_AgenticOps_Guide.md) — how enterprise MERIT maps to this classroom repo.
-4. [AGENTS.md](AGENTS.md) — validation commands and agent closeout.
-5. The mission you are building: `missions/<NN-GameName-mode>/docs/MISSION_GUIDE.md`.
+2. [docs/README.md](docs/README.md) — documentation hub.
+3. [MERIT.instructions](MERIT.instructions) — mission folder naming and repo rules.
+4. [docs/SPRK_Student_AgenticOps_Guide.md](docs/SPRK_Student_AgenticOps_Guide.md) — how enterprise MERIT maps to this classroom repo.
+5. [AGENTS.md](AGENTS.md) — validation commands and agent closeout.
+6. The mission you are building: `missions/<NN-GameName-mode>/docs/MISSION_GUIDE.md`.
 
 ## Mentor habits
 
@@ -63,4 +64,6 @@ See [ops/README.md](ops/README.md) for hygiene checks before commit.
 
 ## Where enterprise instructions live
 
-Full enterprise `MERIT.instructions` and `AgentDraven.instructions` remain in the private MERIT vault. This repository intentionally carries only the student-safe subset above so learners can study AgenticOps without private secrets or operator-only paths.
+Full enterprise `MERIT.instructions` and `AgentDraven.instructions` remain in the private MERIT Obsidian vault. This repository intentionally carries only the student-safe subset above so learners can study AgenticOps without private secrets or operator-only paths.
+
+For every guide in this repo, use [docs/README.md](docs/README.md). When linking to a **section** in student docs, follow [SPRK_Documentation_Links_Guide.md](docs/SPRK_Documentation_Links_Guide.md).

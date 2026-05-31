@@ -33,6 +33,16 @@ or:
 python missions/_shared/tools/sprk_workflow.py
 ```
 
+
+## Table of contents
+
+- [Default Behavior](#default-behavior) [[#Default Behavior]] (obsidian)
+- [Menu Options](#menu-options) [[#Menu Options]] (obsidian)
+- [Why This Is Safer Than The Old Experiment](#why-this-is-safer-than-the-old-experiment) [[#Why This Is Safer Than The Old Experiment]] (obsidian)
+- [Object Interaction Diagram](#object-interaction-diagram) [[#Object Interaction Diagram]] (obsidian)
+- [Command Reference](#command-reference) [[#Command Reference]] (obsidian)
+- [Important Notes](#important-notes) [[#Important Notes]] (obsidian)
+
 ## Default Behavior
 By default, the helper shows status and then opens a menu.
 
@@ -44,16 +54,77 @@ flowchart TD
     Menu --> Branch["2. Start new work branch"]
     Menu --> Submit["3. Save current work and open PR"]
     Menu --> Approve["4. Review / approve / optionally merge a PR"]
-    Menu --> Exit["5. Exit"]
+    Menu --> SyncMain["5. Sync local main with GitHub"]
+    Menu --> Triage["6. Triage open PRs"]
+    Menu --> Exit["7. Exit"]
 ```
 
+Every menu screen reminds you: **`ay` / `ya` = all yes**, **`an` / `na` = all no** (see MERIT.instructions).
+
 ## Menu Options
-| Option | Who Should Use It | What It Does | Confirmation Required |
+
+The helper prints a **main menu (options 1–7)** with full “does / does not” text each time. Option **6** opens a **second sub-menu (triage actions 1–4)** — those numbers are **not** the same as the main menu.
+
+| Main menu | Who | What it does | What it does **not** do |
 | --- | --- | --- | --- |
-| Show status | Everyone | Prints branch, changed files, GitHub user, and open PRs. | No |
-| Start new work branch | Student or agent | Checks out `main`, pulls latest `main`, creates a new branch. | Yes |
-| Save current work and open PR | Student or agent | Shows changed files, stages all current changes, commits, pushes, and opens a PR. | Yes |
-| Review / approve / optionally merge PR | Teacher/admin/maintainer | Shows PR details, approves it, and optionally merges it. | Yes, with extra warning for self-approval |
+| **1** Show status | Everyone | Re-print branch, files, user, open PRs | Change git or GitHub |
+| **2** Start branch | Student / agent | Sync `main`, create feature branch | Commit, PR, merge, close PRs |
+| **3** Submit PR | Student / agent | Commit, push, `gh pr create` | Merge into `main` |
+| **4** Approve / merge | Teacher / maintainer | Approve and optionally merge a **safe** PR | Close stale PRs; safe only **after triage** |
+| **5** Sync `main` | Everyone | Match laptop `main` to GitHub (`y`/`ay` per file) | Touch PRs or feature branches |
+| **6** Triage PRs | Facilitator | Analyze vs `main`; sub-menu below | Merge stale PRs into `main` |
+| **7** Exit | Everyone | Leave helper | — |
+
+### Triage sub-menu (after main menu **6**)
+
+| Triage action | Purpose | GitHub effect |
+| --- | --- | --- |
+| **1** Report only | Read analysis; no changes | None |
+| **2** Close without merge | Remove stale drafts (e.g. #13, #14) | `gh pr close` — **not** a merge |
+| **3** Port commits | Cherry-pick salvage SHAs onto new branch from `main` | New branch pushed; old PR may stay open until you run **2** |
+| **4** Back | Return to main menu | None |
+
+Confirmation is required for main menu **2–5**, triage **2–3**, and **4** (merge path).
+
+### Interactive shortcuts (`y` / `n` / `ay` / `ya` / `an` / `na`)
+
+The helper prints this block at startup and before file-by-file or PR-by-PR questions:
+
+| You type | Meaning |
+| --- | --- |
+| `y` or `yes` | Yes for **this item only** |
+| `n` or `no` | No for **this item only** |
+| `ay` or `ya` | **All yes** for this item and every remaining item |
+| `an` or `na` | **All no** for this item and every remaining item |
+
+Canonical rules: [MERIT.instructions](../MERIT.instructions) (**Interactive confirmation shortcuts**).
+
+### Per-file answers when pull is blocked (option 5)
+
+When local edits would be overwritten by `git pull`, option **5** asks about each file using the shortcuts above.
+
+If you choose `ay`/`ya` for every dirty file, the helper runs `git reset --hard origin/main` after fetching (same outcome as a full overwrite of local `main`).
+
+### Triage stale open PRs (option 6) — example #13 and #14
+
+Open drafts listed at startup are **not** safe to merge just because they exist.
+
+| Verdict | Meaning | Typical action |
+| --- | --- | --- |
+| `LIKELY_SUPERSEDED` | Docs-only PR; `main` already has newer guides | Close PR (option 6 → close) |
+| `STALE_UNSAFE` | Far behind `main`; merge would delete current files | Close PR, port salvage commits to new branch |
+| `PORT_TO_NEW_BRANCH` | Good ideas, wrong base branch | Cherry-pick commits, then option 3 for new PR |
+
+Example flow for **#13** (Space Invaders rail fix on an old branch):
+
+1. `npm run workflow` → **main menu 6** (triage open PRs)  
+2. Read report for #13 (`STALE_UNSAFE`, lists salvage commit `95109af…`)  
+3. **Triage sub-menu 3** — port commits → new branch `cursor/space-invaders-rail-2abe` (optional)  
+4. **Triage sub-menu 2** — close #13 without merge (`y` or `ay` when asked)  
+5. **Main menu 5** — sync laptop `main` with GitHub  
+6. Test, then **main menu 3** — open a new PR from the fresh branch
+
+To only discard stale PRs (no porting): skip step 3; use **triage sub-menu 2** for #13 and #14, then **main menu 5**.
 
 ## Why This Is Safer Than The Old Experiment
 The earlier brancher/approver experiment was removed because it ran shell strings directly. This helper avoids that pattern.
@@ -118,8 +189,24 @@ Review/approve a PR:
 python3 missions/_shared/tools/sprk_workflow.py approve 12
 ```
 
+Sync local `main` with GitHub (fixes “would be overwritten by merge” pull errors):
+
+```bash
+python3 missions/_shared/tools/sprk_workflow.py sync-main
+```
+
+Triage open PRs (analyze, close, or port commits):
+
+```bash
+python3 missions/_shared/tools/sprk_workflow.py triage-prs
+```
+
+Or from the menu: `npm run workflow` → **5** sync main, **6** triage PRs.
+
 ## Important Notes
 - The helper cannot bypass GitHub branch protection or repository rules.
 - If the repo requires another person's approval, GitHub may reject self-approval.
 - The submit action uses `git add -A` after showing status. Stop if unrelated files appear.
 - The approve action is for maintainers, not general student use.
+- **Sync main** permanently removes local edits for any file you answer `y` or `ay`/`ya` to.
+- **Triage PRs** does not merge old drafts into `main` — it reports verdicts and helps close or port commits forward.

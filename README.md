@@ -8,11 +8,18 @@ Shared SPRK onboarding and governance starts in the public [SPRK-Welcome](https:
 
 This repository keeps local copies of the shared guides in [docs](docs/) so students can keep working inside `SPRK-Hello-Repo` after access is approved.
 
+Documentation hub (all guides in one index; link rules in [docs/SPRK_Documentation_Links_Guide.md](docs/SPRK_Documentation_Links_Guide.md)):
+
+- [docs/README.md](docs/README.md)
+
 Key repo-wide learning guide:
 
 - [docs/SPRK_Language_Crosswalk.md](docs/SPRK_Language_Crosswalk.md): maps common programming ideas across Python, JavaScript, Java, Go, Lua, and related patterns used in the missions.
 - [docs/SPRK_Browser_Mission_Foundation_Guide.md](docs/SPRK_Browser_Mission_Foundation_Guide.md): explains the common browser-mission structure so mission guides only need to describe what is different.
 - [docs/SPRK_Browser_Testing_And_Network_Architecture.md](docs/SPRK_Browser_Testing_And_Network_Architecture.md): explains the validation harness, Cursor Cloud flow, and local network hosting model for phones, tablets, and facilitator laptops.
+- [docs/SPRK_Facilitator_Guide.md](docs/SPRK_Facilitator_Guide.md): **start here for teachers and lab hosts** — one-page cheat sheet, laptop vs cloud hosting, bit.ly class links, and student device steps.
+- [docs/SPRK_Touch_Control_Guide.md](docs/SPRK_Touch_Control_Guide.md): iPhone and touchscreen play — drag, multi-touch fire, fullscreen, two-player limits, and keyboard gaps.
+- [docs/SPRK_Cloud_Facilitator_Hosting_Guide.md](docs/SPRK_Cloud_Facilitator_Hosting_Guide.md): deep dive for Cursor Cloud public tunnels (Cloudflare, LocalTunnel) when students are not on the facilitator's Wi-Fi.
 - [docs/SPRK_Guided_Workflow_Helper.md](docs/SPRK_Guided_Workflow_Helper.md): explains the guided Git/GitHub helper that shows status, teaches branch/PR actions, and requires confirmation before doing work.
 - [docs/SPRK_Student_AgenticOps_Guide.md](docs/SPRK_Student_AgenticOps_Guide.md): adapts agentic development practices into student-safe SPRK habits for setup, validation, hygiene, and handoff.
 
@@ -26,10 +33,10 @@ Student-safe AgenticOps and coding-agent entry points (public repo only; no priv
 ## Start Here
 1. ~~Ask for access through the public [SPRK-Welcome](https://github.com/Mr-PI-Bala/SPRK-Welcome) repository.~~<br>
    **Victory:** if you can see this private repository, your access request worked.
-2. [Create your own branch before changing code](#create-your-branch-before-changing-code).
-3. [Pick one mission from the Mission Menu](#pick-one-mission).
-4. [Play the mission first](#play-the-mission-first).
-5. [Make one small change in your own branch](#make-one-small-change-in-your-own-branch).
+2. [Create your own branch before changing code](#create-your-branch-before-changing-code) [[#Create Your Branch Before Changing Code]] (obsidian).
+3. [Pick one mission from the Mission Menu](#pick-one-mission) [[#Pick One Mission]] (obsidian).
+4. [Play the mission first](#play-the-mission-first) [[#Play The Mission First]] (obsidian).
+5. [Make one small change in your own branch](#make-one-small-change-in-your-own-branch) [[#Make One Small Change In Your Own Branch]] (obsidian).
 
 ## Create Your Branch Before Changing Code
 Do this before editing files.
@@ -44,9 +51,9 @@ maya-sprk
 
 Quick summary: use the branch path that matches where you are working.
 
-- [Create A Branch From The GitHub Page](#create-a-branch-from-the-github-page): use this when you are only on the GitHub website and want GitHub to make the branch first.
-- [Create A Branch In Codespaces Browser](#create-a-branch-in-codespaces-browser): use this when you are editing inside Codespaces in the browser or on iPad.
-- [Create A Branch In VS Code Desktop](#create-a-branch-in-vs-code-desktop): use this when the repo is cloned onto your laptop and open in local VS Code.
+- [Create A Branch From The GitHub Page](#create-a-branch-from-the-github-page) [[#Create A Branch From The GitHub Page]] (obsidian): use this when you are only on the GitHub website and want GitHub to make the branch first.
+- [Create A Branch In Codespaces Browser](#create-a-branch-in-codespaces-browser) [[#Create A Branch In Codespaces Browser]] (obsidian): use this when you are editing inside Codespaces in the browser or on iPad.
+- [Create A Branch In VS Code Desktop](#create-a-branch-in-vs-code-desktop) [[#Create A Branch In VS Code Desktop]] (obsidian): use this when the repo is cloned onto your laptop and open in local VS Code.
 
 ```mermaid
 sequenceDiagram
@@ -165,7 +172,7 @@ If the result still says `main`, stop and ask for help before changing files.
 
 Detailed guides:
 
-- [SPRK Git Repository User Guide: Create Your Branch](docs/SPRK_Git_Repository_UserGuide.md#create-your-branch)
+- [SPRK Git Repository User Guide: Create Your Branch](docs/SPRK_Git_Repository_UserGuide.md#create-your-branch) [[docs/SPRK_Git_Repository_UserGuide#Create Your Branch]] (obsidian)
 - [SPRK CodeSpaces User Guide](docs/SPRK_CodeSpaces_UserGuide.md)
 - [SPRK VS Code User Guide](docs/SPRK_VSCode_UserGuide.md), including Markdown preview and iPad troubleshooting.
 
@@ -184,7 +191,7 @@ What each command does:
 Then close and reopen the Markdown preview.
 
 ## Pick One Mission
-Start in the [Mission Menu](#mission-menu).
+Start in the [Mission Menu](#mission-menu) [[#Mission Menu]] (obsidian).
 
 Quick summary:
 
@@ -203,7 +210,7 @@ Why this matters:
 - you can tell whether your later edit actually changed something
 - you understand the difference between the `RealTime`, `X-Ray Vision`, and `Baseline Status` tabs before you start modifying code
 
-Open the mission from the [Mission Menu](#mission-menu), try the default behavior, and read that mission's `MISSION_GUIDE.md` if anything is unclear.
+Open the mission from the [Mission Menu](#mission-menu) [[#Mission Menu]] (obsidian), try the default behavior, and read that mission's `MISSION_GUIDE.md` if anything is unclear.
 
 ## Make One Small Change In Your Own Branch
 After playing the mission, make one small visible change in your branch.
@@ -317,6 +324,8 @@ Every mission should support the same classroom rhythm:
 Start with `01-ReactionRace` because it lets students participate even if they do not all have GitHub access yet.
 
 A facilitator can run the backend on one laptop and share the browser link with students on other devices. Students without GitHub can still play. Students with GitHub can later create branches and improve the mission.
+
+**Facilitating a live class?** Read [docs/SPRK_Facilitator_Guide.md](docs/SPRK_Facilitator_Guide.md). For iPhone and touch play, see [docs/SPRK_Touch_Control_Guide.md](docs/SPRK_Touch_Control_Guide.md).
 
 ## Branch Naming
 Students should use their GitHub handle as their branch name.

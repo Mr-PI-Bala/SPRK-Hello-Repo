@@ -5,6 +5,9 @@
   camera rules, but aliens, bunkers, score, wave, and player health stay shared.
 */
 
+const searchParams = new URLSearchParams(window.location.search);
+const testModeEnabled = searchParams.get("test") === "1";
+
 const canvas = document.querySelector("#invader-canvas");
 const ctx = canvas.getContext("2d");
 const playerNameInput = document.querySelector("#player-name");
@@ -34,6 +37,13 @@ const xrayTab = document.querySelector("#xrayTab");
 const baselineTab = document.querySelector("#baselineTab");
 const scorePanel = document.querySelector("#scorePanel");
 const xrayPanel = document.querySelector("#xrayPanel");
+const waveCelebration = document.querySelector("#wave-celebration");
+const celebrationEyebrow = document.querySelector("#celebration-eyebrow");
+const celebrationTitle = document.querySelector("#celebration-title");
+const celebrationBadge = document.querySelector("#celebration-badge");
+const celebrationInsight = document.querySelector("#celebration-insight");
+const celebrationExtra = document.querySelector("#celebration-extra");
+const celebrationContinue = document.querySelector("#celebration-continue");
 
 const WIDTH = canvas.width;
 const HEIGHT = canvas.height;
@@ -114,6 +124,16 @@ const MODE_LABELS = {
   fps: "3D FPS",
 };
 
+/*
+  3D rail and FPS modes are paused for classroom play until touch and mobile UX
+  are stable. Playwright tests enable them with ?test=1.
+*/
+const EXPERIMENTAL_DIMENSION_MODES = testModeEnabled;
+
+function dimensionModesEnabled() {
+  return EXPERIMENTAL_DIMENSION_MODES;
+}
+
 const keys = new Set();
 const runtime = {
   running: false,
@@ -132,6 +152,7 @@ const runtime = {
   })),
   transition: null,
   saveTimer: null,
+  celebration: null,
 };
 
 let gameState = createDefaultState();
@@ -246,6 +267,9 @@ function normalizeState(rawState) {
     ? raw.bunkers
     : createBunkers();
   next.mode = ["2d", "lateral3d", "fps"].includes(next.mode) ? next.mode : "2d";
+  if (!dimensionModesEnabled() && next.mode !== "2d") {
+    next.mode = "2d";
+  }
   next.score = Number(next.score || 0);
   next.wave = Number(next.wave || 1);
   next.maxLives = clamp(Number(next.maxLives || next.lives || DEFAULT_LIVES), 1, MAX_LIVES);
@@ -1031,11 +1055,57 @@ async function destroyAlien(alien, source = "cannon") {
   ]);
 }
 
+function dismissWaveCelebration() {
+  if (!runtime.celebration) return;
+  runtime.celebration = null;
+  waveCelebration.classList.add("hidden");
+  gameState.status = `Wave ${gameState.wave} deployed.`;
+  gameState.lastEvent = gameState.status;
+  renderHud();
+}
+
+function showWaveCelebration(details) {
+  if (!details || testModeEnabled) {
+    return;
+  }
+
+  celebrationEyebrow.textContent = details.eyebrow;
+  celebrationTitle.textContent = details.headline;
+  celebrationBadge.textContent = details.badge;
+  celebrationInsight.textContent = details.insight;
+  if (details.extraLine) {
+    celebrationExtra.textContent = details.extraLine;
+    celebrationExtra.classList.remove("hidden");
+  } else {
+    celebrationExtra.textContent = "";
+    celebrationExtra.classList.add("hidden");
+  }
+  celebrationContinue.textContent = `Launch Wave ${details.wave}`;
+
+  runtime.celebration = {
+    wave: details.wave,
+    startedAt: performance.now(),
+  };
+  waveCelebration.classList.remove("hidden");
+  gameState.status = `${details.eyebrow} — Wave ${details.wave}`;
+  gameState.lastEvent = gameState.status;
+  SPRK.playSound("level");
+  renderHud();
+  void logEvent(`Math celebration: ${details.headline}`, "wave");
+}
+
 function startNextWave() {
   gameState.wave += 1;
   gameState.aliens = createAlienFleet(gameState.wave);
   gameState.fleet = { direction: 1, stepTimer: 0, beatIndex: 0 };
   gameState.mystery = { active: false, x: -520, direction: 1, timer: 7, points: 100 };
+
+  const celebration = WAVE_MATH.getCelebration(gameState.wave);
+  if (celebration) {
+    showWaveCelebration(celebration);
+    return;
+  }
+
   gameState.status = `Wave ${gameState.wave} deployed.`;
   gameState.lastEvent = gameState.status;
 }
@@ -1093,7 +1163,7 @@ function updateFleet(dt) {
     loseLife("The fleet reached the bunkers in 2D.");
   }
 
-  if (gameState.mode === "lateral3d" && alive.some((alien) => alien.z > -230)) {
+  if (dimensionModesEnabled() && gameState.mode === "lateral3d" && alive.some((alien) => alien.z > -230)) {
     startTransition("fps", "proximity threshold");
   }
 
@@ -1300,6 +1370,7 @@ function updateTransition(dt) {
 }
 
 function startTransition(targetMode, reason = "operator input") {
+  if (!dimensionModesEnabled()) return;
   if (runtime.transition || gameState.mode === targetMode) return;
   const allowed = (
     (gameState.mode === "2d" && targetMode === "lateral3d") ||
@@ -1322,6 +1393,7 @@ function startTransition(targetMode, reason = "operator input") {
 
 function updateGame(dt) {
   updateTransition(dt);
+  if (runtime.celebration) return;
   if (!runtime.running || runtime.transition) return;
   updatePlayer(dt);
   updateFleet(dt);
@@ -1356,6 +1428,8 @@ async function resetGame() {
   runtime.floatingTexts = [];
   runtime.playerImpact = null;
   runtime.transition = null;
+  runtime.celebration = null;
+  waveCelebration.classList.add("hidden");
   gameState = createDefaultState();
   renderHud();
   await SPRK.deleteJson("/api/state");
@@ -1390,6 +1464,11 @@ function preventButtonSpaceActivation(event) {
 
 function handleKeyDown(event) {
   const key = event.key.toLowerCase();
+  if (runtime.celebration && (key === "enter" || key === " ")) {
+    event.preventDefault();
+    dismissWaveCelebration();
+    return;
+  }
   keys.add(key);
   if ([" ", "arrowleft", "arrowright", "arrowup", "arrowdown"].includes(key)) {
     event.preventDefault();
@@ -1397,10 +1476,10 @@ function handleKeyDown(event) {
   if (key === " ") {
     firePlayerShot();
   }
-  if (key === "shift") {
+  if (dimensionModesEnabled() && key === "shift") {
     startTransition(gameState.mode === "2d" ? "lateral3d" : "fps", "Shift key");
   }
-  if (key === "f") {
+  if (dimensionModesEnabled() && key === "f") {
     startTransition("fps", "F key");
   }
 }
@@ -1423,6 +1502,46 @@ canvas.addEventListener("click", () => {
   }
   firePlayerShot();
 });
+
+function configureDimensionControls() {
+  const hidden = !dimensionModesEnabled();
+  [dimensionShiftButton, fpsShiftButton].forEach((button) => {
+    if (!button) return;
+    button.hidden = hidden;
+    button.disabled = hidden;
+  });
+  document.querySelectorAll("[data-experimental-dimension]").forEach((node) => {
+    node.hidden = hidden;
+  });
+}
+
+configureDimensionControls();
+
+const touchControls = SPRK_TOUCH.attach({
+  target: canvas,
+  keys,
+  onAction: () => {
+    if (runtime.running) {
+      firePlayerShot();
+    }
+  },
+  unlockSound: () => SPRK.unlockSound(),
+  fullscreenElement: document.querySelector(".invader-card"),
+  fullscreenButton: document.querySelector("#fullscreen-toggle"),
+  enableFullscreenTripleTap: false,
+  magnetic: {
+    radius: 78,
+    isEnabled: () => runtime.running && gameState.mode !== "fps",
+    getFocusPoint: () => ({
+      x: WIDTH / 2 + gameState.player.x,
+      y: gameState.mode === "lateral3d" ? HEIGHT - 96 : 600,
+    }),
+    applyFocusPoint: (x) => {
+      gameState.player.x = clamp(x - WIDTH / 2, -PLAYER_LIMIT_X, PLAYER_LIMIT_X);
+    },
+  },
+});
+
 document.addEventListener("keydown", handleKeyDown);
 document.addEventListener("keyup", handleKeyUp);
 document.addEventListener("mousemove", handleMouseMove);
@@ -1431,15 +1550,22 @@ document.querySelectorAll("button").forEach((button) => {
   button.addEventListener("keyup", preventButtonSpaceActivation);
 });
 lifeCountInput.addEventListener("change", handleLifeCountChange);
+celebrationContinue.addEventListener("click", () => {
+  SPRK.unlockSound();
+  dismissWaveCelebration();
+});
+
 startGameButton.addEventListener("click", startGame);
-dimensionShiftButton.addEventListener("click", () => {
-  SPRK.unlockSound();
-  startTransition(gameState.mode === "2d" ? "lateral3d" : "fps", "button");
-});
-fpsShiftButton.addEventListener("click", () => {
-  SPRK.unlockSound();
-  startTransition("fps", "button");
-});
+if (dimensionModesEnabled()) {
+  dimensionShiftButton.addEventListener("click", () => {
+    SPRK.unlockSound();
+    startTransition(gameState.mode === "2d" ? "lateral3d" : "fps", "button");
+  });
+  fpsShiftButton.addEventListener("click", () => {
+    SPRK.unlockSound();
+    startTransition("fps", "button");
+  });
+}
 resetGameButton.addEventListener("click", resetGame);
 clearSharedButton.addEventListener("click", clearSharedBoard);
 

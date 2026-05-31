@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SPRK Mission 10 - Space Invaders</title>
   <link rel="stylesheet" href="../_shared/sprk_mission.css">
+  <link rel="stylesheet" href="../_shared/sprk_touch.css">
   <link rel="stylesheet" href="src/styles.css">
 </head>
 <body>
@@ -28,14 +29,27 @@
     </section>
 
     <section class="game-board invader-board">
-      <section class="play-card invader-card" aria-label="Space Invaders dimensional shift game">
+      <section class="play-card invader-card sprk-play-surface" aria-label="Space Invaders dimensional shift game">
         <div class="status-row invader-hud">
           <span id="mode-label">2D Classic</span>
           <strong id="score-label">Score 0000</strong>
           <span id="wave-label">Wave 1</span>
           <span id="lives-label">Lives 3/3</span>
         </div>
-        <canvas id="invader-canvas" width="960" height="680" aria-label="Dimensional Space Invaders playfield"></canvas>
+        <div class="invader-canvas-wrap">
+          <canvas id="invader-canvas" width="960" height="680" aria-label="Dimensional Space Invaders playfield"></canvas>
+          <div id="wave-celebration" class="wave-celebration hidden" role="dialog" aria-modal="true" aria-labelledby="celebration-title">
+            <div class="wave-celebration-card">
+              <p class="wave-celebration-eyebrow" id="celebration-eyebrow">Prime power wave</p>
+              <h2 id="celebration-title">Wave 7</h2>
+              <p class="wave-celebration-badge" id="celebration-badge">Prime</p>
+              <p id="celebration-insight" class="wave-celebration-insight">Insight text loads here.</p>
+              <p id="celebration-extra" class="wave-celebration-extra hidden"></p>
+              <button id="celebration-continue" type="button">Launch this wave</button>
+            </div>
+          </div>
+        </div>
+        <p class="sprk-touch-hint">Touch: drag on the cannon to move, quick tap or second finger to fire. Tap <strong>Fullscreen</strong> (or hold the board ~1.2s on iPhone). Classic 2D mode only by default — tweak the code to turn on 2.5D, 3D, and FPS modes.</p>
         <div class="status-row invader-readouts">
           <span id="alien-count">55 aliens remain</span>
           <span id="fleet-speed">Fleet beat 0.88s</span>
@@ -44,22 +58,23 @@
         </div>
         <div class="invader-actions">
           <button id="start-game" type="button">Start / Resume</button>
-          <button id="dimension-shift" type="button">Dimension Shift</button>
-          <button id="fps-shift" type="button">FPS Dive</button>
+          <button id="fullscreen-toggle" type="button" class="sprk-fullscreen-button">Fullscreen</button>
+          <button id="dimension-shift" type="button" data-experimental-dimension>Dimension Shift</button>
+          <button id="fps-shift" type="button" data-experimental-dimension>FPS Dive</button>
           <button id="reset-game" type="button">Reset Wave</button>
         </div>
         <div class="control-grid">
           <article>
-            <h2>Classic 2D</h2>
-            <p>Move with A/D or arrow keys. Fire one laser at a time with Space. Set 1-10 lives before resetting a wave.</p>
+            <h2>Classic 2D (class play)</h2>
+            <p>Move with A/D, arrows, or touch drag. Fire with Space, tap, or a second finger. Set 1-10 lives before resetting a wave.</p>
           </article>
           <article>
-            <h2>2.5D Rail</h2>
-            <p>Press Shift or Dimension Shift to rotate into a capped rail tilt. The same fleet advances with extra row spacing and an overview map.</p>
+            <h2>Waves (your “levels”)</h2>
+            <p>Each cleared fleet starts the next wave. Hit a <strong>math milestone</strong> (prime 3, 5, 7, 11…, Fibonacci, π, palindrome, and more) for a celebration screen with a number insight before you fight.</p>
           </article>
-          <article>
-            <h2>3D FPS</h2>
-            <p>Press F or FPS Dive for mouse-look aiming. WASD moves across the ground plane while the overview map keeps the full landscape visible.</p>
+          <article data-experimental-dimension>
+            <h2>3D / FPS (paused)</h2>
+            <p>Only 2D is enabled by default. Tweak the code to turn on 2.5D, 3D, and FPS with the existing rail and overview systems.</p>
           </article>
         </div>
       </section>
@@ -100,6 +115,8 @@
   </main>
 
   <script src="../_shared/sprk_app.js"></script>
+  <script src="../_shared/sprk_touch.js"></script>
+  <script src="src/wave_math.js"></script>
   <script src="src/app.js"></script>
 </body>
 </html>

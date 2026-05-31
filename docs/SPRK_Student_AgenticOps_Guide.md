@@ -4,11 +4,20 @@ This guide translates MERIT AgenticOps practices into a classroom-friendly shape
 
 The full enterprise MERIT instruction set remains in the private MERIT vault. This public/student repo carries the safe operating principles that help students and agents learn: clear structure, one source of truth, validation, branch discipline, secrets hygiene, readable docs, and clean handoff.
 
+
+## Table of contents
+
+- [Compare and contrast](#compare-and-contrast) [[#Compare and contrast]] (obsidian)
+- [Mission folder naming (required)](#mission-folder-naming-required) [[#Mission folder naming (required)]] (obsidian)
+- [What to bring into student work](#what-to-bring-into-student-work) [[#What to bring into student work]] (obsidian)
+- [What not to import](#what-not-to-import) [[#What not to import]] (obsidian)
+- [Recommended student handoff](#recommended-student-handoff) [[#Recommended student handoff]] (obsidian)
+
 ## Compare and contrast
 
 | Area | MERIT enterprise pattern | SPRK student adaptation |
 | --- | --- | --- |
-| Instruction source | Private vault hierarchy with L1/L2/L3 instructions | Public repo uses `MERIT.instructions`, `AgentDraven.instructions`, `AGENTS.md`, this guide, and mission docs |
+| Instruction source | Private MERIT Obsidian vault (L1/L2/L3 instructions) | Public repo uses `docs/README.md`, `MERIT.instructions`, `AgentDraven.instructions`, `AGENTS.md`, this guide, and mission docs |
 | Documentation folder | `{Name} docs/` for product/operator docs | Keep existing `docs/` because curriculum and mission links depend on it |
 | Entry points | Product-specific runners and service commands | Mission `server.py`, npm scripts, and `npm run workflow` |
 | Setup | Environment bootstrap scripts | `npm run setup:missions` and devcontainer post-create setup |
@@ -35,15 +44,24 @@ Rules are canonical in [MERIT.instructions](../MERIT.instructions). Do not add a
 
 Use one canonical place for each topic:
 
+- Documentation hub (all repo guides): `docs/README.md`
+- Documentation link rules (portable + section wikilinks): [SPRK_Documentation_Links_Guide.md](SPRK_Documentation_Links_Guide.md)
 - Student start path: `README.md`
 - Mission naming and branch/PR governance: `MERIT.instructions`
 - Mentor tone: `AgentDraven.instructions`
 - Guided workflow: `docs/SPRK_Guided_Workflow_Helper.md`
 - Browser mission architecture: `docs/SPRK_Browser_Mission_Foundation_Guide.md`
 - Testing and network architecture: `docs/SPRK_Browser_Testing_And_Network_Architecture.md`
+- Facilitator cheat sheet: `docs/SPRK_Facilitator_Guide.md`
+- Cloud tunnel hosting: `docs/SPRK_Cloud_Facilitator_Hosting_Guide.md`
+- Touch and phone play: `docs/SPRK_Touch_Control_Guide.md`
+- Classroom LAN testing: `docs/SPRK_Classroom_Network_Test_Guide.md`
 - Validation flow: `docs/BASELINE_VALIDATION_AND_3C_FLOW.md`
+- Maintainer formative insights (local): `docs/PROJECT_GUIDE.md`
 - Language concepts: `docs/SPRK_Language_Crosswalk.md`
 - Mission-specific play/build steps: `missions/<NN-GameName-mode>/docs/MISSION_GUIDE.md`
+
+Enterprise MERIT instructions stay in the private Obsidian vault. In this repo, use portable Markdown links everywhere; add `[[Note#Heading]] (obsidian)` only for **section** references (see SPRK_Documentation_Links_Guide.md). Never copy private vault paths or `obsidian://` URIs into commits or chats.
 
 When adding a new explanation, link to the existing guide if it already exists. Do not create duplicate status or verification docs for the same mission.
 

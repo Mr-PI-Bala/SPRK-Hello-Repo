@@ -3,6 +3,22 @@ Use this guide for the parts that should stay common across browser-first SPRK m
 
 Mission-specific guides should link here for the baseline pattern, then only explain what is different about that mission.
 
+
+## Table of contents
+
+- [What Stays Common](#what-stays-common) [[#What Stays Common]] (obsidian)
+- [Mission Folder Naming](#mission-folder-naming) [[#Mission Folder Naming]] (obsidian)
+- [Common Run Pattern](#common-run-pattern) [[#Common Run Pattern]] (obsidian)
+- [Common File Roles](#common-file-roles) [[#Common File Roles]] (obsidian)
+- [Common Frontend And Backend Pattern](#common-frontend-and-backend-pattern) [[#Common Frontend And Backend Pattern]] (obsidian)
+- [Common Shared APIs](#common-shared-apis) [[#Common Shared APIs]] (obsidian)
+- [Common Touch Pattern](#common-touch-pattern) [[#Common Touch Pattern]] (obsidian)
+- [Common Right-Side Panel Pattern](#common-right-side-panel-pattern) [[#Common Right-Side Panel Pattern]] (obsidian)
+- [Common Change Loop](#common-change-loop) [[#Common Change Loop]] (obsidian)
+- [Common Branch Rule](#common-branch-rule) [[#Common Branch Rule]] (obsidian)
+- [Common Language Crosswalk Rule](#common-language-crosswalk-rule) [[#Common Language Crosswalk Rule]] (obsidian)
+- [What Should Stay Mission-Specific](#what-should-stay-mission-specific) [[#What Should Stay Mission-Specific]] (obsidian)
+
 ## What Stays Common
 Most browser-first SPRK missions share the same foundation:
 
@@ -11,6 +27,7 @@ Most browser-first SPRK missions share the same foundation:
 - `src/styles.css`: mission-specific visuals
 - `server.py`: mission backend startup
 - `missions/_shared/sprk_app.js`: shared frontend helpers
+- `missions/_shared/sprk_touch.js`: shared touch, pointer, and fullscreen helpers for canvas missions
 - `missions/_shared/sprk_backend.py`: shared backend behavior
 
 ## Mission Folder Naming
@@ -77,6 +94,15 @@ These routes are the standard shared classroom pattern:
 - `/api/scores`: shared scoreboard data
 - `/api/events`: X-Ray Vision event stream
 - `/_shared/generated/baseline-status.json`: latest generated baseline summary
+
+## Common Touch Pattern
+Canvas missions should use the shared touch layer instead of inventing per-mission gestures:
+
+- Link `missions/_shared/sprk_touch.css` and `missions/_shared/sprk_touch.js`.
+- Call `SPRK_TOUCH.attach({ target: canvas, keys, ... })` with the same `keys` set the keyboard uses.
+- Document mission-specific gaps (FPS mouse-look, Soccer Match 2P, and so on) in the mission guide.
+
+Student and facilitator reference: [SPRK_Touch_Control_Guide.md](SPRK_Touch_Control_Guide.md).
 
 ## Common Right-Side Panel Pattern
 Browser-first missions should keep the stable three-tab model:

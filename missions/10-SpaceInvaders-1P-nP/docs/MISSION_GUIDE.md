@@ -11,13 +11,16 @@ Build and play a Space Invaders mission that begins as a classic 2D defense game
 ## Mission Navigation
 | Need | Go Here |
 | --- | --- |
-| I want to run the mission | [How To Run](#how-to-run) |
-| I want the controls | [Controls](#controls) |
-| I want the file map | [Code Files](#code-files) |
+| I want to run the mission | [How To Run](#how-to-run) [[#How To Run]] (obsidian) |
+| I want math wave celebrations | [Math Wave Celebrations](#math-wave-celebrations) [[#Math Wave Celebrations]] (obsidian) |
+| I want the controls | [Controls](#controls) [[#Controls]] (obsidian) |
+| I want the file map | [Code Files](#code-files) [[#Code Files]] (obsidian) |
+| I want how rules map to the PRD | [How The Game Rules Map To The PRD](#how-the-game-rules-map-to-the-prd) [[#How The Game Rules Map To The PRD]] (obsidian) |
+| I want to change the game | [Try Changing One Thing](#try-changing-one-thing) [[#Try Changing One Thing]] (obsidian) |
 | I want the original product requirement | [PRD.md](PRD.md) |
 | I want the deeper architecture view | [CODE_WALKTHROUGH.md](CODE_WALKTHROUGH.md) |
-| I need the shared Git workflow | [SPRK Git Repository User Guide](../../../docs/SPRK_Git_Repository_UserGuide.md) |
-| I want the common browser mission pattern | [../../../docs/SPRK_Browser_Mission_Foundation_Guide.md](../../../docs/SPRK_Browser_Mission_Foundation_Guide.md) |
+| I need the shared Git workflow | [SPRK Git Repository User Guide](../../../docs/SPRK_Git_Repository_UserGuide.md#create-your-branch) [[docs/SPRK_Git_Repository_UserGuide#Create Your Branch]] (obsidian) |
+| I want the common browser mission pattern | [SPRK Browser Mission Foundation Guide](../../../docs/SPRK_Browser_Mission_Foundation_Guide.md) |
 
 ## What This Mission Gives You
 - A 55-alien Space Invaders fleet with Squid, Crab, and Octopus rows.
@@ -49,6 +52,17 @@ What each command does:
 
 Open the browser link shown in the terminal. This mission uses port `8010`.
 
+## Math Wave Celebrations
+
+When you clear a fleet and the next wave number is special, a celebration card appears with a short math insight. Examples:
+
+- **Primes** from wave 3 onward: 3, 5, 7, 11, 13…
+- **Fibonacci**: 1, 2, 3, 5, 8, 13, 21…
+- **π, φ, e** milestone digit patterns
+- **Palindromes**, perfect squares, powers of two, happy numbers, angle waves (θ), and more
+
+Logic lives in `src/wave_math.js`. Tap **Launch Wave N** (or press Enter) to continue fighting.
+
 ## Controls
 | Mode | Movement | Fire | Shift |
 | --- | --- | --- | --- |
@@ -62,6 +76,7 @@ Open the browser link shown in the terminal. This mission uses port `8010`.
 | `README.md` | Short Quick Start for running Mission 10. | Run command or control summary. |
 | `index.html` | Page structure, canvas, controls, and shared panels. | Mission labels, controls, and student-facing copy. |
 | `src/app.js` | Game state, fleet rules, collisions, rendering, dimension shifts, and shared API calls. | Alien values, fleet speed, controls, and rendering style. |
+| `src/wave_math.js` | Detects math-special wave numbers and builds celebration text. | Add new number patterns or student-friendly insights. |
 | `src/styles.css` | Mission-specific layout and visual treatment. | Canvas size, colors, and responsive layout. |
 | `server.py` | Starts the shared SPRK backend on port `8010`. | Port, title, or initial state defaults. |
 | `docs/MISSION_GUIDE.md` | Student mission instructions. | Challenge prompts and run steps. |
