@@ -62,14 +62,29 @@ flowchart TD
 Every menu screen reminds you: **`ay` / `ya` = all yes**, **`an` / `na` = all no** (see MERIT.instructions).
 
 ## Menu Options
-| Option | Who Should Use It | What It Does | Confirmation Required |
+
+The helper prints a **main menu (options 1–7)** with full “does / does not” text each time. Option **6** opens a **second sub-menu (triage actions 1–4)** — those numbers are **not** the same as the main menu.
+
+| Main menu | Who | What it does | What it does **not** do |
 | --- | --- | --- | --- |
-| Show status | Everyone | Prints branch, changed files, GitHub user, and open PRs (points to option 6 for stale drafts). | No |
-| Start new work branch | Student or agent | Syncs `main` from GitHub (with per-file prompts if needed), then creates a new branch. | Yes |
-| Save current work and open PR | Student or agent | Shows changed files, stages all current changes, commits, pushes, and opens a PR. | Yes |
-| Review / approve / optionally merge PR | Teacher/admin/maintainer | Shows PR details, approves it, and optionally merges it. Use **after option 6** when triage says merge is safe. | Yes, with extra warning for self-approval |
-| Sync local main with GitHub | Student or facilitator | Lists uncommitted files, asks **per file** whether to discard local edits (`y`/`n`/`ay`/`ya`/`an`/`na`), then updates `main`. | Yes |
-| Triage open PRs | Maintainer / facilitator | Compares each open PR to `main`, prints verdict (superseded, stale, portable), can **close without merge**, or **cherry-pick** commits onto a new branch. | Yes for close/port |
+| **1** Show status | Everyone | Re-print branch, files, user, open PRs | Change git or GitHub |
+| **2** Start branch | Student / agent | Sync `main`, create feature branch | Commit, PR, merge, close PRs |
+| **3** Submit PR | Student / agent | Commit, push, `gh pr create` | Merge into `main` |
+| **4** Approve / merge | Teacher / maintainer | Approve and optionally merge a **safe** PR | Close stale PRs; safe only **after triage** |
+| **5** Sync `main` | Everyone | Match laptop `main` to GitHub (`y`/`ay` per file) | Touch PRs or feature branches |
+| **6** Triage PRs | Facilitator | Analyze vs `main`; sub-menu below | Merge stale PRs into `main` |
+| **7** Exit | Everyone | Leave helper | — |
+
+### Triage sub-menu (after main menu **6**)
+
+| Triage action | Purpose | GitHub effect |
+| --- | --- | --- |
+| **1** Report only | Read analysis; no changes | None |
+| **2** Close without merge | Remove stale drafts (e.g. #13, #14) | `gh pr close` — **not** a merge |
+| **3** Port commits | Cherry-pick salvage SHAs onto new branch from `main` | New branch pushed; old PR may stay open until you run **2** |
+| **4** Back | Return to main menu | None |
+
+Confirmation is required for main menu **2–5**, triage **2–3**, and **4** (merge path).
 
 ### Interactive shortcuts (`y` / `n` / `ay` / `ya` / `an` / `na`)
 
@@ -102,11 +117,14 @@ Open drafts listed at startup are **not** safe to merge just because they exist.
 
 Example flow for **#13** (Space Invaders rail fix on an old branch):
 
-1. `npm run workflow` → **6** Triage open PRs  
+1. `npm run workflow` → **main menu 6** (triage open PRs)  
 2. Read report for #13 (`STALE_UNSAFE`, lists salvage commit `95109af…`)  
-3. Action **3** — port commits → new branch `cursor/space-invaders-rail-2abe`  
-4. Action **2** — close #13 with default comment  
-5. Test, then menu **3** — open a new PR from the fresh branch
+3. **Triage sub-menu 3** — port commits → new branch `cursor/space-invaders-rail-2abe` (optional)  
+4. **Triage sub-menu 2** — close #13 without merge (`y` or `ay` when asked)  
+5. **Main menu 5** — sync laptop `main` with GitHub  
+6. Test, then **main menu 3** — open a new PR from the fresh branch
+
+To only discard stale PRs (no porting): skip step 3; use **triage sub-menu 2** for #13 and #14, then **main menu 5**.
 
 ## Why This Is Safer Than The Old Experiment
 The earlier brancher/approver experiment was removed because it ran shell strings directly. This helper avoids that pattern.
