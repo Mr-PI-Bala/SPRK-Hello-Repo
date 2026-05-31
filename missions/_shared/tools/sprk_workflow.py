@@ -315,7 +315,7 @@ def classify_pr_report(report: PrTriageReport) -> None:
         report.verdict = "STALE_UNSAFE"
         report.recommendation = (
             "Do not merge this PR. It is far behind main and would remove files that exist on main now. "
-            "Close the PR, then port only the salvage commits listed below onto a new branch from main (menu 7)."
+            "Close the PR, then port only the salvage commits listed below onto a new branch from main (menu 6)."
         )
     elif docs_only and not report.deleted_if_merged and report.behind_count > 0:
         report.verdict = "LIKELY_SUPERSEDED"
@@ -327,7 +327,7 @@ def classify_pr_report(report: PrTriageReport) -> None:
         report.verdict = "PORT_TO_NEW_BRANCH"
         report.recommendation = (
             "Gameplay or mission changes should land on a new branch from latest main, not by merging this old PR. "
-            "Close this PR after porting the salvage commits (menu 7)."
+            "Close this PR after porting the salvage commits (menu 6)."
         )
     elif not report.ahead_commits:
         report.verdict = "NO_UNIQUE_COMMITS"
