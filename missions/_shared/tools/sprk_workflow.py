@@ -19,6 +19,8 @@ from dataclasses import dataclass
 CONFIRM_TEXT = "I UNDERSTAND"
 SELF_APPROVE_TEXT = "I UNDERSTAND SELF APPROVAL"
 BRANCH_RE = re.compile(r"^[a-z0-9][a-z0-9._/-]{1,80}$")
+ALL_YES_ANSWERS = {"ay", "ya", "all-yes", "allyes"}
+ALL_NO_ANSWERS = {"an", "na", "all-no", "allno"}
 
 
 @dataclass
@@ -82,6 +84,119 @@ def current_branch() -> str:
 def changed_files() -> list[str]:
     result = run_cmd(["git", "status", "--short"])
     return [line for line in result.stdout.splitlines() if line.strip()]
+
+
+def parse_porcelain_path(line: str) -> tuple[str, str] | None:
+    """Parse one `git status --porcelain` line into (xy, path)."""
+    if len(line) < 4:
+        return None
+    xy = line[:2]
+    path = line[3:].strip()
+    if path.startswith('"') and path.endswith('"'):
+        path = path[1:-1]
+    if " -> " in path:
+        path = path.split(" -> ", 1)[1]
+    return xy, path
+
+
+def dirty_tracked_files() -> list[tuple[str, str]]:
+    """Return tracked paths with local worktree or index changes (not untracked ??)."""
+    result = run_cmd(["git", "status", "--porcelain"])
+    dirty: list[tuple[str, str]] = []
+    for line in result.stdout.splitlines():
+        parsed = parse_porcelain_path(line)
+        if not parsed:
+            continue
+        xy, path = parsed
+        if xy == "??":
+            continue
+        if xy.strip() == "":
+            continue
+        dirty.append((xy, path))
+    return dirty
+
+
+def parse_yes_no_answer(raw: str) -> str | None:
+    """Return yes, no, all_yes, all_no, or None if invalid."""
+    answer = raw.strip().lower()
+    if answer in {"y", "yes"}:
+        return "yes"
+    if answer in {"n", "no"}:
+        return "no"
+    if answer in ALL_YES_ANSWERS:
+        return "all_yes"
+    if answer in ALL_NO_ANSWERS:
+        return "all_no"
+    return None
+
+
+def print_yes_no_help() -> None:
+    print("  y/yes  = yes for this file only")
+    print("  n/no   = no for this file only")
+    print("  ay/ya  = all yes (this file and every remaining file)")
+    print("  an/na  = all no (this file and every remaining file)")
+    print("  (See MERIT.instructions: Interactive confirmation shortcuts.)")
+
+
+def prompt_discard_file(path: str, status_xy: str) -> str | None:
+    """Ask whether to discard local edits for one file. Returns yes/no/all_yes/all_no."""
+    while True:
+        answer = input(f"{path} [{status_xy}] — discard local and use GitHub main? [y/n/ay/ya/an/na]: ")
+        parsed = parse_yes_no_answer(answer)
+        if parsed:
+            return parsed
+        print("[WARN] Enter y, n, ay, ya, an, or na.")
+
+
+def choose_files_to_discard(files: list[tuple[str, str]]) -> tuple[list[str], list[str]] | None:
+    """
+    Ask file-by-file whether to discard local edits.
+    Returns (discard_paths, keep_paths) or None if the user cancels.
+    """
+    if not files:
+        return [], []
+
+    print()
+    print("=== Local files not checked in to GitHub ===")
+    for xy, path in files:
+        print(f"  {xy} {path}")
+    print()
+    print("For each file, choose whether to discard your local edits and match GitHub main:")
+    print_yes_no_help()
+    print()
+
+    to_discard: list[str] = []
+    to_keep: list[str] = []
+    batch: str | None = None
+
+    for xy, path in files:
+        if batch == "yes":
+            to_discard.append(path)
+            continue
+        if batch == "no":
+            to_keep.append(path)
+            continue
+
+        choice = prompt_discard_file(path, xy)
+        if choice == "yes":
+            to_discard.append(path)
+        elif choice == "no":
+            to_keep.append(path)
+        elif choice == "all_yes":
+            batch = "yes"
+            to_discard.append(path)
+        elif choice == "all_no":
+            batch = "no"
+            to_keep.append(path)
+
+    if to_keep and not to_discard:
+        print()
+        print("[STOP] You chose to keep every local file. Nothing was synced.")
+        print("If you want GitHub main on this laptop, run again and answer y or ay for the files to replace.")
+        print("If you want to save local edits, use menu option 2 to create a branch and option 3 to open a PR.")
+        return None
+
+    return to_discard, to_keep
 
 
 def current_user() -> str | None:
@@ -153,9 +268,12 @@ def explain_start_branch(branch_name: str) -> None:
     print()
     print("=== Start New Work: What Will Happen ===")
     print("This creates a safe feature branch from the latest `main`.")
+    print("If you have uncommitted local files, the helper will ask file-by-file first (y/n/ay/ya/an/na).")
     print("Commands that will run:")
+    print_command(["git", "fetch", "origin"])
     print_command(["git", "checkout", "main"])
-    print_command(["git", "pull", "origin", "main"])
+    print("  $ git pull origin main")
+    print("    (or `git reset --hard origin/main` if you discard all local edits)")
     print_command(["git", "checkout", "-b", branch_name])
     print()
     print("This does not commit, push, approve, or merge anything.")
@@ -180,10 +298,114 @@ def start_branch(branch_name: str | None = None) -> None:
     explain_start_branch(branch_name)
     if not confirm_or_stop("Confirm you understand this will switch branches and create a new branch."):
         return
-    run_cmd(["git", "checkout", "main"], check=True)
-    run_cmd(["git", "pull", "origin", "main"], check=True)
+    if not sync_main_with_github(skip_status=True, from_start_branch=True):
+        return
     run_cmd(["git", "checkout", "-b", branch_name], check=True)
     print(f"[OK] You are now on branch `{branch_name}`.")
+
+
+def explain_sync_main(to_discard: list[str], to_keep: list[str], hard_reset: bool) -> None:
+    print()
+    print("=== Sync Main With GitHub: What Will Happen ===")
+    print("This updates your local `main` branch to match GitHub.")
+    print("Commands that will run:")
+    print_command(["git", "fetch", "origin"])
+    print_command(["git", "checkout", "main"])
+    for path in to_discard:
+        print_command(["git", "checkout", "origin/main", "--", path])
+    if hard_reset:
+        print_command(["git", "reset", "--hard", "origin/main"])
+    else:
+        print_command(["git", "pull", "origin", "main"])
+    if to_keep:
+        print()
+        print("Files that will keep your local edits:")
+        for path in to_keep:
+            print(f"  {path}")
+    print()
+    print("Learning note: discard = your uncommitted edits for that file are removed permanently.")
+
+
+def sync_main_with_github(skip_status: bool = False, from_start_branch: bool = False) -> bool:
+    """
+    Match local main to origin/main, resolving uncommitted file conflicts interactively.
+    Returns True if sync completed (or was not needed), False if aborted.
+    """
+    if not skip_status:
+        print_status()
+
+    dirty = dirty_tracked_files()
+    to_discard: list[str] = []
+    to_keep: list[str] = []
+
+    if dirty:
+        choice = choose_files_to_discard(dirty)
+        if choice is None:
+            return False
+        to_discard, to_keep = choice
+        if to_keep:
+            print()
+            print("[INFO] Keeping local edits for:")
+            for path in to_keep:
+                print(f"  {path}")
+
+    hard_reset = not to_keep
+    if dirty:
+        explain_sync_main(to_discard, to_keep, hard_reset)
+        if not confirm_or_stop(
+            "Confirm you understand this will change local files and update main from GitHub."
+        ):
+            return False
+    else:
+        print()
+        print("=== Sync Main With GitHub ===")
+        print("No uncommitted tracked files. Fetching and updating main only.")
+        print_command(["git", "fetch", "origin"])
+        print_command(["git", "checkout", "main"])
+        print_command(["git", "pull", "origin", "main"])
+        if not confirm_or_stop("Confirm you understand this will switch to main and pull from GitHub."):
+            return False
+
+    fetch = run_cmd(["git", "fetch", "origin"])
+    if fetch.returncode != 0:
+        print_command_failure(["git", "fetch", "origin"], fetch)
+        return False
+
+    checkout = run_cmd(["git", "checkout", "main"])
+    if checkout.returncode != 0:
+        print_command_failure(["git", "checkout", "main"], checkout)
+        print("[FAIL] Could not switch to main. Resolve the files above, then run sync again.")
+        return False
+
+    for path in to_discard:
+        restore = run_cmd(["git", "checkout", "origin/main", "--", path])
+        if restore.returncode != 0:
+            print_command_failure(["git", "checkout", "origin/main", "--", path], restore)
+            return False
+
+    if hard_reset:
+        reset = run_cmd(["git", "reset", "--hard", "origin/main"])
+        if reset.returncode != 0:
+            print_command_failure(["git", "reset", "--hard", "origin/main"], reset)
+            return False
+    else:
+        pull = run_cmd(["git", "pull", "origin", "main"])
+        if pull.returncode != 0:
+            print()
+            print("[FAIL] `git pull` is still blocked.")
+            print("Files you kept local may conflict with GitHub. Run sync again and choose y or ay for them,")
+            print("or save them on a feature branch (menu option 2, then 3).")
+            if pull.stdout:
+                print(pull.stdout)
+            if pull.stderr:
+                print(pull.stderr)
+            return False
+
+    if from_start_branch:
+        print("[OK] Local `main` matches GitHub. Creating your work branch next.")
+    else:
+        print("[OK] Local `main` is synced with GitHub (`origin/main`).")
+    return True
 
 
 def explain_submit_work(commit_message: str) -> None:
@@ -356,8 +578,9 @@ def menu() -> None:
         print("2. Start new work branch")
         print("3. Save current work and open PR")
         print("4. Review / approve / optionally merge a PR")
-        print("5. Exit")
-        choice = input("Choose 1-5: ").strip()
+        print("5. Sync local main with GitHub (fix pull blocked by local edits)")
+        print("6. Exit")
+        choice = input("Choose 1-6: ").strip()
         if choice == "1":
             print_status()
         elif choice == "2":
@@ -367,10 +590,12 @@ def menu() -> None:
         elif choice == "4":
             approve_pr()
         elif choice == "5":
+            sync_main_with_github()
+        elif choice == "6":
             print("Goodbye.")
             return
         else:
-            print("Choose a number from 1 to 5.")
+            print("Choose a number from 1 to 6.")
 
 
 def main() -> None:
@@ -384,6 +609,10 @@ def main() -> None:
     submit_parser.add_argument("message", nargs="?", help="Commit message and PR title")
     approve_parser = subparsers.add_parser("approve", help="Approve and optionally merge a PR")
     approve_parser.add_argument("number", nargs="?", help="Pull request number")
+    subparsers.add_parser(
+        "sync-main",
+        help="Update local main from GitHub; ask per file (y/n/ay/ya/an/na) when local edits block pull",
+    )
 
     args = parser.parse_args()
 
@@ -400,6 +629,9 @@ def main() -> None:
         submit_work(args.message)
     elif args.command == "approve":
         approve_pr(args.number)
+    elif args.command == "sync-main":
+        if not sync_main_with_github():
+            sys.exit(1)
     else:
         menu()
 

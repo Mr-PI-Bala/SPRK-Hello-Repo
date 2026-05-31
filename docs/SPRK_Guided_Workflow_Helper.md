@@ -54,16 +54,31 @@ flowchart TD
     Menu --> Branch["2. Start new work branch"]
     Menu --> Submit["3. Save current work and open PR"]
     Menu --> Approve["4. Review / approve / optionally merge a PR"]
-    Menu --> Exit["5. Exit"]
+    Menu --> SyncMain["5. Sync local main with GitHub"]
+    Menu --> Exit["6. Exit"]
 ```
 
 ## Menu Options
 | Option | Who Should Use It | What It Does | Confirmation Required |
 | --- | --- | --- | --- |
 | Show status | Everyone | Prints branch, changed files, GitHub user, and open PRs. | No |
-| Start new work branch | Student or agent | Checks out `main`, pulls latest `main`, creates a new branch. | Yes |
+| Start new work branch | Student or agent | Syncs `main` from GitHub (with per-file prompts if needed), then creates a new branch. | Yes |
 | Save current work and open PR | Student or agent | Shows changed files, stages all current changes, commits, pushes, and opens a PR. | Yes |
 | Review / approve / optionally merge PR | Teacher/admin/maintainer | Shows PR details, approves it, and optionally merges it. | Yes, with extra warning for self-approval |
+| Sync local main with GitHub | Student or facilitator | Lists uncommitted files, asks **per file** whether to discard local edits (`y`/`n`/`ay`/`ya`/`an`/`na`), then updates `main`. | Yes |
+
+### Per-file answers when pull is blocked
+
+When local edits would be overwritten by `git pull`, the helper asks about each file. Shortcuts are defined in [MERIT.instructions](../MERIT.instructions) (**Interactive confirmation shortcuts**):
+
+| You type | Meaning |
+| --- | --- |
+| `y` or `yes` | Discard local edits for **this file** and match GitHub `main` |
+| `n` or `no` | **Keep** local edits for this file |
+| `ay` or `ya` | **All yes** — discard local for this file and every file after it |
+| `an` or `na` | **All no** — keep local for this file and every file after it |
+
+If you choose `ay`/`ya` for every dirty file, the helper runs `git reset --hard origin/main` after fetching (same outcome as a full overwrite of local `main`).
 
 ## Why This Is Safer Than The Old Experiment
 The earlier brancher/approver experiment was removed because it ran shell strings directly. This helper avoids that pattern.
@@ -127,6 +142,14 @@ Review/approve a PR:
 ```bash
 python3 missions/_shared/tools/sprk_workflow.py approve 12
 ```
+
+Sync local `main` with GitHub (fixes “would be overwritten by merge” pull errors):
+
+```bash
+python3 missions/_shared/tools/sprk_workflow.py sync-main
+```
+
+Or from the menu: `npm run workflow` → option **5**.
 
 ## Important Notes
 - The helper cannot bypass GitHub branch protection or repository rules.
