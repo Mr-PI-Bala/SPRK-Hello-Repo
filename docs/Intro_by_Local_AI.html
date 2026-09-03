@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>🎮 SPRK Hello Repo — Student Mission Map</title>
+<style>
+  :root {
+    --bg: #101820;
+    --panel: #162331;
+    --panel-strong: #1f3448;
+    --text: #f2f7fb;
+    --muted: #a9bac8;
+    --accent: #1fb6ff;
+    --go: #1fc76a;
+    --wait: #f4b942;
+    --danger: #ff5c7a;
+    --border: #30485c;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', Arial, sans-serif;
+    min-height: 100vh;
+    line-height: 1.6;
+    padding: 24px;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  .header h1 {
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .header p {
+    color: var(--muted);
+    font-size: 1.1rem;
+    max-width: 700px;
+    margin: 0 auto 24px;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 50px;
+    background: var(--panel-strong);
+    color: var(--go);
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .section {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 20px;
+  }
+
+  .section h2 {
+    color: var(--accent);
+    font-size: 1.4rem;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 3px solid var(--border);
+    padding-bottom: 8px;
+  }
+
+  .section p {
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-top: 8px;
+  }
+
+  .card {
+    background: var(--panel-strong);
+    border-radius: 12px;
+    padding: 16px;
+    border: 1px solid var(--border);
+    transition: transform 0.2s, border-color 0.2s;
+  }
+
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+  }
+
+  .card h3 {
+    color: var(--text);
+    margin-bottom: 8px;
+    font-size: 1.05rem;
+  }
+
+  .card p {
+    color: var(--muted);
+    font-size: 0.92rem;
+    margin-bottom: 0;
+  }
+
+  .phase-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-top: 4px;
+  }
+
+  .game-card {
+    background: var(--panel-strong);
+    border-radius: 12px;
+    padding: 16px 12px;
+    text-align: center;
+    border-left: 4px solid var(--accent);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .game-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 24px rgba(31, 182, 255, 0.2);
+  }
+
+  .game-card .emoji { font-size: 2.2rem; margin-bottom: 6px; }
+  .game-card h4 { color: var(--text); margin-bottom: 4px; }
+  .game-card .number { color: var(--accent); font-weight: bold; margin-bottom: 8px; display: block; }
+
+  .how-to {
+    background: var(--panel-strong);
+    border-radius: 12px;
+    padding: 20px;
+    border-left: 4px solid var(--go);
+    margin-top: 16px;
+  }
+
+  .how-to h3 { color: var(--text); margin-bottom: 12px; }
+
+  .how-to ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .how-to li {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  .how-to li:last-child { border-bottom: none; }
+
+  .how-to code {
+    background: #0d141d;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--accent);
+    font-size: 0.85rem;
+    display: inline-block;
+  }
+
+  .checklist {
+    list-style: none;
+    padding: 0;
+    margin-top: 16px;
+  }
+
+  .checklist li {
+    color: var(--muted);
+    padding: 8px 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+  }
+
+  .checklist li::before { content: "✅"; color: var(--go); font-weight: bold; }
+
+  .tip {
+    background: rgba(244, 185, 66, 0.12);
+    border-left: 4px solid var(--wait);
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-top: 16px;
+  }
+
+  .tip p { color: #e8d5a0; margin-bottom: 0; font-size: 0.95rem; }
+
+  .footer {
+    text-align: center;
+    margin-top: 40px;
+    padding: 20px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 600px) {
+    body { padding: 12px; }
+    .section { padding: 18px; }
+    .card-grid, .phase-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="badge">🎓 SPRK Hello Repo</div>
+  <h1>Welcome to Your Coding Mission Map</h1>
+  <p>This is your guide to the **Hello Repository** — a collection of browser-based games where you'll learn programming concepts by playing, changing, and sharing. Grab your notebook and let's dive in!</p>
+</div>
+
+<!-- ==================== REPO OVERVIEW ==================== -->
+<div class="section">
+  <h2>🗂️ Repository Structure</h2>
+  <p>This folder contains everything you need to play missions, run tests, and follow the learning path. Here's what each part does:</p>
+
+  <div class="card-grid">
+    <div class="card">
+      <h3>🎮 missions/</h3>
+      <p>All playable games live here. Each mission has its own `server.py` (Python backend) and `src/app.js` (JavaScript logic). You'll edit the code to change game behavior.</p>
+    </div>
+    <div class="card">
+      <h3>🧪 tests/</h3>
+      <p>All game validation lives here. Playwright runs headless browser tests to make sure your changes don't break the real backends or shared state.</p>
+    </div>
+    <div class="card">
+      <h3>📚 docs/</h3>
+      <p>The single source of truth for guides, mission instructions, and classroom hosting tips. Every student should read this first!</p>
+    </div>
+    <div class="card">
+      <h3>⚙️ ops/README.md</h3>
+      <p>Your personal hygiene checklist — branch rules, commit cleanup, and how to hand off your work cleanly.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== MISSION PHASES ==================== -->
+<div class="section">
+  <h2>🗺️ Mission Phases & Games</h2>
+  <p>Progress through the missions in order. Each one builds on what you learned before.</p>
+
+  <div class="phase-grid">
+    <!-- Phase 1 -->
+    <div class="game-card">
+      <span class="number">01</span><br>ReactionRace
+      <span class="emoji">⏱️</span>
+      <h4>Timers &amp; Classes</h4>
+    </div>
+    <div class="game-card">
+      <span class="number">02</span><br>SnakeGame
+      <span class="emoji">🐍</span>
+      <h4>Grid Logic</h4>
+    </div>
+
+    <!-- Phase 2 -->
+    <div class="game-card">
+      <span class="number">03</span><br>PingPong
+      <span class="emoji">🏓</span>
+      <h4>Physics &amp; Paddle</h4>
+    </div>
+    <div class="game-card">
+      <span class="number">04</span><br>FlashCards
+      <span class="emoji">🃏</span>
+      <h4>Data Structures</h4>
+    </div>
+    <div class="game-card">
+      <span class="number">05</span><br>QuizRoom
+      <span class="emoji">📝</span>
+      <h4>Forms &amp; Validation</h4>
+    </div>
+    <div class="game-card">
+      <span class="number">06</span><br>FourSquare
+      <span class="emoji">⚽</span>
+      <h4>Rules &amp; Turns</h4>
+    </div>
+    <div class="game-card">
+      <span class="number">07</span><br>SoccerScore
+      <span class="emoji">🏈</span>
+      <h4>Shared State</h4>
+    </div>
+
+    <!-- Phase 3 -->
+    <div class="game-card">
+      <span class="number">10</span><br>SpaceInvaders
+      <span class="emoji">👽</span>
+      <h4>Wave Mechanics &amp; Destruction</h4>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== HOW TO START ==================== -->
+<div class="section">
+  <h2>🚀 How to Get Started (5 Steps)</h2>
+
+  <div class="checklist">
+    <li><strong>1. Clone the repo</strong> — Get your local copy from GitHub or the assigned URL.</li>
+    <li><strong>2. Read your mission's docs</strong> — Open `missions/<NN>/docs/MISSION_GUIDE.md` to understand what you're building.</li>
+    <li><strong>3. Create a branch</strong> — Never commit directly to `main`. Use `<task-name>` branches.</li>
+    <li><strong>4. Run the game locally</strong> — Open `src/app.js` in your browser or use `npm run start` if needed.</li>
+    <li><strong>5. Commit &amp; push a PR</strong> — Make small changes, run tests with `npm test`, then submit.</li>
+  </div>
+</div>
+
+<!-- ==================== OPS CHECKLIST ==================== -->
+<div class="section">
+  <h2>🧹 Ops Hygiene Checklist</h2>
+  <p>Keep your repo clean so everyone can follow along. Run these before you commit:</p>
+
+  <ul class="checklist">
+    <li>✅ Only intended files changed (`git status --short`)</li>
+    <li>✅ `node_modules/`, `.env`, Python caches, and browser artifacts are **NOT** committed</li>
+    <li>✅ Tests pass with `npm test` before you push a PR</li>
+    <li>✅ Your branch is named clearly (e.g. `fix-slow-timing`)</li>
+    <li>✅ Write a short summary in your PR title and body</li>
+  </ul>
+
+  <div class="tip">
+    <p><strong>💡 Pro Tip:</strong> If you get stuck on tests, remember — you can run the full test suite anytime with <code>npm test</code>. The Playwright harness spins up a real browser against the Python backend so you're testing real behavior.</p>
+  </div>
+</div>
+
+<!-- ==================== KEY TOOLING ==================== -->
+<div class="section">
+  <h2>🛠️ Toolchain at a Glance</h2>
+  <p>All missions share these core tools so your codebase stays consistent:</p>
+
+  <div class="card-grid">
+    <div class="card">
+      <h3>Python (Flask)</h3>
+      <p>All Python backends live in `server.py`. They handle shared state like leaderboards, timers, and multi-device game logic.</p>
+    </div>
+    <div class="card">
+      <h3>JavaScript / TypeScript</h3>
+      <p>All frontend games use vanilla JS or TS. Shared utilities live in `_shared/sprk_app.js` and `_shared/sprk_mission.css`.</p>
+    </div>
+    <div class="card">
+      <h3>Playwright</h3>
+      <p>All tests run headless browsers against the real Python backend — no fake mocks, just real behavior.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== FOOTER ==================== -->
+<div class="footer">
+  <p>🎯 Remember: Play, Change, Share. The best way to learn is by breaking things (safely) and fixing them together.</p>
+  <p style="margin-top: 8px;">Questions? Check out <code>AGENTS.md</code>, the mission's <code>MISSION_GUIDE.md</code>, or ask your facilitator.</p>
+</div>
+
+</body>
+</html>

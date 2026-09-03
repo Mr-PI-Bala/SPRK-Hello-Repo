@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SPRK Language Crosswalk</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            line-height: 1.6; 
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); 
+            color: #e2e8f0; 
+            margin: 0; 
+            padding: 30px; 
+            min-height: 100vh;
+        }
+        .container { 
+            max-width: 950px; 
+            margin: auto; 
+            background: #1e293b; 
+            padding: 40px; 
+            border-radius: 16px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4); 
+            border: 1px solid #334155; 
+        }
+        h1 { 
+            color: #38bdf8; 
+            border-bottom: 3px solid #334155; 
+            padding-bottom: 12px; 
+            margin-top: 0; 
+            font-size: 2.2em;
+        }
+        h2 { 
+            color: #818cf8; 
+            margin-top: 35px; 
+            border-bottom: 1px solid #334155; 
+            padding-bottom: 8px; 
+        }
+        h3 { 
+            color: #c084fc; 
+            margin-top: 25px;
+        }
+        p {
+            color: #cbd5e1;
+        }
+        a { 
+            color: #38bdf8; 
+            text-decoration: none; 
+            transition: color 0.2s;
+        }
+        a:hover { 
+            color: #7dd3fc; 
+            text-decoration: underline; 
+        }
+        pre { 
+            background: #0f172a; 
+            padding: 16px; 
+            border-radius: 10px; 
+            overflow-x: auto; 
+            border: 1px solid #334155; 
+            color: #38bdf8; 
+            font-size: 0.95em;
+        }
+        code { 
+            background: #0f172a; 
+            padding: 3px 6px; 
+            border-radius: 4px; 
+            font-family: monospace; 
+            color: #f472b6; 
+        }
+        pre code {
+            color: #38bdf8;
+            background: transparent;
+            padding: 0;
+        }
+        ul, ol { 
+            margin-bottom: 20px; 
+            color: #cbd5e1;
+        }
+        li { 
+            margin-bottom: 8px; 
+        }
+        strong {
+            color: #38bdf8;
+        }
+        .toc-box { 
+            background: #0f172a; 
+            padding: 22px; 
+            border-radius: 12px; 
+            border: 1px solid #334155; 
+            margin-bottom: 30px; 
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .toc-box ul { 
+            margin: 0; 
+            padding-left: 20px; 
+        }
+        .badge {
+            background: #0ea5e9;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: bold;
+            vertical-align: middle;
+        }
+        footer { 
+            font-size: 5px; 
+            color: #777; 
+            margin-top: 50px; 
+            border-top: 1px solid #334155; 
+            padding-top: 15px; 
+            text-align: center; 
+            letter-spacing: 0.2px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>🌐 SPRK Language Crosswalk <span class="badge">for the Coding Club</span></h1>
+    <p>This guide translates common programming concepts across different languages. If you have experience in older structured languages (C, C++, Java) or newer systems languages (Go, Lua), this document helps map your existing mental models to the languages used in SPRK missions.</p>
+    <p>Use this guide in two ways:</p>
+    <ul>
+        <li>Mission guides should point to the specific concepts a student is seeing in that mission.</li>
+        <li>The <code>XX-Template-nP</code> mission should act as the all-inclusive baseline that new missions extend.</li>
+    </ul>
+
+    <div class="toc-box">
+        <h3>🧭 Table of Contents</h3>
+        <ul>
+            <li><a href="#concept-1-the-sliding-window-fifo-buffer">📦 Concept 1: The Sliding Window (FIFO Buffer)</a></li>
+            <li><a href="#concept-2-iterating-over-collections-the-foreach-loop">🔄 Concept 2: Iterating Over Collections (The Foreach Loop)</a></li>
+            <li><a href="#concept-3-key-value-data-structures-dictionaries--maps">🗺️ Concept 3: Key-Value Data Structures (Dictionaries / Maps)</a></li>
+            <li><a href="#concept-4-string-interpolation">💬 Concept 4: String Interpolation</a></li>
+            <li><a href="#concept-5-error-handling">🛡️ Concept 5: Error Handling</a></li>
+            <li><a href="#concept-6-functions-as-variables-callbacks--lambdas">⚡ Concept 6: Functions as Variables (Callbacks / Lambdas)</a></li>
+            <li><a href="#concept-7-objects-and-methods">📦 Concept 7: Objects and Methods</a></li>
+            <li><a href="#concept-8-multiple-return-values">🔀 Concept 8: Multiple Return Values</a></li>
+            <li><a href="#concept-9-null-defaults--coalescing">🛟 Concept 9: Null Defaults / Coalescing</a></li>
+            <li><a href="#concept-10-variable-scope-avoiding-global-leaks">🔒 Concept 10: Variable Scope (Avoiding Global Leaks)</a></li>
+        </ul>
+    </div>
+
+    <h2 id="concept-1-the-sliding-window-fifo-buffer">📦 Concept 1: The Sliding Window (FIFO Buffer)</h2>
+    <p><strong>The Goal:</strong> Keep a list of exactly the last 80 items. When a new item is added, the oldest item is dropped.</p>
+    
+    <h3>C / Java (The Manual / Linked List approach)</h3>
+    <p>In older or heavily structured languages, you often manage the memory or list size manually, either shifting array elements or using a linked data structure.</p>
+    <pre><code class="language-java">// Java example using a LinkedList
+LinkedList&lt;String&gt; events = new LinkedList&lt;&gt;();
+events.add(newEvent);
+if (events.size() > 80) {
+    events.removeFirst();
+}</code></pre>
+
+    <h3>Python (The Slicing approach)</h3>
+    <p>Python abstracts array pointer math behind <strong>Negative Indexing</strong> and <strong>Slices</strong>.</p>
+    <pre><code class="language-python">events.append(event)
+del events[:-80] # Targets and deletes everything up to the last 80 items</code></pre>
+
+    <h3>Go (The Slice Reassignment approach)</h3>
+    <p>Go also uses slices, but instead of deleting, you reassign the slice bounds to a window of itself.</p>
+    <pre><code class="language-go">events = append(events, event)
+if len(events) > 80 {
+    events = events[len(events)-80:] // Reslice to keep only the last 80
+}</code></pre>
+
+    <h3>Lua (The Table approach)</h3>
+    <p>Lua uses Tables for all data structures. You manually remove the first index, which triggers Lua to shift the rest of the table down.</p>
+    <pre><code class="language-lua">table.insert(events, event)
+if #events > 80 then
+    table.remove(events, 1) -- Removes index 1 and shifts the rest down
+end</code></pre>
+
+    <h2 id="concept-2-iterating-over-collections-the-foreach-loop">🔄 Concept 2: Iterating Over Collections (The Foreach Loop)</h2>
+    <p><strong>The Goal:</strong> Loop through every item in a list without manually managing an incrementing counter (<code>i++</code>).</p>
+    
+    <h3>C / Java</h3>
+    <p>Modern Java uses an enhanced <code>for</code> loop, while older C requires manual index management.</p>
+    <pre><code class="language-java">for (String event : events) {
+    System.out.println(event);
+}</code></pre>
+
+    <h3>Python</h3>
+    <p>Python natively iterates over the items directly.</p>
+    <pre><code class="language-python">for event in events:
+    print(event)</code></pre>
+
+    <h3>Go</h3>
+    <p>Go uses the <code>range</code> keyword, which always returns two values: the index and the value. If you don't need the index, you must discard it with an underscore <code>_</code>.</p>
+    <pre><code class="language-go">for _, event := range events {
+    fmt.Println(event)
+}</code></pre>
+
+    <h3>Lua</h3>
+    <p>Lua uses <code>ipairs</code> (index pairs) for ordered lists/arrays.</p>
+    <pre><code class="language-lua">for i, event in ipairs(events) do
+    print(event)
+end</code></pre>
+
+    <h2 id="concept-3-key-value-data-structures-dictionaries--maps">🗺️ Concept 3: Key-Value Data Structures (Dictionaries / Maps)</h2>
+    <p><strong>The Goal:</strong> Store data with a specific label (key) instead of a numbered index.</p>
+    
+    <h3>Java</h3>
+    <p>Java requires importing and instantiating strongly-typed Map objects.</p>
+    <pre><code class="language-java">HashMap&lt;String, Integer&gt; player = new HashMap&lt;&gt;();
+player.put("score", 100);</code></pre>
+
+    <h3>Python</h3>
+    <p>Python uses Dictionaries (<code>dict</code>) with curly braces.</p>
+    <pre><code class="language-python">player = {"score": 100}</code></pre>
+
+    <h3>Go</h3>
+    <p>Go uses the <code>map</code> keyword, explicitly defining the key and value types.</p>
+    <pre><code class="language-go">player := map[string]int{"score": 100}</code></pre>
+
+    <h3>Lua</h3>
+    <p>Lua uses Tables for <em>everything</em>. A Table can act as an array or a dictionary simultaneously.</p>
+    <pre><code class="language-lua">local player = {score = 100}</code></pre>
+
+    <h2 id="concept-4-string-interpolation">💬 Concept 4: String Interpolation</h2>
+    <p><strong>The Goal:</strong> Inject variables directly into a text string without clumsy concatenation (<code>"Score: " + score</code>).</p>
+    
+    <h3>Java</h3>
+    <p>Java uses <code>String.format</code>.</p>
+    <pre><code class="language-java">String msg = String.format("Player %s scored %d", name, score);</code></pre>
+
+    <h3>Python</h3>
+    <p>Python uses "f-strings" (format strings), prefixing the string with <code>f</code>.</p>
+    <pre><code class="language-python">msg = f"Player {name} scored {score}"</code></pre>
+
+    <h3>Go</h3>
+    <p>Go uses the <code>fmt</code> package to format strings.</p>
+    <pre><code class="language-go">msg := fmt.Sprintf("Player %s scored %d", name, score)</code></pre>
+
+    <h3>Lua</h3>
+    <p>Lua uses <code>string.format</code> (similar to C's <code>printf</code>).</p>
+    <pre><code class="language-lua">local msg = string.format("Player %s scored %d", name, score)</code></pre>
+
+    <h2 id="concept-5-error-handling">🛡️ Concept 5: Error Handling</h2>
+    <p><strong>The Goal:</strong> Safely handle a function that might fail without crashing the whole program.</p>
+    
+    <h3>Java / Python (Exceptions)</h3>
+    <p>Java and Python use a <code>try/catch</code> or <code>try/except</code> block to "catch" thrown errors.</p>
+    <pre><code class="language-python">try:
+    result = 10 / 0
+except ZeroDivisionError as e:
+    print(f"Failed: {e}")</code></pre>
+
+    <h3>Go (Values)</h3>
+    <p>Go actively rejects exceptions. Errors are just normal values returned by functions.</p>
+    <pre><code class="language-go">result, err := DoMath()
+if err != nil {
+    fmt.Println("Failed:", err)
+}</code></pre>
+
+    <h3>Lua (Protected Calls)</h3>
+    <p>Lua uses <code>pcall</code> (protected call) to run risky functions safely.</p>
+    <pre><code class="language-lua">local success, err = pcall(function() return 10 / 0 end)
+if not success then
+    print("Failed: " .. err)
+end</code></pre>
+
+    <h2 id="concept-6-functions-as-variables-callbacks--lambdas">⚡ Concept 6: Functions as Variables (Callbacks / Lambdas)</h2>
+    <p><strong>The Goal:</strong> Pass a function as an argument to another function, often used for clicking buttons or delays.</p>
+    
+    <h3>Java</h3>
+    <p>Java traditionally uses Interfaces, but now supports lambda functions.</p>
+    <pre><code class="language-java">button.onClick(e -> {
+    System.out.println("Clicked!");
+});</code></pre>
+
+    <h3>Python</h3>
+    <p>Python uses <code>lambda</code> for one-liners, or passes the name of a <code>def</code> directly.</p>
+    <pre><code class="language-python">button.onclick(lambda e: print("Clicked!"))</code></pre>
+
+    <h3>Go</h3>
+    <p>Go allows anonymous functions to be passed seamlessly.</p>
+    <pre><code class="language-go">button.OnClick(func(e Event) {
+    fmt.Println("Clicked!")
+})</code></pre>
+
+    <h3>Lua</h3>
+    <p>Functions in Lua are first-class values and can be assigned directly to table properties.</p>
+    <pre><code class="language-lua">local button = {}
+button.onclick = function(e)
+    print("Clicked!")
+end</code></pre>
+
+    <h2 id="concept-7-objects-and-methods">📦 Concept 7: Objects and Methods</h2>
+    <p><strong>The Goal:</strong> Bind a function directly to the data it modifies.</p>
+    
+    <h3>Java / Python (Classes)</h3>
+    <p>Object-Oriented languages group data and methods inside a <code>class</code>.</p>
+    <pre><code class="language-python">class Player:
+    def __init__(self):
+        self.score = 0
+        
+    def add_score(self, amount):
+        self.score += amount</code></pre>
+
+    <h3>Go (Structs and Receivers)</h3>
+    <p>Go doesn't have classes. You attach "Receiver functions" to Structs.</p>
+    <pre><code class="language-go">type Player struct { score int }
+
+func (p *Player) AddScore(amount int) {
+    p.score += amount
+}</code></pre>
+
+    <h3>Lua (Tables and Metatables)</h3>
+    <p>Lua creates objects using Tables. The colon <code>:</code> is syntactic sugar that automatically passes <code>self</code> to the function.</p>
+    <pre><code class="language-lua">Player = {score = 0}
+
+function Player:addScore(amount)
+    self.score = self.score + amount
+end</code></pre>
+
+    <h2 id="concept-8-multiple-return-values">🔀 Concept 8: Multiple Return Values</h2>
+    <p><strong>The Goal:</strong> Return more than one piece of data from a function (like X and Y coordinates).</p>
+    
+    <h3>Java</h3>
+    <p>Java restricts functions to returning exactly one thing. You must create a custom Object, use an Array, or use a <code>Pair</code>/<code>Map</code>.</p>
+    <pre><code class="language-java">int[] getCoords() {
+    return new int[]{10, 20};
+}</code></pre>
+
+    <h3>Python / Go / Lua</h3>
+    <p>Modern languages natively support returning multiple values at once.</p>
+    <pre><code class="language-python"># Python
+def get_coords():
+    return 10, 20
+x, y = get_coords()</code></pre>
+    <pre><code class="language-go">// Go
+func getCoords() (int, int) {
+    return 10, 20
+}
+x, y := getCoords()</code></pre>
+
+    <h2 id="concept-9-null-defaults--coalescing">🛟 Concept 9: Null Defaults / Coalescing</h2>
+    <p><strong>The Goal:</strong> Provide a default fallback value if a variable is missing or null.</p>
+    
+    <h3>Java</h3>
+    <p>Java uses the Ternary Operator <code>? :</code> or explicit <code>if/else</code>.</p>
+    <pre><code class="language-java">String finalName = (name != null) ? name : "DefaultName";</code></pre>
+
+    <h3>Python</h3>
+    <p>Python uses inline <code>if/else</code> or the <code>or</code> keyword.</p>
+    <pre><code class="language-python">final_name = name or "DefaultName"</code></pre>
+
+    <h3>Lua</h3>
+    <p>Lua makes heavy use of the <code>or</code> operator to assign default values concisely.</p>
+    <pre><code class="language-lua">local finalName = name or "DefaultName"</code></pre>
+
+    <h2 id="concept-10-variable-scope-avoiding-global-leaks">🔒 Concept 10: Variable Scope (Avoiding Global Leaks)</h2>
+    <p><strong>The Goal:</strong> Create a variable that only exists inside the current block of code and doesn't pollute the rest of the application.</p>
+    
+    <h3>C / Java</h3>
+    <p>Variables are strictly block-scoped. You must declare their type.</p>
+    <pre><code class="language-java">int x = 5;</code></pre>
+
+    <h3>Python</h3>
+    <p>Python has no variable declaration keywords. Variables are automatically scoped to the function they are in.</p>
+    <pre><code class="language-python">x = 5</code></pre>
+
+    <h3>Go</h3>
+    <p>Go uses <code>:=</code> to both declare and assign a block-scoped variable, inferring its type automatically.</p>
+    <pre><code class="language-go">x := 5</code></pre>
+
+    <h3>Lua</h3>
+    <p>Lua variables are <strong>GLOBAL</strong> by default, which causes massive bugs. You must explicitly use <code>local</code> to scope them.</p>
+    <pre><code class="language-lua">local x = 5</code></pre>
+
+    <footer>
+        © 2024-2026 AURAVYBE. All Rights Reserved. This material is the intellectual property of AURAVYBE and is licensed for the exclusive use of SPRK Coding Club. Unauthorized use, including making copies of the material even for personal use, is strictly prohibited.
+    </footer>
+
+</div>
+
+</body>
+</html>

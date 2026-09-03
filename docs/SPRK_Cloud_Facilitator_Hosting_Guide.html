@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SPRK Cloud Facilitator Hosting Guide</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; margin: 40px; color: #333; max-width: 900px; }
+        pre { background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
+        code { background: #f4f4f4; padding: 2px 4px; border-radius: 3px; font-family: monospace; }
+        table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        footer { font-size: 5px; color: #777; margin-top: 40px; border-top: 1px solid #ddd; padding-top: 10px; }
+    </style>
+</head>
+<body>
+
+<h1>SPRK Cloud Facilitator Hosting Guide</h1>
+
+<p>Use this guide when a <strong>facilitator hosts the game backend in Cursor Cloud</strong> (or any remote Linux environment) and students join from <strong>iPhone, iPad, Chromebook, Android, or any browser</strong> — even when they are <strong>not</strong> on the same Wi‑Fi as a laptop.</p>
+
+<p><strong>New facilitators:</strong> start with the <a href="SPRK_Facilitator_Guide.md">SPRK Facilitator Guide</a> for the one-page cheat sheet, Path A vs Path B decision chart, bit.ly workflow, and what to tell the class. This document is the <strong>deep dive for Path B (cloud + tunnel)</strong> only.</p>
+
+<p>This is different from the <a href="SPRK_Classroom_Network_Test_Guide.md">SPRK Classroom Network Test Guide</a> <strong>local network</strong> model, where students open <code>http://&lt;facilitator-laptop-ip&gt;:&lt;port&gt;</code>.</p>
+
+<h2>Table of contents</h2>
+<ul>
+    <li><a href="#when-to-use-this-guide">When To Use This Guide</a></li>
+    <li><a href="#big-picture">Big Picture</a></li>
+    <li><a href="#mission-port-reference">Mission Port Reference</a></li>
+    <li><a href="#step-1-%E2%80%94-start-the-backend">Step 1 — Start The Backend</a></li>
+    <li><a href="#step-2-%E2%80%94-open-a-public-tunnel-recommended-cloudflare">Step 2 — Open A Public Tunnel (Recommended: Cloudflare)</a></li>
+    <li><a href="#step-2-%E2%80%94-alternative-localtunnel">Step 2 — Alternative: LocalTunnel</a></li>
+    <li><a href="#compare-the-two-tunnel-options">Compare The Two Tunnel Options</a></li>
+    <li><a href="#what-does-not-work-for-students">What Does Not Work For Students</a></li>
+    <li><a href="#friendly-and-semi-permanent-links">Friendly And Semi-Permanent Links</a></li>
+    <li><a href="#facilitator-checklist">Facilitator Checklist</a></li>
+    <li><a href="#troubleshooting">Troubleshooting</a></li>
+    <li><a href="#related-guides">Related Guides</a></li>
+</ul>
+
+<h2 id="when-to-use-this-guide">When To Use This Guide</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Situation</th>
+            <th>Use this cloud tunnel guide</th>
+            <th>Use local LAN guide instead</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Facilitator has no laptop, only phone/tablet + Cursor</td>
+            <td>Yes</td>
+            <td>No</td>
+        </tr>
+        <tr>
+            <td>Backend runs in <strong>Cursor Cloud</strong> or Codespaces</td>
+            <td>Yes</td>
+            <td>No</td>
+        </tr>
+        <tr>
+            <td>School Wi‑Fi blocks device-to-device traffic</td>
+            <td>Often yes</td>
+            <td>Sometimes no</td>
+        </tr>
+        <tr>
+            <td>Everyone in the same room on one shared hotspot to one laptop</td>
+            <td>No</td>
+            <td>Yes</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2 id="big-picture">Big Picture</h2>
+<p>The mission backend still runs on <code>python3 server.py</code> and listens on <code>0.0.0.0</code> inside the remote VM. Phones cannot reach that VM with <code>localhost</code> or a raw cloud IP. A <strong>public tunnel</strong> creates an HTTPS link that forwards student browsers into the running backend.</p>
+
+<pre><code>[Facilitator: Cursor Cloud agent] --&gt; [python3 server.py (0.0.0.0:8010)]
+[python3 server.py] --&gt; [Public tunnel: Cloudflare or LocalTunnel]
+[Public tunnel] --&gt; [Student devices: iPhone, Chromebook, iPad, Android]
+[Student devices] --&gt; [Backend]</code></pre>
+
+<p>Object interaction summary:</p>
+<ol>
+    <li>Facilitator starts <code>server.py</code> in the cloud workspace.</li>
+    <li>Facilitator starts a tunnel process that points at <code>http://127.0.0.1:&lt;port&gt;</code>.</li>
+    <li>Tunnel prints a public <code>https://...</code> URL.</li>
+    <li>Facilitator shares that <strong>one URL</strong> with the class.</li>
+    <li>Every device that opens the same URL shares the same backend state (scores, multiplayer, events).</li>
+</ol>
+
+<h2 id="mission-port-reference">Mission Port Reference</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Mission</th>
+            <th>Folder</th>
+            <th>Default port</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr><td>01 Reaction Race</td><td><code>missions/01-ReactionRace-nP</code></td><td>8000</td></tr>
+        <tr><td>02 Snake Game</td><td><code>missions/02-SnakeGame-1P-nP</code></td><td>8002</td></tr>
+        <tr><td>03 Ping Pong</td><td><code>missions/03-PingPong-2P-nP</code></td><td>8003</td></tr>
+        <tr><td>04 Flash Cards</td><td><code>missions/04-FlashCards-1P-nP</code></td><td>8004</td></tr>
+        <tr><td>05 Quiz Room</td><td><code>missions/05-QuizRoom-nP</code></td><td>8005</td></tr>
+        <tr><td>06 Four Square</td><td><code>missions/06-FourSquare-nP</code></td><td>8006</td></tr>
+        <tr><td>07 Soccer Score</td><td><code>missions/07-SoccerScore-nP</code></td><td>8007</td></tr>
+        <tr><td>08 Soccer Match</td><td><code>missions/08-SoccerMatch-nP</code></td><td>8008</td></tr>
+        <tr><td>10 Space Invaders</td><td><code>missions/10-SpaceInvaders-1P-nP</code></td><td>8010</td></tr>
+    </tbody>
+</table>
+<p>Replace <code>8010</code> in the examples below with your mission port when needed.</p>
+
+<h2 id="step-1-%E2%80%94-start-the-backend">Step 1 — Start The Backend</h2>
+<p>From the repository root in Cursor Cloud:</p>
+<pre><code class="language-bash">cd missions/10-SpaceInvaders-1P-nP
+python3 server.py</code></pre>
+<p>Leave this terminal running. You should see a line like:</p>
+<pre><code>Local link: http://localhost:8010</code></pre>
+<p>That link only works <strong>inside</strong> the cloud VM. Students still need the public tunnel URL from Step 2.</p>
+
+<h2 id="step-2-%E2%80%94-open-a-public-tunnel-recommended-cloudflare">Step 2 — Open A Public Tunnel (Recommended: Cloudflare)</h2>
+<h3>What Cloudflare Quick Tunnel Does</h3>
+<p><code>cloudflared</code> opens an outbound connection from the cloud VM to Cloudflare. Cloudflare gives you a temporary public hostname (ending in <code>.trycloudflare.com</code>) that forwards HTTPS traffic to your local <code>server.py</code> port. No router setup, no firewall holes, and no IP address for students to type.</p>
+<p>This is the approach that worked when LocalTunnel showed <strong>502 Bad Gateway</strong> after entering the wrong IP.</p>
+
+<h3>One-Time Install (in Cursor Cloud)</h3>
+<pre><code class="language-bash">curl -sL https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -o /tmp/cloudflared
+chmod +x /tmp/cloudflared
+/tmp/cloudflared --version</code></pre>
+
+<h3>Start The Tunnel (second terminal)</h3>
+<pre><code class="language-bash">/tmp/cloudflared tunnel --url http://127.0.0.1:8010</code></pre>
+<p>Or use the repo helper (same behavior):</p>
+<pre><code class="language-bash">bash missions/_shared/tools/sprk_public_tunnel.sh 8010</code></pre>
+<p>Copy the <code>https://....trycloudflare.com</code> URL from the output. Share <strong>only that URL</strong> with students.</p>
+
+<h3>Student Steps (iPhone, Chromebook, any device)</h3>
+<ol>
+    <li>Open the shared <code>https://....trycloudflare.com</code> link in a normal browser (Safari, Chrome, etc.).</li>
+    <li>Wait a few seconds on first load.</li>
+    <li>Play the mission. Everyone on the same link shares one backend.</li>
+</ol>
+
+<h3>Keep Both Processes Running</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Process</th>
+            <th>Must stay open</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>python3 server.py</code></td>
+            <td>Yes — this is the game backend</td>
+        </tr>
+        <tr>
+            <td><code>cloudflared tunnel ...</code></td>
+            <td>Yes — this is the public link</td>
+        </tr>
+    </tbody>
+</table>
+<p>If either terminal stops, students lose access until you restart it and share a <strong>new</strong> URL (see <a href="#friendly-and-semi-permanent-links">Friendly And Semi-Permanent Links</a>).</p>
+
+<h2 id="step-2-%E2%80%94-alternative-localtunnel">Step 2 — Alternative: LocalTunnel</h2>
+<p>LocalTunnel is a Node-based option. It can work, but many phones hit an <strong>IP reminder page</strong> first. Entering the wrong IP causes <strong>502 Bad Gateway</strong>.</p>
+<h3>Start LocalTunnel</h3>
+<pre><code class="language-bash">npx --yes localtunnel --port 8010</code></pre>
+<p>Copy the <code>https://....loca.lt</code> URL.</p>
+
+<h3>If LocalTunnel Asks For An IP</h3>
+<ol>
+    <li>On the <strong>student phone</strong>, open <a href="https://ifconfig.me">https://ifconfig.me</a> and copy the number shown.</li>
+    <li>Paste <strong>that</strong> number into the LocalTunnel page.</li>
+    <li>Do <strong>not</strong> use <code>127.0.0.1</code>, the cloud VM IP, or the facilitator home router IP from a different network.</li>
+</ol>
+<p>Prefer Cloudflare when you want to avoid this step.</p>
+
+<h2 id="compare-the-two-tunnel-options">Compare The Two Tunnel Options</h2>
+<table>
+    <thead>
+        <tr>
+            <th></th>
+            <th>Cloudflare Quick Tunnel</th>
+            <th>LocalTunnel (<code>loca.lt</code>)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Student URL pattern</td>
+            <td><code>https://*-*.trycloudflare.com</code></td>
+            <td><code>https://*-*.loca.lt</code></td>
+        </tr>
+        <tr>
+            <td>IP typing on phone</td>
+            <td>Usually not required</td>
+            <td>Often required</td>
+        </tr>
+        <tr>
+            <td>Wrong IP entered</td>
+            <td>N/A</td>
+            <td><strong>502 Bad Gateway</strong></td>
+        </tr>
+        <tr>
+            <td>Install</td>
+            <td>Download <code>cloudflared</code> binary once</td>
+            <td><code>npx</code> (Node already in repo setup)</td>
+        </tr>
+        <tr>
+            <td>Best for class</td>
+            <td><strong>Recommended</strong></td>
+            <td>Backup / quick test</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2 id="what-does-not-work-for-students">What Does Not Work For Students</h2>
+<table>
+    <thead>
+        <tr>
+            <th>URL students might try</th>
+            <th>Why it fails</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>http://localhost:8010</code></td>
+            <td>Points at the phone itself, not the cloud backend</td>
+        </tr>
+        <tr>
+            <td><code>http://127.0.0.1:8010</code></td>
+            <td>Same as localhost</td>
+        </tr>
+        <tr>
+            <td><code>http://34.x.x.x:8010</code> (cloud public IP)</td>
+            <td>Cloud VMs usually do not expose mission ports on the public internet</td>
+        </tr>
+        <tr>
+            <td>Cursor Desktop <strong>plug icon</strong> forward to <code>localhost</code></td>
+            <td>Forwards to a <strong>laptop running Cursor Desktop</strong>, not to a phone-only workflow</td>
+        </tr>
+    </tbody>
+</table>
+<p>See also <a href="SPRK_Browser_Testing_And_Network_Architecture.md#why-127001-does-not-reach-the-laptop-next-to-you">SPRK Browser Testing And Network Architecture</a>.</p>
+
+<h2 id="friendly-and-semi-permanent-links">Friendly And Semi-Permanent Links</h2>
+<h3>Short Answer</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Link type</th>
+            <th>Friendly?</th>
+            <th>Same URL every class?</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>trycloudflare.com</code> (quick tunnel)</td>
+            <td>Random words each start</td>
+            <td><strong>No</strong> — new URL when tunnel restarts</td>
+        </tr>
+        <tr>
+            <td><code>loca.lt</code> (LocalTunnel)</td>
+            <td>Random words each start</td>
+            <td><strong>No</strong></td>
+        </tr>
+        <tr>
+            <td><strong>bit.ly</strong> (or similar) you control</td>
+            <td><strong>Yes</strong> — you pick <code>bit.ly/sprk-invaders</code></td>
+            <td><strong>Yes for the shortcut</strong> — you <strong>update the destination</strong> when the tunnel URL changes</td>
+        </tr>
+        <tr>
+            <td>Cloudflare <strong>named tunnel</strong> + your domain</td>
+            <td><strong>Yes</strong> — e.g. <code>play.yourschool.org</code></td>
+            <td><strong>Yes</strong>, with Cloudflare account setup</td>
+        </tr>
+    </tbody>
+</table>
+<p>Quick tunnels are <strong>session links</strong>, not permanent hosting. Treat them like a classroom session password: valid while the facilitator keeps both processes running.</p>
+
+<h3>Recommended Classroom Pattern: bit.ly (Or Similar)</h3>
+<ol>
+    <li>Create one short link you control, for example <code>https://bit.ly/sprk-space-invaders</code>.</li>
+    <li>Start <code>python3 server.py</code> and <code>cloudflared</code> as above.</li>
+    <li>Copy the new <code>https://....trycloudflare.com</code> URL.</li>
+    <li>In bit.ly, set the short link <strong>destination</strong> to that URL.</li>
+    <li>Students always type or bookmark the <strong>same</strong> bit.ly link.</li>
+    <li>Next session: repeat steps 2–4 when the Cloudflare URL changes.</li>
+</ol>
+<p>Students see a stable name; you update the behind-the-scenes destination when needed.</p>
+
+<h3>Optional: Semi-Permanent Cloudflare Named Tunnel</h3>
+<p>For a URL that stays the same without updating bit.ly every session, use a <a href="https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/">Cloudflare Tunnel</a> with:</p>
+<ul>
+    <li>A free Cloudflare account</li>
+    <li>A hostname you own (for example <code>sprk.yourdomain.org</code>)</li>
+    <li>A named tunnel configuration stored in the cloud VM or facilitator machine</li>
+</ul>
+<p>That setup is beyond this quick classroom guide. Use quick tunnels + bit.ly for SPRK tryouts; move to named tunnels when a school wants year-long stable links.</p>
+
+<h3>LocalTunnel Custom Subdomain</h3>
+<p><code>npx localtunnel --port 8010 --subdomain my-sprk-class</code> only works when that subdomain is available and may still change between sessions. Do not rely on it as a permanent class link without testing the same day.</p>
+
+<h2 id="facilitator-checklist">Facilitator Checklist</h2>
+<p>Use the full before/during/after lists in the <a href="SPRK_Facilitator_Guide.md#facilitator-checklist-full">SPRK Facilitator Guide</a>. Path B minimum:</p>
+<ul>
+    <li>[ ] <code>python3 server.py</code> running in the mission folder</li>
+    <li>[ ] Tunnel running; <code>https://....trycloudflare.com</code> copied</li>
+    <li>[ ] bit.ly destination updated (if used)</li>
+    <li>[ ] One student device smoke-tested before class starts</li>
+</ul>
+
+<h2 id="troubleshooting">Troubleshooting</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Problem</th>
+            <th>Try this</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>502 Bad Gateway</strong> on <code>loca.lt</code> after entering IP</td>
+            <td>Wrong IP; use Cloudflare instead, or use the phone’s real public IP from <a href="https://ifconfig.me">ifconfig.me</a></td>
+        </tr>
+        <tr>
+            <td>Page loads but game API fails</td>
+            <td>Confirm <code>server.py</code> is still running on the same port the tunnel targets</td>
+        </tr>
+        <tr>
+            <td>Tunnel URL worked earlier, now fails</td>
+            <td>Quick tunnel ended; restart <code>cloudflared</code> and share the <strong>new</strong> URL (update bit.ly)</td>
+        </tr>
+        <tr>
+            <td>Only facilitator sees the game</td>
+            <td>Students must use the <strong>tunnel</strong> URL, not <code>localhost</code></td>
+        </tr>
+        <tr>
+            <td>Two different links, two scoreboards</td>
+            <td>Everyone must use the <strong>same</strong> shared URL</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2 id="related-guides">Related Guides</h2>
+<ul>
+    <li><a href="SPRK_Facilitator_Guide.md">SPRK Facilitator Guide</a> — main entry for teachers; cheat sheet and Path A vs B</li>
+    <li><a href="SPRK_Classroom_Network_Test_Guide.md">SPRK Classroom Network Test Guide</a> — same-room Wi‑Fi / laptop IP hosting</li>
+    <li><a href="SPRK_Browser_Testing_And_Network_Architecture.md">SPRK Browser Testing And Network Architecture</a> — validation harness and address tables</li>
+    <li>Mission 10 guide — running Space Invaders</li>
+</ul>
+
+<footer>
+    © 2024-2026 AURAVYBE. All Rights Reserved. This material is the intellectual property of AURAVYBE and is licensed for the exclusive use of SPRK Coding Club. Unauthorized use, including making copies of the material even for personal use, is strictly prohibited.
+</footer>
+
+</body>
+</html>

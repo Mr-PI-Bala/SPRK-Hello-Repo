@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🚀 SPRK Browser Testing And Network Architecture</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+  });
+</script>
+<style>
+  @page {
+    size: A4;
+    margin: 20mm;
+    page-break-inside: avoid;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #101820;
+    color: #f2f7fb;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    min-height: 100vh;
+    line-height: 1.6;
+    padding: 32px;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+
+  .header h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: #1fb6ff;
+    text-shadow: 0 0 20px rgba(31,182,255,0.4);
+    margin-bottom: 12px;
+  }
+
+  .header p {
+    color: #a9bac8;
+    font-size: 1.1rem;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 50px;
+    background: rgba(31,182,255,0.15);
+    color: #1fb6ff;
+    font-weight: 700;
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+    font-size: 0.85rem;
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    background: rgba(22,35,49,0.8);
+    border: 1px solid #30485c;
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .section::before {
+    content: '';
+    position: absolute;
+    top: -3px; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #1fb6ff, #1fc76a);
+    border-radius: 16px 16px 0 0;
+  }
+
+  .section h2 {
+    color: #1fb6ff;
+    font-size: clamp(1.3rem, 3vw, 1.8rem);
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 10px;
+    border-bottom: 2px solid #30485c;
+    padding-bottom: 8px;
+    font-weight: 800;
+  }
+
+  .section h3 {
+    color: #f2f7fb;
+    font-size: 1.1rem;
+    margin: 16px 0 8px;
+  }
+
+  .section p, .section li {
+    color: #a9bac8;
+    font-size: 0.95rem;
+    margin-bottom: 12px;
+  }
+
+  ul, ol {
+    padding-left: 20px;
+    margin-bottom: 16px;
+  }
+
+  li {
+    margin-bottom: 6px;
+  }
+
+  code {
+    background: rgba(31,52,72,0.8);
+    color: #1fc76a;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.9em;
+  }
+
+  pre {
+    background: rgba(16,24,32,0.9);
+    border: 1px solid #30485c;
+    border-radius: 8px;
+    padding: 14px;
+    overflow-x: auto;
+    margin: 12px 0 16px;
+    color: #f2f7fb;
+    font-family: monospace;
+    font-size: 0.88rem;
+  }
+
+  .mermaid {
+    background: rgba(16,24,32,0.6);
+    border: 1px solid #30485c;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px 0;
+    text-align: center;
+    overflow-x: auto;
+  }
+
+  /* ── TABLES ── */
+  .table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 12px;
+    margin-bottom: 16px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: rgba(16,24,32,0.6);
+    border-radius: 8px;
+    overflow: hidden;
+    font-size: 0.9rem;
+  }
+
+  th, td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #30485c;
+    color: #a9bac8;
+  }
+
+  th {
+    background: rgba(31,52,72,0.9);
+    color: #1fb6ff;
+    font-weight: 700;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  a {
+    color: #1fb6ff;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    text-align: center;
+    margin-top: 40px;
+    padding: 20px 24px;
+    border-top: 2px solid #30485c;
+    color: #a9bac8;
+    font-size: 5px;
+    width: 100%;
+  }
+
+  .footer .footer-dot {
+    display: inline-block;
+    width: 8px; 
+    height: 8px;
+    background: #1fb6ff;
+    border-radius: 50%;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+
+  .footer-legal {
+    margin-top: 6px;
+    font-size: 5px;
+    color: #7a8c9e;
+    line-height: 1.3;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="badge">🎓 SPRK Coding Club Architecture</div>
+  <h1>SPRK Browser Testing And Network Architecture</h1>
+  <p>This guide explains how SPRK browser missions run, how automated validation works, and how a facilitator laptop can host a mission for phones, tablets, and other laptops on the same local network. <em>Mission 10 (`10-SpaceInvaders-1P-nP`) is the example throughout this document.</em></p>
+</div>
+
+<div class="section">
+  <h2>📑 Table of Contents</h2>
+  <ul>
+    <li><a href="#visual-map">Visual Map</a></li>
+    <li><a href="#quick-vocabulary">Quick Vocabulary</a></li>
+    <li><a href="#big-picture">Big Picture: Browser To Cursor Cloud To GitHub</a></li>
+    <li><a href="#setup-commands">What The Setup Commands Do</a></li>
+    <li><a href="#dependency-graph">Command Dependency Graph</a></li>
+    <li><a href="#validation-harness">Automated Validation Harness</a></li>
+    <li><a href="#runtime-architecture">Runtime Architecture For A Browser Mission</a></li>
+    <li><a href="#mission-10-model">Mission 10 Object Model</a></li>
+    <li><a href="#runtime-lifecycle">Runtime Data Lifecycle</a></li>
+    <li><a href="#dimension-flow">Mission 10 Dimension Flow</a></li>
+    <li><a href="#running-cloud">Running The Game In Cursor Cloud</a></li>
+    <li><a href="#cloud-facilitator">Cloud Facilitator Hosting</a></li>
+    <li><a href="#running-laptop">Running The Game On A Facilitator Laptop</a></li>
+    <li><a href="#why-localhost">Why 127.0.0.1 Does Not Reach The Laptop Next To You</a></li>
+    <li><a href="#local-network">Local Network Object Interaction</a></li>
+    <li><a href="#finding-ip">Finding The Facilitator Laptop IP On Windows</a></li>
+    <li><a href="#cursor-vs-laptop">Cursor Cloud Versus Facilitator Laptop</a></li>
+    <li><a href="#troubleshooting">Troubleshooting Checklist</a></li>
+    <li><a href="#command-reference">Command Reference</a></li>
+  </ul>
+</div>
+
+<div class="section" id="visual-map">
+  <h2>🗺️ Visual Map</h2>
+  <p>Use this map when you want to jump to the diagram that answers your question.</p>
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Question</th>
+          <th>Best Visual</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Where is the code running when I use Cursor in a browser?</td>
+          <td><a href="#big-picture">Big Picture: Browser To Cursor Cloud To GitHub</a></td>
+        </tr>
+        <tr>
+          <td>Which command installs which thing?</td>
+          <td><a href="#dependency-graph">Command Dependency Graph</a></td>
+        </tr>
+        <tr>
+          <td>What exactly happens during <code>npm run test:spaceinvaders</code>?</td>
+          <td><a href="#validation-harness">Automated Validation Harness</a></td>
+        </tr>
+        <tr>
+          <td>What objects exist in a browser mission?</td>
+          <td><a href="#runtime-architecture">Runtime Architecture For A Browser Mission</a></td>
+        </tr>
+        <tr>
+          <td>How does Mission 10 keep state across 2D, 3D, and FPS?</td>
+          <td><a href="#mission-10-model">Mission 10 Object Model</a></td>
+        </tr>
+        <tr>
+          <td>How does browser state move through the backend?</td>
+          <td><a href="#runtime-lifecycle">Runtime Data Lifecycle</a></td>
+        </tr>
+        <tr>
+          <td>Why do phones not use <code>127.0.0.1</code>?</td>
+          <td><a href="#why-localhost">Why 127.0.0.1 Does Not Reach The Laptop Next To You</a></td>
+        </tr>
+        <tr>
+          <td>How do iPhone, iPad, Android, and other laptops connect to the facilitator laptop?</td>
+          <td><a href="#local-network">Local Network Object Interaction</a></td>
+        </tr>
+        <tr>
+          <td>Facilitator hosts in Cursor Cloud; students on phones/Chromebooks anywhere</td>
+          <td><a href="#cloud-facilitator">Cloud Facilitator Hosting</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="section" id="quick-vocabulary">
+  <h2>📖 Quick Vocabulary</h2>
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Term</th>
+          <th>Meaning</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Cursor Cloud Agent</td>
+          <td>A remote Linux machine controlled through the Cursor browser experience. It edits files, runs commands, commits, pushes, and can run tests.</td>
+        </tr>
+        <tr>
+          <td>GitHub</td>
+          <td>The source-code home for the repository. GitHub stores branches, commits, and pull requests. It does not automatically run the live Python game server.</td>
+        </tr>
+        <tr>
+          <td>Backend</td>
+          <td>The Python process started by <code>server.py</code>. It serves the game page and handles <code>/api/state</code>, <code>/api/scores</code>, and <code>/api/events</code>.</td>
+        </tr>
+        <tr>
+          <td>Frontend</td>
+          <td>The browser page: <code>index.html</code>, <code>src/styles.css</code>, and <code>src/app.js</code>.</td>
+        </tr>
+        <tr>
+          <td>Playwright</td>
+          <td>The automated browser testing tool used by this repo.</td>
+        </tr>
+        <tr>
+          <td>Chromium</td>
+          <td>The browser engine Playwright downloads and controls for tests.</td>
+        </tr>
+        <tr>
+          <td><code>127.0.0.1</code> / <code>localhost</code></td>
+          <td>"This same device." It never means "the laptop next to me."</td>
+        </tr>
+        <tr>
+          <td>LAN IP</td>
+          <td>The local Wi-Fi or Ethernet address of a machine, such as <code>192.168.1.42</code>. Other devices on the same network use this to connect to a facilitator laptop.</td>
+        </tr>
+        <tr>
+          <td>Public tunnel URL</td>
+          <td>An <code>https://</code> link from a tunnel service (for example Cloudflare Quick Tunnel) that forwards browsers into a backend running in Cursor Cloud. Students use this when they are not on the facilitator's Wi-Fi.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="section" id="big-picture">
+  <h2>🌐 Big Picture: Browser To Cursor Cloud To GitHub</h2>
+  <p>When you use Cursor in a browser from a Windows laptop, the code usually runs on a remote Cursor Cloud machine, not directly on the laptop in front of you.</p>
+  
+  <div class="mermaid">
+    flowchart TD
+        User["Student or facilitator<br>Windows laptop browser"] --> CursorUI["Cursor Web UI"]
+        CursorUI --> Agent["Cursor Cloud Agent<br>remote Linux VM"]
+        Agent --> Workspace["/workspace<br>git checkout"]
+        Workspace --> Mission["missions/10-SpaceInvaders-1P-nP"]
+        Agent --> GitHub["GitHub<br>Mr-PI-Bala/SPRK-Hello-Repo"]
+        Agent --> Node["Node.js and npm"]
+        Agent --> Python["python3"]
+        Agent --> Playwright["Playwright test runner"]
+        Playwright --> Chromium["Headless Chromium test browser"]
+  </div>
+
+  <h3>Object Interaction Diagram: Cursor Cloud Work Session</h3>
+  <div class="mermaid">
+    sequenceDiagram
+        participant Human as Human on Windows laptop
+        participant Browser as Browser tab
+        participant Cursor as Cursor Web UI
+        participant Agent as Cursor Cloud Agent
+        participant FS as /workspace files
+        participant Shell as Cloud shell
+        participant Git as git client
+        participant GitHub as GitHub repo
+
+        Human->>Browser: type request
+        Browser->>Cursor: send prompt and workspace context
+        Cursor->>Agent: assign task to cloud VM
+        Agent->>FS: read and edit files
+        Agent->>Shell: run npm, python, git, tests
+        Shell->>FS: create test artifacts and docs
+        Agent->>Git: git add / commit / push
+        Git->>GitHub: upload branch commits
+        Agent->>GitHub: create or update pull request
+        Cursor-->>Browser: show progress and final answer
+  </div>
+
+  <h3>System Boundary Table</h3>
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Boundary</th>
+          <th>Runs Where</th>
+          <th>Owns What</th>
+          <th>Student Confusion To Avoid</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Windows laptop browser</td>
+          <td>Your Dell, school laptop, or personal machine</td>
+          <td>The Cursor web page and any local browser tabs</td>
+          <td>It is not automatically where the code executes.</td>
+        </tr>
+        <tr>
+          <td>Cursor Cloud VM</td>
+          <td>Remote Linux machine</td>
+          <td><code>/workspace</code>, shell commands, tests, commits</td>
+          <td><code>localhost</code> here means the remote VM.</td>
+        </tr>
+        <tr>
+          <td>GitHub</td>
+          <td>GitHub servers</td>
+          <td>branches, commits, pull requests</td>
+          <td>GitHub stores code but does not run <code>server.py</code> for classroom play.</td>
+        </tr>
+        <tr>
+          <td>Facilitator laptop</td>
+          <td>Local classroom machine</td>
+          <td>local Python backend and LAN IP</td>
+          <td>Phones connect to the laptop IP, not to GitHub.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p><strong>Object interaction summary:</strong> The user types a request into Cursor in the browser &rarr; The Cursor Cloud Agent edits files under <code>/workspace</code> &rarr; The agent runs shell commands on the remote Linux VM &rarr; Git commits and pushes go from the cloud VM to GitHub &rarr; Tests run inside the cloud VM unless the repo is cloned and tested locally.</p>
+</div>
+
+<div class="section" id="setup-commands">
+  <h2>⚙️ What The Setup Commands Do</h2>
+  
+  <h3><code>npm run setup:missions</code></h3>
+  <p><code>npm run setup:missions</code> is the inherited one-command setup path for browser mission validation. It runs:</p>
+  <pre>npm ci &amp;&amp; npx playwright install chromium</pre>
+  <p>This installs JavaScript dependencies from the lockfile and downloads the Chromium browser that Playwright uses for automated tests.</p>
+
+  <h3><code>npm install</code></h3>
+  <p><code>npm install</code> reads the repo-level files <code>package.json</code> and <code>package-lock.json</code>. It installs JavaScript development tools under <code>node_modules/</code>. For this repo, the important package is <code>@playwright/test</code>, which provides the test runner. <em>This command does not run the game; it prepares the test tooling.</em></p>
+
+  <h3><code>npx playwright install chromium</code></h3>
+  <p>Playwright needs an actual browser binary to automate. This command downloads the matching Chromium browser build into the machine's Playwright cache. <em>This command does not change mission code.</em></p>
+
+  <h3><code>npm run test:spaceinvaders</code></h3>
+  <p>This runs the Mission 10 validation harness. In <code>package.json</code>, the script points to:</p>
+  <pre>node tests/helpers/run-playwright.js spaceinvaders</pre>
+  <p>The helper selects the Space Invaders mission, starts its backend, launches Playwright, opens Chromium, and runs assertions in <code>tests/spaceinvaders.spec.js</code>.</p>
+</div>
+
+<div class="section" id="dependency-graph">
+  <h2>📊 Command Dependency Graph</h2>
+  <p>Run these commands in order when setting up a fresh machine for automated browser validation.</p>
+  
+  <div class="mermaid">
+    flowchart LR
+        Setup["npm run setup:missions"] --> NpmInstall["npm ci"]
+        PackageFiles["package.json<br>package-lock.json"] --> NpmInstall
+        NpmInstall --> NodeModules["node_modules/<br>@playwright/test"]
+        NodeModules --> Npx["npx playwright install chromium"]
+        Npx --> BrowserCache["Playwright browser cache<br>Chromium + headless shell"]
+        BrowserCache --> TestCommand["npm run test:spaceinvaders"]
+        TestCommand --> Runner["tests/helpers/run-playwright.js"]
+        Runner --> MissionServer["python3 server.py<br>port 8010"]
+        Runner --> Spec["tests/spaceinvaders.spec.js"]
+  </div>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Command</th>
+          <th>Reads</th>
+          <th>Creates Or Uses</th>
+          <th>Main Purpose</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>npm run setup:missions</code></td>
+          <td><code>package.json</code>, <code>package-lock.json</code></td>
+          <td><code>node_modules/</code> and Playwright browser cache</td>
+          <td>One inherited setup command for students, agents, Codespaces, and local clones.</td>
+        </tr>
+        <tr>
+          <td><code>npm install</code></td>
+          <td><code>package.json</code>, <code>package-lock.json</code></td>
+          <td><code>node_modules/</code></td>
+          <td>Install JavaScript test tooling.</td>
+        </tr>
+        <tr>
+          <td><code>npx playwright install chromium</code></td>
+          <td>installed Playwright package</td>
+          <td>Playwright browser cache</td>
+          <td>Download the browser used by automated tests.</td>
+        </tr>
+        <tr>
+          <td><code>npm run test:spaceinvaders</code></td>
+          <td><code>package.json</code>, test helpers, mission files</td>
+          <td>Playwright report and baseline status artifacts</td>
+          <td>Start the backend and verify the mission in a real browser.</td>
+        </tr>
+        <tr>
+          <td><code>python3 server.py</code></td>
+          <td>Mission <code>server.py</code> and shared backend</td>
+          <td>running web server on port <code>8010</code></td>
+          <td>Run the game for humans to play.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="section" id="validation-harness">
+  <h2>🤖 Automated Validation Harness</h2>
+  <p>The test harness starts the real backend and opens the real browser page.</p>
+
+  <div class="mermaid">
+    sequenceDiagram
+        participant User as User or Agent Shell
+        participant NPM as npm script
+        participant Runner as tests/helpers/run-playwright.js
+        participant PW as Playwright
+        participant ServerHelper as tests/helpers/start-mission-server.js
+        participant Python as python3 server.py
+        participant Backend as Mission backend on 127.0.0.1:8010
+        participant Browser as Headless Chromium
+        participant App as src/app.js
+        participant API as /api/state /api/scores /api/events
+
+        User->>NPM: npm run test:spaceinvaders
+        NPM->>Runner: node run-playwright.js spaceinvaders
+        Runner->>PW: configure baseURL and spec file
+        PW->>ServerHelper: start webServer command
+        ServerHelper->>Python: python3 server.py
+        Python->>Backend: serve mission on port 8010
+        PW->>Backend: wait until /api/scores responds
+        PW->>Browser: launch Chromium
+        Browser->>Backend: GET /?test=1
+        Backend->>Browser: index.html, CSS, JS
+        Browser->>App: run game code
+        App->>API: GET /api/state
+        PW->>App: call window.__sprkTest helpers
+        App->>API: POST state, scores, and events
+        PW->>PW: assert aliens, score, bunkers, modes, and shared state
+  </div>
+
+  <h3>Validation Harness Objects</h3>
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Object</th>
+          <th>File Or Process</th>
+          <th>Responsibility</th>
+          <th>Talks To</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>npm script</td>
+          <td><code>package.json</code></td>
+          <td>Names the command students run.</td>
+          <td><code>tests/helpers/run-playwright.js</code></td>
+        </tr>
+        <tr>
+          <td>Test runner helper</td>
+          <td><code>tests/helpers/run-playwright.js</code></td>
+          <td>Selects mission, base URL, and spec file.</td>
+          <td>Playwright CLI</td>
+        </tr>
+        <tr>
+          <td>Server helper</td>
+          <td><code>tests/helpers/start-mission-server.js</code></td>
+          <td>Starts the correct Python backend for the chosen mission.</td>
+          <td><code>server.py</code></td>
+        </tr>
+        <tr>
+          <td>Mission backend</td>
+          <td><code>missions/10-SpaceInvaders-1P-nP/server.py</code></td>
+          <td>Serves files and shared JSON APIs.</td>
+          <td>Browser, shared backend helper</td>
+        </tr>
+        <tr>
+          <td>Browser test</td>
+          <td><code>tests/spaceinvaders.spec.js</code></td>
+          <td>Makes assertions about Mission 10 behavior.</td>
+          <td>Headless Chromium page</td>
+        </tr>
+        <tr>
+          <td>Test hooks</td>
+          <td><code>window.__sprkTest</code> in <code>src/app.js</code></td>
+          <td>Provide deterministic controls for tests.</td>
+          <td>Playwright spec</td>
+        </tr>
+        <tr>
+          <td>Baseline writer</td>
+          <td><code>tests/helpers/write-baseline-status.js</code></td>
+          <td>Publishes test summary for Baseline Status tab.</td>
+          <td><code>missions/_shared/generated/</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Validation Pass/Fail Flow</h3>
+  <div class="mermaid">
+    flowchart TD
+        Start["npm run test:spaceinvaders"] --> ServerStarts{"Backend starts?"}
+        ServerStarts -- "No" --> ServerFail["Fail early<br>check Python or port 8010"]
+        ServerStarts -- "Yes" --> BrowserStarts{"Chromium launches?"}
+        BrowserStarts -- "No" --> BrowserFail["Fail early<br>run npx playwright install chromium"]
+        BrowserStarts -- "Yes" --> PageLoads{"Mission page loads?"}
+        PageLoads -- "No" --> PageFail["Check server route, HTML, JS errors"]
+        PageLoads -- "Yes" --> Assertions{"Game assertions pass?"}
+        Assertions -- "No" --> TestFail["Fix mission behavior or test expectation"]
+        Assertions -- "Yes" --> Passed["Baseline passed<br>status JSON/HTML updated"]
+  </div>
+
+  <p><strong>What Mission 10 Validation Checks:</strong> The Space Invaders baseline verifies page rendering, shared backend connection, starting with 55 aliens, scoring/alien count reduction upon destruction, fleet acceleration, bunker damage persistence, 2D/3D rail/FPS mode switching, and X-Ray Vision/Baseline Status reachability.</p>
+</div>
+
+<div class="section" id="runtime-architecture">
+  <h2>🏛️ Runtime Architecture For A Browser Mission</h2>
+  <div class="mermaid">
+    flowchart LR
+        Browser["Browser"] --> HTML["index.html"]
+        HTML --> SharedCSS["../_shared/sprk_mission.css"]
+        HTML --> LocalCSS["src/styles.css"]
+        HTML --> SharedJS["../_shared/sprk_app.js"]
+        HTML --> AppJS["src/app.js"]
+
+        AppJS --> Canvas["Canvas or DOM game UI"]
+        AppJS --> Controls["Keyboard, mouse, buttons, touch"]
+        AppJS --> API["Backend API"]
+
+        API --> State["/api/state"]
+        API --> Scores["/api/scores"]
+        API --> Events["/api/events"]
+
+        ServerPy["server.py"] --> SharedBackend["missions/_shared/sprk_backend.py"]
+        SharedBackend --> State
+        SharedBackend --> Scores
+        SharedBackend --> Events
+  </div>
+  <p>For Mission 10 structure, refer to <code>missions/10-SpaceInvaders-1P-nP/</code> containing <code>index.html</code>, <code>server.py</code>, <code>src/app.js</code>, <code>src/styles.css</code>, and documentation files.</p>
+</div>
+
+<div class="section" id="mission-10-model">
+  <h2>🎯 Mission 10 Object Model</h2>
+  <p>Mission 10 keeps one state object for all views. The renderer changes how the state is shown, but the score, wave, aliens, and bunkers stay the same.</p>
+  
+  <div class="mermaid">
+    flowchart TD
+        GameState["gameState"] --> Mode["mode<br>2d / lateral3d / fps"]
+        GameState --> Score["score"]
+        GameState --> Wave["wave"]
+        GameState --> Lives["lives"]
+        GameState --> Player["player<br>x, z, yaw, pitch"]
+        GameState --> Fleet["fleet<br>direction, beat, timing"]
+        GameState --> Aliens["aliens[55]<br>type, row, col, x, y, z, alive"]
+        GameState --> Bunkers["bunkers[4]<br>voxel cells alive/dead"]
+        GameState --> Mystery["mystery ship"]
+
+        Mode --> Renderer["drawScene() chooses camera"]
+        Renderer --> Classic["draw2DScene()"]
+        Renderer --> Rail["drawRailScene()"]
+        Renderer --> FPS["drawFpsScene()"]
+
+        Controls["keyboard, mouse, buttons"] --> Updates["updateGame()"]
+        Updates --> Collisions["shot, alien, bunker, player collisions"]
+        Collisions --> GameState
+        GameState --> Save["POST /api/state"]
+        GameState --> RealTime["POST /api/scores"]
+        GameState --> XRay["POST /api/events"]
+  </div>
+  <p><strong>Why this matters:</strong> Destroyed aliens stay destroyed after dimension shifts, bunker damage persists, score continues smoothly, and tests inspect a single unified state machine.</p>
+</div>
+
+<div class="section" id="runtime-lifecycle">
+  <h2>🔄 Runtime Data Lifecycle</h2>
+  <div class="mermaid">
+    sequenceDiagram
+        participant Student as Student
+        participant Browser as Browser tab
+        participant App as src/app.js
+        participant Canvas as Canvas renderer
+        participant API as Python backend API
+        participant State as In-memory MissionState
+        participant Panel as RealTime / X-Ray / Baseline tabs
+
+        Student->>Browser: open mission URL
+        Browser->>App: load shared JS and mission JS
+        App->>API: GET /api/state
+        API->>State: read current state
+        State-->>API: state JSON
+        API-->>App: state payload
+        App->>Canvas: draw current mode
+        Student->>App: move, fire, shift dimension
+        App->>App: update gameState
+        App->>Canvas: redraw 2D, rail, or FPS view
+        App->>API: POST /api/state
+        App->>API: POST /api/scores when score changes
+        App->>API: POST /api/events for X-Ray Vision
+        API->>State: merge state, scores, and events
+        App->>Panel: refresh visible shared panels
+  </div>
+
+  <h3>Mission 10 State Table</h3>
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>State Field</th>
+          <th>Example</th>
+          <th>Updated By</th>
+          <th>Displayed In</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>mode</code></td>
+          <td><code>2d</code>, <code>lateral3d</code>, <code>fps</code></td>
+          <td>Dimension Shift button, Shift key, FPS Dive, proximity trigger</td>
+          <td>HUD mode label and renderer</td>
+        </tr>
+        <tr>
+          <td><code>score</code></td>
+          <td><code>130</code></td>
+          <td>Alien hits and mystery ship hits</td>
+          <td>HUD and RealTime tab</td>
+        </tr>
+        <tr>
+          <td><code>wave</code></td>
+          <td><code>1</code></td>
+          <td>Wave clear logic</td>
+          <td>HUD and RealTime summary</td>
+        </tr>
+        <tr>
+          <td><code>lives</code></td>
+          <td><code>3</code></td>
+          <td>Alien shots or fleet breach</td>
+          <td>HUD</td>
+        </tr>
+        <tr>
+          <td><code>aliens[]</code></td>
+          <td>55 alien objects</td>
+          <td>Fleet movement and collision logic</td>
+          <td>Canvas renderer and tests</td>
+        </tr>
+        <tr>
+          <td><code>bunkers[]</code></td>
+          <td>four voxel cell arrays</td>
+          <td>Player and alien shots</td>
+          <td>Canvas renderer and bunker status</td>
+        </tr>
+        <tr>
+          <td><code>player</code></td>
+          <td>x, z, yaw, pitch</td>
+          <td>keyboard, mouse, test hooks</td>
+          <td>renderer and collision logic</td>
+        </tr>
+        <tr>
+          <td><code>mystery</code></td>
+          <td>active UFO state</td>
+          <td>timer and shot collision</td>
+          <td>2D renderer and score events</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="section" id="dimension-flow">
+  <h2>📐 Mission 10 Dimension Flow</h2>
+  <div class="mermaid">
+    flowchart LR
+        Classic["2D Classic<br>orthographic-style canvas<br>one laser at a time"] -->|"Dimension Shift<br>1.5s blend"| Rail["3D Rail<br>runway projection<br>z-axis shots"]
+        Rail -->|"FPS Dive, F key,<br>or proximity threshold"| FPS["FPS Climax<br>mouse-look style aim<br>rapid plasma"]
+        Classic -->|"FPS Dive button"| FPS
+
+        State["Same gameState<br>aliens, bunkers, score, wave"] -. "preserved" .-> Classic
+        State -. "preserved" .-> Rail
+        State -. "preserved" .-> FPS
+  </div>
+</div>
+
+<div class="section" id="running-cloud">
+  <h2>☁️ Running The Game In Cursor Cloud</h2>
+  <p>Use this when the code is running in Cursor's remote environment:</p>
+  <pre>cd /workspace/missions/10-SpaceInvaders-1P-nP
+python3 server.py</pre>
+  <p>The backend prints a local link like <code>http://localhost:8010</code>. Inside Cursor Cloud, that means the Cursor Cloud VM. To view it from your laptop browser, open the Cursor port preview or forwarded URL for port <code>8010</code>. Note that <code>127.0.0.1:8010</code> on your Windows laptop is your local machine, not the cloud VM.</p>
+</div>
+
+<div class="section" id="cloud-facilitator">
+  <h2>🌐 Cloud Facilitator Hosting</h2>
+  <p>When the facilitator has no local laptop on the classroom network, or school Wi-Fi blocks device-to-device traffic, host the backend in Cursor Cloud and share a <strong>public tunnel URL</strong> with iPhones, Chromebooks, iPads, and other browsers.</p>
+  <ol>
+    <li>Start <code>python3 server.py</code> in the mission folder inside the cloud VM.</li>
+    <li>Start a Cloudflare Quick Tunnel to <code>http://127.0.0.1:&lt;port&gt;</code>.</li>
+    <li>Share the printed <code>https://....trycloudflare.com</code> link with the class.</li>
+  </ol>
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Topic</th>
+          <th>Guide</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Facilitator cheat sheet, Path A vs B, bit.ly, class script</td>
+          <td><code>SPRK_Facilitator_Guide.md</code></td>
+        </tr>
+        <tr>
+          <td>Cloud tunnel details, LocalTunnel alternative</td>
+          <td><code>SPRK_Cloud_Facilitator_Hosting_Guide.md</code></td>
+        </tr>
+        <tr>
+          <td>Same-room laptop IP hosting</td>
+          <td><code>SPRK_Classroom_Network_Test_Guide.md</code></td>
+        </tr>
+        <tr>
+          <td>Tunnel helper command</td>
+          <td><code>bash missions/_shared/tools/sprk_public_tunnel.sh 8010</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="section" id="running-laptop">
+  <h2>💻 Running The Game On A Facilitator Laptop</h2>
+  <p>Use this when one laptop in the room should host the mission for nearby phones, tablets, and laptops.</p>
+  <pre>git clone https://github.com/Mr-PI-Bala/SPRK-Hello-Repo.git
+cd SPRK-Hello-Repo
+git checkout cursor/10-space-invaders-de64
+cd missions/10-SpaceInvaders-1P-nP
+python server.py</pre>
+  <p>On some Windows machines, use <code>py server.py</code>. The backend binds to <code>0.0.0.0:8010</code> (listening on all network interfaces). The facilitator laptop can open <code>http://127.0.0.1:8010</code>, while other devices use the LAN IP like <code>http://192.168.1.42:8010</code>.</p>
+</div>
+
+<div class="section" id="why-localhost">
+  <h2>🚫 Why <code>127.0.0.1</code> Does Not Reach The Laptop Next To You</h2>
+  <p><code>127.0.0.1</code> always points back to the device making the request. If the backend is running on the facilitator Dell laptop, phones and tablets should not use <code>127.0.0.1</code>; they must use the Dell's local network address.</p>
+</div>
+
+<div class="section" id="local-network">
+  <h2>🏠 Local Network Object Interaction</h2>
+  <div class="mermaid">
+    flowchart TD
+        Dell["Facilitator Dell laptop<br>runs python server.py<br>LAN IP: 192.168.1.42<br>Port: 8010"]
+
+        DellBrowser["Dell browser"] -->|"http://127.0.0.1:8010"| Dell
+        IPhone["iPhone browser"] -->|"http://192.168.1.42:8010"| Dell
+        IPad["iPad browser"] -->|"http://192.168.1.42:8010"| Dell
+        Android["Android browser"] -->|"http://192.168.1.42:8010"| Dell
+        StudentLaptop["Other laptop browser"] -->|"http://192.168.1.42:8010"| Dell
+
+        Dell --> Backend["SPRK backend"]
+        Backend --> State["shared in-memory state"]
+        Backend --> Scores["shared scores"]
+        Backend --> Events["X-Ray Vision events"]
+  </div>
+
+  <h3>Local Network Sequence Diagram</h3>
+  <div class="mermaid">
+    sequenceDiagram
+        participant Dell as Facilitator Dell<br>192.168.1.42:8010
+        participant Python as python server.py
+        participant iPhone as iPhone Safari
+        participant iPad as iPad Safari
+        participant Android as Android Chrome
+        participant State as Shared backend state
+
+        Dell->>Python: start server.py
+        Python->>Python: bind 0.0.0.0:8010
+        iPhone->>Python: GET http://192.168.1.42:8010
+        iPad->>Python: GET http://192.168.1.42:8010
+        Android->>Python: GET http://192.168.1.42:8010
+        Python-->>iPhone: same mission HTML/CSS/JS
+        Python-->>iPad: same mission HTML/CSS/JS
+        Python-->>Android: same mission HTML/CSS/JS
+        iPhone->>State: POST /api/events or /api/state
+        iPad->>State: GET /api/state
+        Android->>State: GET /api/scores
+        State-->>iPad: updated shared state
+        State-->>Android: updated shared scores
+  </div>
+
+  <h3>Addressing Table</h3>
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>You Type This URL On...</th>
+          <th>URL</th>
+          <th>Result</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Dell facilitator laptop</td>
+          <td><code>http://127.0.0.1:8010</code></td>
+          <td>Connects to the Dell's own backend.</td>
+        </tr>
+        <tr>
+          <td>Dell facilitator laptop</td>
+          <td><code>http://192.168.1.42:8010</code></td>
+          <td>Also connects to the Dell through its LAN IP.</td>
+        </tr>
+        <tr>
+          <td>iPhone on same Wi-Fi</td>
+          <td><code>http://127.0.0.1:8010</code></td>
+          <td>Looks for a backend on the iPhone itself and usually fails.</td>
+        </tr>
+        <tr>
+          <td>iPhone on same Wi-Fi</td>
+          <td><code>http://192.168.1.42:8010</code></td>
+          <td>Connects to the Dell backend.</td>
+        </tr>
+        <tr>
+          <td>Cursor Cloud VM</td>
+          <td><code>http://127.0.0.1:8010</code></td>
+          <td>Connects to the backend running inside Cursor Cloud.</td>
+        </tr>
+        <tr>
+          <td>Your Windows browser while backend runs in Cursor</td>
+          <td>Cursor forwarded port URL</td>
+          <td>Connects through Cursor's tunnel to the cloud backend.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p><strong>Requirements:</strong> Same Wi-Fi network, device-to-device traffic enabled, Windows Firewall allowing inbound Python traffic on port <code>8010</code>, and the server terminal kept open.</p>
+</div>
+
+<div class="section" id="finding-ip">
+  <h2>🔍 Finding The Facilitator Laptop IP On Windows</h2>
+  <p>Open PowerShell or Command Prompt and run:</p>
+  <pre>ipconfig</pre>
+  <p>Look for the Wi-Fi adapter's IPv4 address:</p>
+  <pre>Wireless LAN adapter Wi-Fi:
+   IPv4 Address . . . . . . . . . . : 192.168.1.42</pre>
+  <p>Nearby devices then open <code>http://192.168.1.42:8010</code>.</p>
+</div>
+
+<div class="section" id="cursor-vs-laptop">
+  <h2>⚖️ Cursor Cloud Versus Facilitator Laptop</h2>
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Scenario</th>
+          <th>Where backend runs</th>
+          <th>Best URL for the host</th>
+          <th>Best URL for phones/tablets</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Cursor Cloud tryout</td>
+          <td>Remote Cursor VM</td>
+          <td>Cursor forwarded port URL (Desktop) or tunnel URL</td>
+          <td>Public tunnel URL, e.g. <code>https://....trycloudflare.com</code></td>
+        </tr>
+        <tr>
+          <td>Dell facilitator local play</td>
+          <td>Dell laptop</td>
+          <td><code>http://127.0.0.1:8010</code></td>
+          <td><code>http://&lt;Dell LAN IP&gt;:8010</code></td>
+        </tr>
+        <tr>
+          <td>Student laptop local experiment</td>
+          <td>Student laptop</td>
+          <td><code>http://127.0.0.1:8010</code></td>
+          <td>Usually not needed unless that student hosts</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="section" id="troubleshooting">
+  <h2>🛠️ Troubleshooting Checklist</h2>
+  <p><strong>If automated tests fail:</strong></p>
+  <ol>
+    <li>Run <code>npm run setup:missions</code>.</li>
+    <li>Run <code>npm run test:spaceinvaders</code>.</li>
+    <li>Confirm no other process is already using port <code>8010</code>.</li>
+  </ol>
+  <p><strong>If phones/tablets cannot reach a facilitator laptop:</strong></p>
+  <ol>
+    <li>Confirm the backend is running.</li>
+    <li>Confirm all devices are on the same Wi-Fi.</li>
+    <li>Use <code>ipconfig</code> and connect to the facilitator laptop's IPv4 address.</li>
+    <li>Allow Python through Windows Firewall.</li>
+    <li>Avoid guest Wi-Fi networks blocking device-to-device traffic.</li>
+    <li>Try from another laptop browser first, then mobile devices.</li>
+  </ol>
+</div>
+
+<div class="section" id="command-reference">
+  <h2>⌨️ Command Reference</h2>
+  <p><strong>Run Mission 10 in Cursor Cloud:</strong></p>
+  <pre>cd /workspace/missions/10-SpaceInvaders-1P-nP
+python3 server.py</pre>
+  <p><strong>Run Mission 10 locally on Windows:</strong></p>
+  <pre>cd missions/10-SpaceInvaders-1P-nP
+python server.py</pre>
+  <p><strong>Install test tools:</strong></p>
+  <pre>npm run setup:missions</pre>
+  <p><strong>Install Playwright browser only:</strong></p>
+  <pre>npx playwright install chromium</pre>
+  <p><strong>Run Mission 10 validation:</strong></p>
+  <pre>npm run test:spaceinvaders</pre>
+</div>
+
+<div class="footer">
+  <div><span class="footer-dot"></span> SPRK Browser Testing And Network Architecture Guide</div>
+  <div class="footer-legal">&copy; 2024-2026 AURAVYBE. All Rights Reserved. This material is the intellectual property of AURAVYBE and is licensed for the exclusive use of SPRK Coding Club. Unauthorized use, including making copies of the material even for personal use, is strictly prohibited.</div>
+</div>
+
+</body>
+</html>

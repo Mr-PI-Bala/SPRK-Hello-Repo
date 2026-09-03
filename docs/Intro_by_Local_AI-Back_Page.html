@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌟 Hello Repo — Mission Map Part 2</title>
+<style>
+  @page {
+    size: A4;
+    margin: 20mm;
+    page-break-inside: avoid;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #101820;
+    color: #f2f7fb;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    min-height: 100vh;
+    line-height: 1.6;
+    padding: 24px;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  .header h1 {
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
+    color: #1fb6ff;
+    text-shadow: 0 0 20px rgba(31,182,255,0.4);
+    margin-bottom: 12px;
+  }
+
+  .header p {
+    color: #a9bac8;
+    font-size: 1.1rem;
+    max-width: 700px;
+    margin: 0 auto 24px;
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    background: rgba(22,35,49,0.8);
+    border: 1px solid #30485c;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .section::before {
+    content: '';
+    position: absolute;
+    top: -3px; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #1fb6ff, #1fc76a);
+    border-radius: 16px 16px 0 0;
+  }
+
+  .section h2 {
+    color: #1fb6ff;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 10px;
+    border-bottom: 3px solid #30485c;
+    padding-bottom: 8px;
+    font-weight: 800;
+  }
+
+  .section p {
+    color: #a9bac8;
+    margin-bottom: 16px;
+    font-size: 1rem;
+  }
+
+  /* ── CARD GRID ── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 

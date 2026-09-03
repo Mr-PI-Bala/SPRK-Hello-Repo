@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SPRK Classroom Network Test Guide</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; margin: 40px; color: #333; max-width: 900px; }
+        pre { background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
+        code { background: #f4f4f4; padding: 2px 4px; border-radius: 3px; font-family: monospace; }
+        footer { font-size: 8px; color: #777; margin-top: 40px; border-top: 1px solid #ddd; padding-top: 10px; }
+    </style>
+</head>
+<body>
+
+<h1>SPRK Classroom Network Test Guide</h1>
+
+<p>Repo-wide doc index: <a href="README.md">docs/README.md</a>. Link rules: <a href="SPRK_Documentation_Links_Guide.md">SPRK_Documentation_Links_Guide.md</a>. Facilitator quick path: <a href="SPRK_Facilitator_Guide.md">SPRK_Facilitator_Guide.md</a>.</p>
+<p>This guide explains how to test a classroom setup where one laptop hosts a backend and students join from Chromebooks, iPads, iPhones, Android phones, or other laptops.</p>
+
+<p><strong>Facilitators:</strong> for the full hosting playbook (laptop Wi‑Fi <strong>and</strong> Cursor Cloud tunnels), one-page cheat sheet, and bit.ly pattern, read the <a href="SPRK_Facilitator_Guide.md">SPRK Facilitator Guide</a> first.</p>
+
+<p>The goal is to prove this pattern before class:</p>
+<pre><code>Backend host laptop
+  |
+  v
+Classroom network
+  |
+  v
+Student devices open the app in a browser</code></pre>
+
+<h2>Table Of Contents</h2>
+<ul>
+    <li><a href="SPRK_Facilitator_Guide.md">SPRK Facilitator Guide</a> (main playbook — read first)</li>
+    <li><a href="#recommended-device-roles">Recommended Device Roles</a></li>
+    <li><a href="#network-options">Network Options</a></li>
+    <li><a href="#option-d---cursor-cloud-facilitator-with-public-tunnel">Option D - Cursor Cloud Facilitator With Public Tunnel</a></li>
+    <li><a href="#tcl-linkport-ik511-note">TCL LINKPORT IK511 Note</a></li>
+    <li><a href="#test-accounts">Test Accounts</a></li>
+    <li><a href="#four-device-test">Four Device Test</a></li>
+    <li><a href="#backend-host-requirements">Backend Host Requirements</a></li>
+    <li><a href="#student-device-requirements">Student Device Requirements</a></li>
+    <li><a href="#classroom-fallbacks">Classroom Fallbacks</a></li>
+    <li><a href="#alpha-student-validation">Alpha Student Validation</a></li>
+</ul>
+
+<h2 id="recommended-device-roles">Recommended Device Roles</h2>
+<p>Use a real laptop as the backend host.</p>
+<p>Recommended backend host:</p>
+<ul>
+    <li>Windows laptop, macOS laptop, or Linux laptop.</li>
+    <li>Can run Python or Node.</li>
+    <li>Can connect to school Wi-Fi or a private hotspot network.</li>
+    <li>Can allow inbound browser connections through the local firewall.</li>
+</ul>
+<p>Good backend-host example:</p>
+<pre><code>Dell Latitude laptop</code></pre>
+<p>Student devices can be lighter:</p>
+<ul>
+    <li>School Chromebook</li>
+    <li>iPad</li>
+    <li>iPhone</li>
+    <li>Android phone</li>
+    <li>Android tablet</li>
+    <li>Another laptop</li>
+</ul>
+<p>Student devices only need a browser for the first multiplayer classroom tests.</p>
+
+<h2 id="network-options">Network Options</h2>
+<p>Try networks in this order.</p>
+
+<h3>Option A - School Network</h3>
+<p>Use the normal school Wi-Fi first.</p>
+<p>This is best if it works because students are already allowed to use it.</p>
+<p>Possible blocker:</p>
+<p>Some school networks use device isolation. That means a student Chromebook may have internet access but cannot connect to a backend running on the teacher laptop.</p>
+
+<h3>Option B - SPRK Laptop Network</h3>
+<p>The <code>SPRK Laptop Network</code> is a private classroom network started from the backend-host laptop.</p>
+<p>Use this when the school network blocks device-to-device traffic.</p>
+<p>Example pattern:</p>
+<pre><code>TCL LINKPORT gives internet to the backend laptop.
+Backend laptop shares a local hotspot network.
+Student devices join that shared laptop network.
+Student devices open the backend laptop IP address in a browser.</code></pre>
+<p>This keeps the classroom test isolated from school network restrictions where possible.</p>
+
+<h3>Option C - Projector And Pairing</h3>
+<p>If networking fails, use one visible laptop/projector and assign active roles:</p>
+<ul>
+    <li>Driver: controls the code.</li>
+    <li>Navigator: reads instructions and decides next move.</li>
+    <li>Tester: tries the app and reports behavior.</li>
+    <li>Designer: chooses names, colors, rules, or questions.</li>
+    <li>Scorekeeper: tracks scores or team results.</li>
+</ul>
+<p>No student should become passive because they lack a device.</p>
+
+<h2 id="option-d---cursor-cloud-facilitator-with-public-tunnel">Option D - Cursor Cloud Facilitator With Public Tunnel</h2>
+<p>Use this when the backend runs in <strong>Cursor Cloud</strong> (or another remote Linux workspace) and students join from <strong>any network</strong> with phones, Chromebooks, or tablets.</p>
+<p>Students open one shared <strong>HTTPS tunnel URL</strong> (for example from Cloudflare Quick Tunnel), not a laptop LAN address.</p>
+<p>Full facilitator playbook and cheat sheet:</p>
+<ul>
+    <li><a href="SPRK_Facilitator_Guide.md">SPRK Facilitator Guide</a></li>
+</ul>
+<p>Tunnel technical details (Cloudflare vs LocalTunnel):</p>
+<ul>
+    <li><a href="SPRK_Cloud_Facilitator_Hosting_Guide.md">SPRK Cloud Facilitator Hosting Guide</a></li>
+</ul>
+<p>Quick summary for facilitators:</p>
+<ol>
+    <li>Start <code>python3 server.py</code> in the mission folder and leave it running.</li>
+    <li>Start a public tunnel to that port (Cloudflare recommended).</li>
+    <li>Share the <code>https://....trycloudflare.com</code> link (or a bit.ly that points to it) with the class.</li>
+</ol>
+
+<h2 id="tcl-linkport-ik511-note">TCL LINKPORT IK511 Note</h2>
+<p>The TCL LINKPORT IK511 is a USB-C cellular internet device. Treat it as internet for one host device, not as a normal multi-device classroom hotspot by itself.</p>
+<p>Expected use:</p>
+<pre><code>TCL LINKPORT IK511
+  -> Dell laptop
+  -> Windows Mobile Hotspot or laptop-shared network
+  -> student devices</code></pre>
+<p>What must be tested:</p>
+<ul>
+    <li>Whether the Dell laptop can share the LINKPORT connection.</li>
+    <li>How many devices can join the laptop-shared network.</li>
+    <li>Whether joined devices can open the backend laptop IP address.</li>
+    <li>Whether the Windows firewall allows the classroom app port.</li>
+</ul>
+<p>Do not assume the LINKPORT alone supports a full classroom of direct Wi-Fi clients.</p>
+
+<h2 id="test-accounts">Test Accounts</h2>
+<p>Use different accounts to simulate real classroom roles.</p>
+<p>Example test setup:</p>
+<pre><code>Dell laptop: AgentDraven
+iPad: Mr-PI-Bala
+iPhone: Maya-SPRK
+School Chromebook: balataps</code></pre>
+<p>Use generalized account wording in docs:</p>
+<pre><code>Backend host: &lt;SPRKAdmin-or-SPRKTeacher-account&gt;
+Student device: &lt;YourName&gt;-SPRK or another student test account</code></pre>
+
+<h2 id="four-device-test">Four Device Test</h2>
+<p>Run this test before using the setup with students.</p>
+
+<h3>Step 1 - Connect Devices</h3>
+<p>Connect all devices to the same network:</p>
+<ul>
+    <li>School Wi-Fi, or</li>
+    <li>SPRK Laptop Network</li>
+</ul>
+
+<h3>Step 2 - Start Backend</h3>
+<p>On the backend-host laptop, start the app so it listens on all network interfaces.</p>
+<p>Example:</p>
+<pre><code class="language-bash">python server.py --host 0.0.0.0 --port 8000</code></pre>
+<p>The important part is:</p>
+<pre><code>0.0.0.0</code></pre>
+<p>That means other devices can connect. <code>localhost</code> only works on the same machine.</p>
+
+<h3>Step 3 - Find Host IP</h3>
+<p>On Windows PowerShell:</p>
+<pre><code class="language-powershell">ipconfig</code></pre>
+<p>Find the IPv4 address for the active network.</p>
+<p>Example:</p>
+<pre><code>192.168.137.1</code></pre>
+
+<h3>Step 4 - Open From Student Devices</h3>
+<p>On each student device browser:</p>
+<pre><code>http://&lt;backend-host-ip&gt;:8000</code></pre>
+<p>Example:</p>
+<pre><code>http://192.168.137.1:8000</code></pre>
+
+<h3>Step 5 - Validate Interaction</h3>
+<p>Each device should be able to:</p>
+<ul>
+    <li>Load the page.</li>
+    <li>Enter a player name.</li>
+    <li>Send an action.</li>
+    <li>See shared score, game state, or leaderboard changes.</li>
+</ul>
+
+<h2 id="backend-host-requirements">Backend Host Requirements</h2>
+<p>The backend host must:</p>
+<ul>
+    <li>Run the backend app.</li>
+    <li>Bind to <code>0.0.0.0</code>.</li>
+    <li>Show its local IP address.</li>
+    <li>Allow the app port through firewall.</li>
+    <li>Stay awake during class.</li>
+    <li>Stay plugged into power if possible.</li>
+</ul>
+<p>For Windows Firewall, allow Python or Node when prompted for a private network.</p>
+
+<h2 id="student-device-requirements">Student Device Requirements</h2>
+<p>Student devices need:</p>
+<ul>
+    <li>Browser access.</li>
+    <li>Same network as the backend host.</li>
+    <li>The backend URL.</li>
+</ul>
+<p>They do not need GitHub access for the first multiplayer test.</p>
+<p>They do not need Codespaces for the first multiplayer test.</p>
+<p>They do not need a personal laptop if they can use:</p>
+<ul>
+    <li>school Chromebook</li>
+    <li>shared iPad</li>
+    <li>personal phone</li>
+    <li>paired teammate device</li>
+</ul>
+
+<h2 id="classroom-fallbacks">Classroom Fallbacks</h2>
+<p>Use this order:</p>
+<pre><code>School Wi-Fi
+  |
+  v
+SPRK Laptop Network
+  |
+  v
+Cursor Cloud + public tunnel (any device, any network)
+  |
+  v
+Projector/shared laptop mode
+  |
+  v
+Paper roles plus live demo</code></pre>
+<p>If device networking fails, still run the collaboration:</p>
+<ul>
+    <li>Students propose game rules.</li>
+    <li>Students choose team names.</li>
+    <li>Students test the projected app.</li>
+    <li>Students report bugs.</li>
+    <li>Students design the next feature.</li>
+</ul>
+
+<h2 id="alpha-student-validation">Alpha Student Validation</h2>
+<p>Maya.SPRK should validate this guide as the Alpha Student.</p>
+<p>Maya checks:</p>
+<ul>
+    <li>Can a student understand the device roles?</li>
+    <li>Can a student tell the difference between school Wi-Fi and SPRK Laptop Network?</li>
+    <li>Can a student open the backend URL from a phone?</li>
+    <li>Can a student understand why <code>localhost</code> is wrong on their own phone?</li>
+    <li>Can a student participate without GitHub access?</li>
+    <li>Can a student participate without a personal laptop?</li>
+</ul>
+<p>When Maya finds confusion, capture it as:</p>
+<ol>
+    <li>A GitHub issue or issue comment.</li>
+    <li>A <code>Formative Insights</code> entry in <code>docs/PROJECT_GUIDE.md</code> if it changes how SPRK should teach or operate.</li>
+    <li>A user-facing guide update if it changes what students need to do.</li>
+</ol>
+
+<footer>
+    © 2024-2026 AURAVYBE. All Rights Reserved. This material is the intellectual property of AURAVYBE and is licensed for the exclusive use of SPRK Coding Club. Unauthorized use, including making copies of the material even for personal use, is strictly prohibited.
+</footer>
+
+</body>
+</html>

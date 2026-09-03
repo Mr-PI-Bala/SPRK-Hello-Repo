@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SPRK CodeSpaces User Guide</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; margin: 40px; color: #333; max-width: 900px; }
+        pre { background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
+        code { background: #f4f4f4; padding: 2px 4px; border-radius: 3px; font-family: monospace; }
+        table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        footer { font-size: 5px; color: #777; margin-top: 40px; border-top: 1px solid #ddd; padding-top: 10px; }
+    </style>
+</head>
+<body>
+
+<h1>SPRK CodeSpaces User Guide</h1>
+<p>This guide explains when to use GitHub Codespaces, what to do after opening it, and where troubleshooting fits.</p>
+
+<h2>Table Of Contents</h2>
+<ul>
+    <li><a href="#what-codespaces-is">What Codespaces Is</a></li>
+    <li><a href="#codespaces-flow">Codespaces Flow</a></li>
+    <li><a href="#open-codespaces">Open Codespaces</a></li>
+    <li><a href="#run-the-project-check">Run The Project Check</a></li>
+    <li><a href="#runtime-levels">Runtime Levels</a></li>
+    <li><a href="#multiplayer-project-prerequisite">Multiplayer Project Prerequisite</a></li>
+    <li><a href="#troubleshooting">Troubleshooting</a></li>
+</ul>
+
+<h2 id="what-codespaces-is">What Codespaces Is</h2>
+<p>Codespaces is a cloud computer in your browser. It lets you read code, edit files, run checks, commit, push, and open Pull Requests without setting up a personal laptop.</p>
+<p>Best first use:</p>
+<pre><code>Open repo
+  |
+  v
+Open Codespaces
+  |
+  v
+Read README
+  |
+  v
+Run safe project check
+  |
+  v
+Make one small change
+  |
+  v
+Commit, push, Pull Request</code></pre>
+
+<h2 id="codespaces-flow">Codespaces Flow</h2>
+<p>Use this flow to decide which section matters.</p>
+<pre><code>[Open working repository] --&gt; [Open Codespaces]
+[Open Codespaces] --&gt; [Read README.md]
+[Read README.md] --&gt; [Run project check]
+[Run project check] --&gt; [Is this browser-visible?]
+[Is this browser-visible?] --&gt;|Yes| [Use preview or browser link]
+[Is this browser-visible?] --&gt;|No, desktop/3D app| [Use Runtime Levels]
+[Use preview or browser link] --&gt; [Is this multiplayer/classroom mode?]
+[Is this multiplayer/classroom mode?] --&gt;|Yes| [Use Classroom Network Test Guide]
+[Is this multiplayer/classroom mode?] --&gt;|No| [Make a small change]
+[Use Runtime Levels] --&gt; [Make a small change]
+[Use Classroom Network Test Guide] --&gt; [Make a small change]
+[Make a small change] --&gt; [Commit, push, Pull Request]</code></pre>
+
+<p>Plain version:</p>
+<pre><code>Codespaces first
+  -&gt; safe check
+  -&gt; browser preview if available
+  -&gt; classroom network test only for multiplayer projects
+  -&gt; troubleshooting only when something breaks</code></pre>
+
+<h2 id="open-codespaces">Open Codespaces</h2>
+<p>From a GitHub repository:</p>
+<ol>
+    <li>Click <code>Code</code>.</li>
+    <li>Open the <code>Codespaces</code> tab.</li>
+    <li>Create or open a Codespace.</li>
+    <li>Read <code>README.md</code>.</li>
+    <li>Run the project check from that repository.</li>
+</ol>
+
+<h2 id="run-the-project-check">Run The Project Check</h2>
+<p>For <code>SPRK-Hello-Repo</code>, use the check command documented inside that repository.</p>
+<p>For Python repositories that provide a safe check, the command usually looks like:</p>
+<pre><code class="language-bash">python -m core.main --check</code></pre>
+<p>The check should validate the project without opening a desktop graphics window.</p>
+
+<h2 id="runtime-levels">Runtime Levels</h2>
+<p>Runtime levels matter when a project needs more than normal browser preview.</p>
+<pre><code>Level A - Code/check only
+Use Codespaces to read, edit, and run the safe check.
+
+Level B - Browser-visible app
+Use Codespaces preview or a browser link.
+
+Level C - Local/classroom backend
+One laptop runs the backend; other devices join from a browser.
+
+Level D - Desktop/3D visual test
+Use a graphics-capable laptop or advanced virtual desktop setup.</code></pre>
+<p>Most first projects should use Level A or Level B. Multiplayer classroom projects use Level C. Advanced 3D projects may need Level D.</p>
+
+<h2 id="multiplayer-project-prerequisite">Multiplayer Project Prerequisite</h2>
+<p>This is not required for every project.</p>
+<p>Use the classroom device/network test only when the project needs multiple students to connect to one backend.</p>
+<p>Examples:</p>
+<ul>
+    <li><code>nP</code> classroom games.</li>
+    <li>shared scoreboards.</li>
+    <li>quiz rooms.</li>
+    <li>frontend/backend projects where phones or Chromebooks join the same game.</li>
+</ul>
+<p>Guide:</p>
+<pre><code>docs/SPRK_Classroom_Network_Test_Guide.md</code></pre>
+
+<h2 id="troubleshooting">Troubleshooting</h2>
+<h3>Troubleshooting Table Of Contents</h3>
+<ul>
+    <li><a href="#copilot-chat-took-too-long">Copilot Chat Took Too Long</a></li>
+    <div><a href="#desktop-or-3d-app-will-not-open">Desktop Or 3D App Will Not Open</a></div>
+</ul>
+
+<h3 id="copilot-chat-took-too-long">Copilot Chat Took Too Long</h3>
+<p>Symptom:</p>
+<pre><code>Chat took too long to get ready. Please ensure you are signed in to GitHub and that the extension GitHub.copilot-chat is installed and enabled.</code></pre>
+<p>Fix:</p>
+<ol>
+    <li>Confirm Codespaces is signed in as the expected GitHub account.</li>
+    <li>Open Extensions with <code>Ctrl+Shift+X</code>.</li>
+    <li>Search for <code>GitHub Copilot Chat</code>.</li>
+    <li>Install or enable <code>GitHub Copilot Chat</code>.</li>
+    <li>Reload the window with <code>Ctrl+Shift+P</code>, then <code>Developer: Reload Window</code>.</li>
+    <li>Click <code>Restart</code> in the Chat panel if the warning remains.</li>
+</ol>
+<p>Terminal check:</p>
+<pre><code class="language-bash">code --list-extensions --show-versions | grep -i copilot</code></pre>
+<p>Expected useful result:</p>
+<pre><code>GitHub.copilot-chat@...</code></pre>
+
+<h3 id="desktop-or-3d-app-will-not-open">Desktop Or 3D App Will Not Open</h3>
+<p>If Codespaces shows this:</p>
+<pre><code>Exception: No graphics pipe is available!</code></pre>
+<p>that means the app cannot find a graphical display.</p>
+<p>Use the safe check in Codespaces. Run visible desktop or 3D apps on a graphics-capable laptop.</p>
+
+<footer>
+    © 2024-2026 AURAVYBE. All Rights Reserved. This material is the intellectual property of AURAVYBE and is licensed for the exclusive use of SPRK Coding Club. Unauthorized use, including making copies of the material even for personal use, is strictly prohibited.
+</footer>
+
+</body>
+</html>

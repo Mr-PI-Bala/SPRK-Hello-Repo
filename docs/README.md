@@ -52,6 +52,8 @@ Do not paste private MERIT vault paths or operator-only `obsidian://` URIs into 
 
 ## Toolchain
 
+Standalone **HTML** exports (browser/print-friendly) sit beside the Markdown sources: `SPRK_*_Guide.html`, `Intro_by_Local_AI*.html`.
+
 | Guide | Purpose |
 | --- | --- |
 | [SPRK_Git_Repository_UserGuide.md](SPRK_Git_Repository_UserGuide.md) | Accounts, access, branches, PRs |

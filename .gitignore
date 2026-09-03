@@ -5,3 +5,4 @@ tests/artifacts/
 __pycache__/
 *.pyc
 output/
+tmp/

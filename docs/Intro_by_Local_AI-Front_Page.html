@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌟 Hello Repo — Mission Map Part 1</title>
+<style>
+  @page {
+    size: A4;
+    margin: 20mm;
+    page-break-inside: avoid;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #101820;
+    color: #f2f7fb;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    min-height: 100vh;
+    line-height: 1.6;
+    padding: 24px;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  .header h1 {
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
+    color: #1fb6ff;
+    text-shadow: 0 0 20px rgba(31,182,255,0.4);
+    margin-bottom: 12px;
+  }
+
+  .header p {
+    color: #a9bac8;
+    font-size: 1.1rem;
+    max-width: 700px;
+    margin: 0 auto 24px;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 50px;
+    background: rgba(31,182,255,0.15);
+    color: #1fb6ff;
+    font-weight: 700;
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    background: rgba(22,35,49,0.8);
+    border: 1px solid #30485c;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .section::before {
+    content: '';
+    position: absolute;
+    top: -3px; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #1fb6ff, #1fc76a);
+    border-radius: 16px 16px 0 0;
+  }
+
+  .section h2 {
+    color: #1fb6ff;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 10px;
+    border-bottom: 3px solid #30485c;
+    padding-bottom: 8px;
+    font-weight: 800;
+  }
+
+  .section p {
+    color: #a9bac8;
+    margin-bottom: 16px;
+    font-size: 1rem;
+  }
+
+  /* ── CARD GRID (Repository Structure) ── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    margin-top: 8px;
+  }
+
+  .card {
+    background: rgba(31,52,72,0.6);
+    border-radius: 12px;
+    padding: 16px;
+    border: 1px solid #30485c;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    border-color: #1fb6ff;
+    box-shadow: 0 8px 24px rgba(31,182,255,0.15);
+  }
+
+  .card h3 {
+    color: #f2f7fb;
+    margin-bottom: 6px;
+    font-size: 0.95rem;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .card p {
+    color: #a9bac8;
+    font-size: 0.88rem;
+    margin-bottom: 0;
+    line-height: 1.5;
+  }
+
+  /* ── GAME CARDS (Mission Phases) ── */
+  .game-card {
+    background: rgba(31,52,72,0.6);
+    border-radius: 14px;
+    padding: 14px 10px;
+    text-align: center;
+    border-left: 4px solid #1fb6ff;
+    transition: transform 0.3s;
+    cursor: pointer;
+  }
+
+  .game-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 24px rgba(31,182,255,0.2);
+  }
+
+  .game-card .emoji { font-size: 2rem; margin-bottom: 6px; display: block; }
+  .game-card h4 { color: #f2f7fb; margin: 0 0 4px; font-size: 1.05rem; display: flex; align-items: center; justify-content: center; gap: 4px; flex-wrap: wrap; }
+
+  /* ── PHASE BADGES (Applied to Mission X) ── */
+  .phase-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    vertical-align: middle;
+  }
+
+  .phase-1 { background: rgba(31,182,255,0.15); color: #1fb6ff; border: 1px solid rgba(31,182,255,0.3); }
+  .phase-2 { background: rgba(31,199,106,0.15); color: #1fc76a; border: 1px solid rgba(31,199,106,0.3); }
+  .phase-3 { background: rgba(244,185,66,0.15); color: #f4b942; border: 1px solid rgba(244,185,66,0.3); }
+
+  /* ── FOOTER ── */
+  .footer {
+    text-align: center;
+    margin-top: 40px;
+    padding: 20px 24px;
+    border-top: 2px solid #30485c;
+    color: #a9bac8;
+    font-size: 5px;
+    width: 100%;
+  }
+
+  .footer .footer-dot {
+    display: inline-block;
+    width: 8px; 
+    height: 8px;
+    background: #1fb6ff;
+    border-radius: 50%;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+
+  .footer-legal {
+    margin-top: 6px;
+    font-size: 5px;
+    color: #7a8c9e;
+    line-height: 1.3;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="badge">🎓 SPRK Hello Repo</div>
+  <h1>🗺️✨ SPRK Coding Club <br>Mission Map 🗺️✨</h1>
+  <p>This is your guide to the <b><em>Hello Repository</em></b> — a collection of browser-based games where you'll learn programming concepts by playing, changing, and sharing. <br>Grab your laptop and let's dive in!</p>
+</div>
+
+<div class="section">
+  <h2>🗂️ Repository Structure — Where Things Live 📁</h2>
+  <p>This folder contains everything you need to play missions, run tests, and follow the learning path. Here's what each part does:</p>
+
+  <div class="card-grid">
+    <div class="card">
+      <h3>🎮 <span>missions/</span></h3>
+      <p>All playable games live here! Each mission has its own <code>server.py</code> (Python backend) and <code>src/app.js</code> (JavaScript logic). You'll edit the code to change game behavior.</p>
+    </div>
+    <div class="card">
+      <h3>🧪 <span>tests/</span></h3>
+      <p>All game validation lives here! Playwright runs headless browser tests to make sure your changes don't break the real backends or shared state.</p>
+    </div>
+    <div class="card">
+      <h3>📚 <span>docs/</span></h3>
+      <p>The single source of truth for guides, mission instructions, and classroom hosting tips. Every student should read this first!</p>
+    </div>
+    <div class="card">
+      <h3>⚙️ <span>ops/README.md</span></h3>
+      <p>Your personal hygiene checklist — branch rules, commit cleanup, and how to hand off your work cleanly.</p>
+    </div>
+  </div>
+
+  <div style="margin-top:16px; padding:12px; background:rgba(244,185,66,0.1); border-left:4px solid #f4b942; border-radius:8px;">
+    <p><strong>💡 Pro Tip:</strong> The entire repo is designed to work with a single shared Python backend that handles all the multiplayer state! 🤝</p>
+  </div>
+</div>
+
+<div class="section">
+  <h2>🗺️ Your Missions — An Adventure Map 🎮</h2>
+  <p>Progress through the missions in order across all 3 phases! Each one builds on what you learned before.</p>
+
+  <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px;">
+
+    <div class="game-card">
+      <span class="emoji">⏱️</span>
+      <h4><span class="phase-badge phase-1">🏆 Mission 01</span></h4>
+      <p style="color:#a9bac8; font-size:0.85rem; margin-top:4px;"><strong>ReactionRace</strong><br><small>Timers & Classes</small></p>
+    </div>
+    <div class="game-card">
+      <span class="emoji">🐍</span>
+      <h4><span class="phase-badge phase-1">🏆 Mission 02</span></h4>
+      <p style="color:#a9bac8; font-size:0.85rem; margin-top:4px;"><strong>SnakeGame</strong><br><small>Grid Logic</small></p>
+    </div>
+
+    <div class="game-card">
+      <span class="emoji">🏓</span>
+      <h4><span class="phase-badge phase-2">🌟 Mission 03</span></h4>
+      <p style="color:#a9bac8; font-size:0.85rem; margin-top:4px;"><strong>PingPong</strong><br><small>Physics & Paddle</small></p>
+    </div>
+    <div class="game-card">
+      <span class="emoji">🃏</span>
+      <h4><span class="phase-badge phase-2">🌟 Mission 04</span></h4>
+      <p style="color:#a9bac8; font-size:0.85rem; margin-top:4px;"><strong>FlashCards</strong><br><small>Data Structures</small></p>
+    </div>
+    <div class="game-card">
+      <span class="emoji">📝</span>
+      <h4><span class="phase-badge phase-2">🌟 Mission 05</span></h4>
+      <p style="color:#a9bac8; font-size:0.85rem; margin-top:4px;"><strong>QuizRoom</strong><br><small>Forms & Validation</small></p>
+    </div>
+    <div class="game-card">
+      <span class="emoji">⚽</span>
+      <h4><span class="phase-badge phase-2">🌟 Mission 06</span></h4>
+      <p style="color:#a9bac8; font-size:0.85rem; margin-top:4px;"><strong>FourSquare</strong><br><small>Rules & Turns</small></p>
+    </div>
+    <div class="game-card">
+      <span class="emoji">🏈</span>
+      <h4><span class="phase-badge phase-2">🌟 Mission 07</span></h4>
+      <p style="color:#a9bac8; font-size:0.85rem; margin-top:4px;"><strong>SoccerScore</strong><br><small>Shared State</small></p>
+    </div>
+
+    <div class="game-card">
+      <span class="emoji">👽</span>
+      <h4><span class="phase-badge phase-3">🚀 Mission 08</span></h4>
+      <p style="color:#a9bac8; font-size:0.85rem; margin-top:4px;"><strong>SpaceInvaders</strong><br><small>Wave Mechanics</small></p>
+    </div>
+
+  </div>
+
+  <p style="margin-top: 12px; color: #a9bac8; font-size: 0.9rem;">
+    🏆 <strong>Phase 1</strong> = Foundations &bull; 
+    🌟 <strong>Phase 2</strong> = Multiplayer Magic &bull; 
+    🚀 <strong>Phase 3</strong> = Advanced Challenges
+  </p>
+</div>
+
+<div class="footer">
+  <div><span class="footer-dot"></span> Page 1 of 2 | Hello Repo Mission Map</div>
+  <div class="footer-legal">&copy; 2024-2026 AURAVYBE. All Rights Reserved. This material is the intellectual property of AURAVYBE and is licensed for the exclusive use of SPRK Coding Club. Unauthorized use, including making copies of the material even for personal use, is strictly prohibited.</div>
+</div>
+
+</body>
+</html>

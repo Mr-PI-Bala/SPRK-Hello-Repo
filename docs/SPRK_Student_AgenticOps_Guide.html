@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SPRK Student AgenticOps Guide</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            line-height: 1.6; 
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); 
+            color: #e2e8f0; 
+            margin: 0; 
+            padding: 30px; 
+            min-height: 100vh;
+        }
+        .container { 
+            max-width: 950px; 
+            margin: auto; 
+            background: #1e293b; 
+            padding: 40px; 
+            border-radius: 16px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4); 
+            border: 1px solid #334155; 
+        }
+        h1 { 
+            color: #38bdf8; 
+            border-bottom: 3px solid #334155; 
+            padding-bottom: 12px; 
+            margin-top: 0; 
+            font-size: 2.2em;
+        }
+        h2 { 
+            color: #818cf8; 
+            margin-top: 35px; 
+            border-bottom: 1px solid #334155; 
+            padding-bottom: 8px; 
+        }
+        h3 { 
+            color: #c084fc; 
+            margin-top: 25px;
+        }
+        p {
+            color: #cbd5e1;
+        }
+        a { 
+            color: #38bdf8; 
+            text-decoration: none; 
+            transition: color 0.2s;
+        }
+        a:hover { 
+            color: #7dd3fc; 
+            text-decoration: underline; 
+        }
+        pre { 
+            background: #0f172a; 
+            padding: 16px; 
+            border-radius: 10px; 
+            overflow-x: auto; 
+            border: 1px solid #334155; 
+            color: #38bdf8; 
+            font-size: 0.95em;
+        }
+        code { 
+            background: #0f172a; 
+            padding: 3px 6px; 
+            border-radius: 4px; 
+            font-family: monospace; 
+            color: #f472b6; 
+        }
+        pre code {
+            color: #38bdf8;
+            background: transparent;
+            padding: 0;
+        }
+        table { 
+            border-collapse: collapse; 
+            width: 100%; 
+            margin: 20px 0; 
+            background: #0f172a;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #334155;
+        }
+        th, td { 
+            border: 1px solid #334155; 
+            padding: 12px 15px; 
+            text-align: left; 
+        }
+        th { 
+            background-color: #1e293b; 
+            color: #38bdf8;
+            font-weight: 600;
+        }
+        td {
+            color: #cbd5e1;
+        }
+        ul, ol { 
+            margin-bottom: 20px; 
+            color: #cbd5e1;
+        }
+        li { 
+            margin-bottom: 8px; 
+        }
+        kbd { 
+            background: #334155; 
+            border: 1px solid #475569; 
+            border-bottom: 3px solid #1e293b;
+            border-radius: 5px; 
+            padding: 3px 7px; 
+            font-family: monospace; 
+            font-size: 0.9em; 
+            color: #f8fafc; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2); 
+        }
+        .toc-box { 
+            background: #0f172a; 
+            padding: 22px; 
+            border-radius: 12px; 
+            border: 1px solid #334155; 
+            margin-bottom: 30px; 
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .toc-box ul { 
+            margin: 0; 
+            padding-left: 20px; 
+        }
+        .badge {
+            background: #0ea5e9;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: bold;
+            vertical-align: middle;
+        }
+        footer { 
+            font-size: 5px; 
+            color: #777; 
+            margin-top: 50px; 
+            border-top: 1px solid #334155; 
+            padding-top: 15px; 
+            text-align: center; 
+            letter-spacing: 0.2px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>⚡AgenticOps Guide <span class="badge">SPRK Coding Club</span></h1>
+    <p>This guide translates MERIT AgenticOps practices into a classroom-friendly shape for <code>SPRK-Hello-Repo</code>.</p>
+    <p>The full enterprise MERIT instruction set remains in the private MERIT vault. This public/student repo carries the safe operating principles that help students and agents learn: clear structure, one source of truth, validation, branch discipline, secrets hygiene, readable docs, and clean handoff.</p>
+
+    <div class="toc-box">
+        <h3>🧭 Table Of Contents</h3>
+        <ul>
+            <li><a href="#compare-and-contrast">⚖️ Compare and contrast</a></li>
+            <li><a href="#mission-folder-naming-required">📁 Mission folder naming (required)</a></li>
+            <li><a href="#what-to-bring-into-student-work">🎒 What to bring into student work</a></li>
+            <li><a href="#what-not-to-import">🚫 What not to import</a></li>
+            <li><a href="#recommended-student-handoff">🤝 Recommended student handoff</a></li>
+        </ul>
+    </div>
+
+    <h2 id="compare-and-contrast">⚖️ Compare and contrast</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Area</th>
+                <th>MERIT enterprise pattern</th>
+                <th>SPRK student adaptation</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Instruction source</strong></td>
+                <td>Private MERIT Obsidian vault (L1/L2/L3 instructions)</td>
+                <td>Public repo uses <code>docs/README.md</code>, <code>MERIT.instructions</code>, <code>AgentDraven.instructions</code>, <code>AGENTS.md</code>, this guide, and mission docs</td>
+            </tr>
+            <tr>
+                <td><strong>Documentation folder</strong></td>
+                <td><code>{Name} docs/</code> for product/operator docs</td>
+                <td>Keep existing <code>docs/</code> because curriculum and mission links depend on it</td>
+            </tr>
+            <tr>
+                <td><strong>Entry points</strong></td>
+                <td>Product-specific runners and service commands</td>
+                <td>Mission <code>server.py</code>, npm scripts, and <code>npm run workflow</code></td>
+            </tr>
+            <tr>
+                <td><strong>Setup</strong></td>
+                <td>Environment bootstrap scripts</td>
+                <td><code>npm run setup:missions</code> and devcontainer post-create setup</td>
+            </tr>
+            <tr>
+                <td><strong>Validation</strong></td>
+                <td>CI gates, health checks, and release checks</td>
+                <td>Playwright mission baseline through <code>npm run validate</code></td>
+            </tr>
+            <tr>
+                <td><strong>Workflow</strong></td>
+                <td>One task, one branch, one PR</td>
+                <td>Guided by <code>docs/SPRK_Guided_Workflow_Helper.md</code>; duplicate PRs are closed after consolidation</td>
+            </tr>
+            <tr>
+                <td><strong>Secrets</strong></td>
+                <td>Local environment files and secret stores</td>
+                <td><code>.env.local</code> is ignored; commit only safe examples</td>
+            </tr>
+            <tr>
+                <td><strong>Closeout</strong></td>
+                <td>Structured handoff reports</td>
+                <td>Short 3-3: Done, State, Next</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 id="mission-folder-naming-required">📁 Mission folder naming (required)</h2>
+    <p>SPRK missions use one public folder name per game:</p>
+    <pre><code>NN-GameName-&lt;mode-label&gt;</code></pre>
+    <p>Examples: <code>02-SnakeGame-1P-nP</code>, <code>10-SpaceInvaders-1P-nP</code>.</p>
+    <p>Rules are canonical in <a href="../MERIT.instructions">MERIT.instructions</a>. Do not add a second folder for the same mission under a different spelling.</p>
+
+    <h2 id="what-to-bring-into-student-work">🎒 What to bring into student work</h2>
+
+    <h3>1. Single source of truth</h3>
+    <p>Use one canonical place for each topic:</p>
+    <ul>
+        <li>Documentation hub (all repo guides): <code>docs/README.md</code></li>
+        <li>Documentation link rules (portable + section wikilinks): <a href="SPRK_Documentation_Links_Guide.md">SPRK_Documentation_Links_Guide.md</a></li>
+        <li>Student start path: <code>README.md</code></li>
+        <li>Mission naming and branch/PR governance: <code>MERIT.instructions</code></li>
+        <li>Mentor tone: <code>AgentDraven.instructions</code></li>
+        <li>Guided workflow: <code>docs/SPRK_Guided_Workflow_Helper.md</code></li>
+        <li>Browser mission architecture: <code>docs/SPRK_Browser_Mission_Foundation_Guide.md</code></li>
+        <li>Testing and network architecture: <code>docs/SPRK_Browser_Testing_And_Network_Architecture.md</code></li>
+        <li>Facilitator cheat sheet: <code>docs/SPRK_Facilitator_Guide.md</code></li>
+        <li>Cloud tunnel hosting: <code>docs/SPRK_Cloud_Facilitator_Hosting_Guide.md</code></li>
+        <li>Touch and phone play: <code>docs/SPRK_Touch_Control_Guide.md</code></li>
+        <li>Classroom LAN testing: <code>docs/SPRK_Classroom_Network_Test_Guide.md</code></li>
+        <li>Validation flow: <code>docs/BASELINE_VALIDATION_AND_3C_FLOW.md</code></li>
+        <li>Maintainer formative insights (local): <code>docs/PROJECT_GUIDE.md</code></li>
+        <li>Language concepts: <code>docs/SPRK_Language_Crosswalk.md</code></li>
+        <li>Mission-specific play/build steps: <code>missions/&lt;NN-GameName-mode&gt;/docs/MISSION_GUIDE.md</code></li>
+    </ul>
+    <p>Enterprise MERIT instructions stay in the private Obsidian vault. In this repo, use portable Markdown links everywhere; add <code>[[Note#Heading]] (obsidian)</code> only for <strong>section</strong> references (see SPRK_Documentation_Links_Guide.md). Never copy private vault paths or <code>obsidian://</code> URIs into commits or chats.</p>
+    <p>When adding a new explanation, link to the existing guide if it already exists. Do not create duplicate status or verification docs for the same mission.</p>
+
+    <h3>2. Inherited setup and validation</h3>
+    <p>Branches and forks inherit these repo-owned commands:</p>
+    <pre><code class="language-bash">npm run setup:missions
+npm run validate</code></pre>
+    <p>Codespaces-compatible environments run setup from <code>.devcontainer/devcontainer.json</code>. GitHub Actions runs mission validation from <code>.github/workflows/mission-baseline.yml</code>.</p>
+
+    <h3>3. Branch and PR discipline</h3>
+    <p>Use one named branch and one PR per task. If a task needs more review, more validation, or conflict fixes, update the same branch and PR instead of creating a new branch. If duplicate PRs already exist, pick one canonical PR, move useful changes into it, and close the duplicates.</p>
+    <p>This is the classroom version of the enterprise MERIT rule: forward progress should have one source of truth.</p>
+
+    <h3>4. Guided GitHub workflow</h3>
+    <p>Use:</p>
+    <pre><code class="language-bash">npm run workflow</code></pre>
+    <p>The helper shows status first, explains each operation, and requires confirmation before changing branches, committing, opening PRs, approving, or merging.</p>
+
+    <h3>5. Student closeout checklist</h3>
+    <p>Before a student or agent says a change is ready:</p>
+    <ul>
+        <li>Check the branch is not <code>main</code>.</li>
+        <li>Confirm the branch is the canonical branch for the current task.</li>
+        <li>Run the targeted mission test or <code>npm run validate</code>.</li>
+        <li>Check <code>git status --short</code> for only intended files.</li>
+        <li>Do not stage secrets, caches, <code>node_modules/</code>, <code>tests/artifacts/</code>, or local output.</li>
+        <li>Commit with a clear message.</li>
+        <li>Push the branch and open or update the canonical PR.</li>
+    </ul>
+
+    <h3>6. Secrets and local state</h3>
+    <p>Current missions do not need API keys. If a future mission does:</p>
+    <ul>
+        <li>Commit <code>.env.example</code> with safe placeholder names.</li>
+        <li>Keep real values in <code>.env.local</code>.</li>
+        <li>Keep <code>.env.local</code> ignored.</li>
+        <li>Never paste real secrets into issues, chats, docs, generated reports, or screenshots.</li>
+    </ul>
+
+    <h3>7. Hard-coded paths</h3>
+    <p>Avoid machine-specific paths such as <code>/Users/name/...</code> or <code>C:\Users\name\...</code> in repo code and docs. Prefer relative paths from the repo root, mission folder paths, or helper scripts.</p>
+
+    <h3>8. Error and recovery language</h3>
+    <p>Student-facing errors should include the next action. Prefer:</p>
+    <pre><code>[FAIL] Mission backend did not start on port 8010. Close the old server or rerun npm run validate.</code></pre>
+    <p>Avoid unexplained failures such as:</p>
+    <pre><code>Error: failed</code></pre>
+
+    <h2 id="what-not-to-import">🚫 What not to import</h2>
+    <p>Do not force enterprise-only patterns into this classroom repo unless the project grows into them:</p>
+    <ul>
+        <li>private vault paths or private instruction contents</li>
+        <li>heavy admin-console requirements for beginner missions</li>
+        <li>billing, subscriber, tenant, or production operations architecture</li>
+        <li>duplicate branches or PRs for the same task</li>
+        <li>duplicate mission folders or alternate naming schemes for the same game</li>
+    </ul>
+
+    <h2 id="recommended-student-handoff">🤝 Recommended student handoff</h2>
+    <p>Use three short sections:</p>
+    <pre><code class="language-markdown">Done
+- What changed
+
+State
+- What passed or failed
+- Canonical branch and PR
+
+Next
+- What someone should try next</code></pre>
+
+    <footer>
+        © 2024-2026 AURAVYBE. All Rights Reserved. This material is the intellectual property of AURAVYBE and is licensed for the exclusive use of SPRK Coding Club. Unauthorized use, including making copies of the material even for personal use, is strictly prohibited.
+    </footer>
+
+</div>
+
+</body>
+</html>
