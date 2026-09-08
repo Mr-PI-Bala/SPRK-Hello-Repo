@@ -3,8 +3,8 @@
   "mode": "all",
   "runner": "Playwright",
   "baselinePolicy": "Playwright is the current baseline validation mechanism for browser-first SPRK missions. Additional or replacement baseline validators are allowed later.",
-  "generatedAt": "2026-05-31T16:38:48.602Z",
-  "generatedAtLabel": "May 31, 2026, 4:38:48 PM",
+  "generatedAt": "2026-05-31T17:57:38.003Z",
+  "generatedAtLabel": "May 31, 2026, 5:57:38 PM",
   "status": "passed",
   "passed": 10,
   "failed": 0,
@@ -97,61 +97,61 @@
     {
       "title": "reactionrace.spec.js > ReactionRace supports shared multiplayer scoreboard and x-ray events",
       "status": "passed",
-      "durationMs": 552,
+      "durationMs": 546,
       "file": "reactionrace.spec.js"
     },
     {
       "title": "reactionrace.spec.js > ReactionRace shows an offline message when the backend calls fail",
       "status": "passed",
-      "durationMs": 62,
+      "durationMs": 64,
       "file": "reactionrace.spec.js"
     },
     {
       "title": "snakegame.spec.js > SnakeGame supports shared scores and baseline status",
       "status": "passed",
-      "durationMs": 611,
+      "durationMs": 649,
       "file": "snakegame.spec.js"
     },
     {
       "title": "pingpong.spec.js > PingPong baseline works",
       "status": "passed",
-      "durationMs": 310,
+      "durationMs": 351,
       "file": "pingpong.spec.js"
     },
     {
       "title": "flashcards.spec.js > FlashCards baseline works",
       "status": "passed",
-      "durationMs": 369,
+      "durationMs": 363,
       "file": "flashcards.spec.js"
     },
     {
       "title": "quizroom.spec.js > QuizRoom baseline works",
       "status": "passed",
-      "durationMs": 4891,
+      "durationMs": 4880,
       "file": "quizroom.spec.js"
     },
     {
       "title": "foursquare.spec.js > FourSquare baseline works",
       "status": "passed",
-      "durationMs": 330,
+      "durationMs": 349,
       "file": "foursquare.spec.js"
     },
     {
       "title": "soccerscore.spec.js > SoccerScore baseline works",
       "status": "passed",
-      "durationMs": 301,
+      "durationMs": 292,
       "file": "soccerscore.spec.js"
     },
     {
       "title": "soccermatch.spec.js > SoccerMatch baseline works",
       "status": "passed",
-      "durationMs": 683,
+      "durationMs": 682,
       "file": "soccermatch.spec.js"
     },
     {
       "title": "spaceinvaders.spec.js > Space Invaders dimensional shift baseline works",
       "status": "passed",
-      "durationMs": 3546,
+      "durationMs": 3575,
       "file": "spaceinvaders.spec.js"
     }
   ]

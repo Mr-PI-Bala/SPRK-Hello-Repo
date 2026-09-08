@@ -56,6 +56,7 @@ const BUNKER_ROWS = 4;
 const BUNKER_COLS = 7;
 const DEFAULT_LIVES = 3;
 const MAX_LIVES = 10;
+const ALIEN_FLEET_SPEED_SCALE = 0.5;
 const RAIL_TILT_MAX_DEGREES = 70;
 const RAIL_TILT_DEGREES = 64;
 const OVERVIEW = {
@@ -321,7 +322,8 @@ function bunkerPercent() {
 
 function fleetIntervalSeconds() {
   const alive = Math.max(1, aliveAlienCount());
-  return Math.max(0.12, 0.08 + 0.8 * (alive / TOTAL_ALIENS));
+  const baseInterval = Math.max(0.12, 0.08 + 0.8 * (alive / TOTAL_ALIENS));
+  return baseInterval / ALIEN_FLEET_SPEED_SCALE;
 }
 
 function scoreMultiplier() {
@@ -1585,6 +1587,7 @@ window.__sprkTest = {
       bunkerCells: bunkerCellCount(),
       running: runtime.running,
       fleetInterval: fleetIntervalSeconds(),
+      alienFleetSpeedScale: ALIEN_FLEET_SPEED_SCALE,
       scoreMultiplier: scoreMultiplier(),
       floatingTextCount: runtime.floatingTexts.length,
       playerImpactActive: Boolean(runtime.playerImpact),
